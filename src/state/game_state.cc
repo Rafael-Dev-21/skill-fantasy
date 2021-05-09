@@ -41,6 +41,15 @@ static void on_start(GameState *current) {
 #endif
 	} else if(input == "99") {
 		current->changeState(STATE_END);
+	} else {
+		std::cout << "E: option not supported!" << std::endl;
+		std::cout << "[press any key]" << std::endl;
+#ifdef _WIN32
+		system("pause");
+#endif
+#ifdef __linux__
+		system("read -n 1");
+#endif
 	}
 }
 
