@@ -1,4 +1,5 @@
 #include "state/game_state.hh"
+#include "commons.hh"
 #include <iostream>
 
 int main() {
