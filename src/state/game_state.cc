@@ -1,12 +1,14 @@
 #include "game_state.hh"
-#include "cstdlib"
+#include "../system/fileio.hh"
+#include <cstdlib>
 #include <iostream>
-#include <fstream>
+#include <vector>
 
 
 
 static std::string input = "";
-static std::string output = "";
+
+static std::vector<std::string> menu_start;
 
 void GameState::changeState(GameStateEnum n) {
 	game_state = n;
@@ -20,13 +22,14 @@ static void on_start(GameState *current) {
 	system("clear");
 #endif
 
-	std::ifstream menu("data/menu_start.txt");
-
-	while(std::getline(menu, output)) {
-		std::cout << output << std::endl;
+	if(menu_start.empty()) {
+		std::string path("data/menu_start.txt");
+		FileIO::load_file(menu_start, path);
 	}
 
-	menu.close();
+	for(std::string output : menu_start) {
+		std::cout << output << std::endl;
+	}
 
 	std::cout << "=> ";
 	std::cin >> input;

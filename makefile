@@ -3,7 +3,7 @@ LDFLAGS =
 PROG = skill_fantasy
 CXX = clang++
 
-DIRS = src/state/*.cc
+DIRS = src/state/*.cc src/system/*.cc
 
 all: $(PROG)
 
