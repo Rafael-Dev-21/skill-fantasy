@@ -1,14 +1,54 @@
-CFLAGS = -Wno-endif-labels -Werror -Wall
-LDFLAGS = 
-PROG = skill_fantasy
-CXX = clang++
+# nome do projeto
+PROJ_NAME=skillfantasy
 
-DIRS = src/state/*.cc src/system/*.cc
+# código fonte
+CXX_SOURCE=$(wildcard ./src/*.cc);
 
-all: $(PROG)
+# cabeçalhos
+HXX_SOURCE=$(wildcard ./src/*.hh);
 
-$(PROG): src/*
-	$(CXX) $(CFLAGS) src/main.cc $(DIRS) -o $(PROG)
+# objetos
+OBJ=$(subst .cc,.o,$(subst src,obj,$(CXX_SOURCE)))
+
+# compilador
+CXX=clang++
+
+# marcas do compilador
+CXX_FLAGS=-W         \
+          -Wall      \
+          -std=c++11
+
+# comando usado para limpar o alvo
+RM= rm -rf
+
+
+
+#
+# compilação e linkagem
+#
+all: objFolder $(PROJ_NAME)
+
+$(PROJ_NAME): $(OBJ)
+	@ echo 'Building binary using clang++ linker: $@'
+	$(CXX) $^ -o $@
+	@ echo 'Finished building binary: $@'
+	@ echo ' '
+
+./obj/%.o: ./src/%.cc ./src/%.hh
+	@ echo 'Building target using clang++ compiler: $<'
+	$(CXX) -c $< $(CXX_FLAGS) -o $@
+	@ echo ' '
+
+./obj/main.o: ./src/main.cc
+	@ echo 'Building target using clang++ compiler: $<'
+	$(CXX) -c $< $(CXX_FLAGS) -o $@
+	@ echo ' '
+
+objFolder:
+	@ mkdir -p obj
 
 clean:
-	rm $(PROG)
+	@ $(RM) ./obj/*.o $(PROJ_NAME) *~
+	@rmdir obj
+
+.PHONY: all clean
