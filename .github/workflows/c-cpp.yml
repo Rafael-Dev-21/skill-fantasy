@@ -13,5 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: bootstrap
+      run: ./bootstrap.sh
     - name: make
       run: make
