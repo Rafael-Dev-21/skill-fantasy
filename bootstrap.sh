@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo pt-get install make clang
+sudo apt-get install make clang
