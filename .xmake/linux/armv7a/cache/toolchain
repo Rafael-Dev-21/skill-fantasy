@@ -1,0 +1,22 @@
+{
+    tool_target_skillfantasy_linux_armv7a_cxx = {
+        program = "/data/data/com.termux/files/usr/bin/gcc",
+        toolname = "clang",
+        toolchain_info = {
+            plat = "linux",
+            arch = "armv7a",
+            name = "gcc",
+            cachekey = "gcc_arch_armv7a_plat_linux"
+        }
+    },
+    tool_target_skillfantasy_linux_armv7a_ld = {
+        program = "/data/data/com.termux/files/usr/bin/g++",
+        toolname = "clangxx",
+        toolchain_info = {
+            plat = "linux",
+            arch = "armv7a",
+            name = "gcc",
+            cachekey = "gcc_arch_armv7a_plat_linux"
+        }
+    }
+}
