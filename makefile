@@ -28,6 +28,11 @@ RM= rm -rf
 #
 all: objFolder $(PROJ_NAME)
 
+$(PROJ_NAME).exe: $(OBJ)
+	@ echo 'Building binary using MinGW linker: $@'
+	$(CXX) --target=x86_64-win32 --sysroot=~/MinGW/MinGW $^ -o $@
+	@ echo 'Finished building binary: $@'
+
 $(PROJ_NAME): $(OBJ)
 	@ echo 'Building binary using clang++ linker: $@'
 	$(CXX) $^ -o $@

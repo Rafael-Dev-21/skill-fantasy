@@ -17,9 +17,5 @@ jobs:
       run: ./bootstrap.sh
     - name: make
       run: make
-    - name: test
-      run: ./skillfantasy
-    - name: quit
-      run: 99
     - name: clean
       run: make clean
