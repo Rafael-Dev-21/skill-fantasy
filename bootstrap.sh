@@ -1,3 +1,6 @@
 #!/bin/bash
 
-sudo apt-get install make clang
+sudo apt update && sudo apt upgrade -y
+sudo apt-get install clang curl bash
+
+bash <(curl -fsSL https://xmake.io/shget.text)
