@@ -1,18 +1,5 @@
 {
     cmdlines = {
-        "xmake f -p windows -a x86",
-        "xmake ",
-        "xmake ",
-        "xmake ",
-        "xmake lua /data/data/com.termux/files/usr/share/xmake/actions/build/statistics.lua",
-        "xmake lua /data/data/com.termux/files/usr/share/xmake/actions/build/cleaner.lua",
-        "xmake run skillfantasy.exe",
-        "xmake ",
-        "xmake g --pkg_searchdirs=/pgs",
-        "xmake g --pkg_searchdirs=/pkgs",
-        "xmake ",
-        "xmake f -p windows -a x86",
-        "xmake ",
         "xmake run skillfantasy",
         "xmake f -p mingw --sdk=~/mingw32 -a i386",
         "xmake f -p mingw --sdk=~/mingw/ -a i386",
@@ -64,6 +51,19 @@
         "xmake ",
         "xmake ",
         "xmake ",
-        "xmake "
+        "xmake ",
+        "xmake f -p windows -a x86",
+        "xmake ",
+        "xmake f -p windows -a x86",
+        "xmake ",
+        "xmake ",
+        "xmake clean",
+        "xmake ",
+        "xmake ",
+        "xmake clean",
+        "xmake f",
+        "xmake clean",
+        "xmake f -p linux",
+        "xmake clean"
     }
 }

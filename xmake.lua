@@ -11,7 +11,9 @@ target("skillfantasy")
 	end
 	--> if is platform windows add pcurses
 	if is_plat("windows") then
-		add_packages("pdcurses")
+		--> change by your pdcurses file
+		add_cxxflags("-L./pdcurses.dll")
+		add_includedirs("pdcurses")
 	end
 	if is_mode("debug") then
 		add_defines("DEBUG")
