@@ -6,12 +6,10 @@
 int main() {
 	Game *game = Game::getInstance();
 
-	std::cout << "Starting..." << std::endl;
-
+	initscr();
+	noecho();
 	game->run();
-
-	std::cout << "Closing..." << std::endl;
+	endwin();
 
 	return 0;
 }
-

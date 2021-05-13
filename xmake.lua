@@ -8,6 +8,7 @@ target("skillfantasy")
 	--> if is platform linux or macosx add ncurses to project
 	if is_plat("linux" or "macosx") then
 		add_packages("ncurses")
+		add_links("ncurses")
 	end
 	--> if is platform windows add pcurses
 	if is_plat("windows") then

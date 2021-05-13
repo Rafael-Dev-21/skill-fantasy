@@ -11,9 +11,10 @@ Change the pdcurses.dll path in xmake.lua to your pdcurses filepath.
 * battle system.
 * skill system.
 * separate data from program.
-* multi-platform.
-* ncurses | pdcurses interface;
+* multi-platform?
 
 ## done
  * start menu.
  * stack finite state machine.
+ * ncurses interface.
+ * pdcurses interface?

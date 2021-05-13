@@ -1,8 +1,6 @@
 {
-    options = {
-        plat = "linux"
-    },
     mtimes = {
-        ["xmake.lua"] = 1620869659
-    }
+        ["xmake.lua"] = 1620881692
+    },
+    options = { }
 }
