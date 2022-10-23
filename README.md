@@ -1,20 +1,18 @@
 # skill-fantasy
-A opensource project of a cli rpg.
+A opensource project of a survival roguelike.
 
 ## Build
 
-xmake is the preferential build system for this project, the makefile will be updated for a while, but is temporally.
-Change the pdcurses.dll path in xmake.lua to your pdcurses filepath.
+Make is the tool of choice. The game only supports linux, other OSes will be added later.
 
 ## todo
 
-* battle system.
-* skill system.
-* separate data from program.
-* multi-platform?
-
-## done
- * start menu.
- * stack finite state machine.
- * ncurses interface.
- * pdcurses interface?
+* [ ] world generation
+* [ ] resource gathering
+* [ ] crafting
+* [ ] progression
+* [ ] save and load
+* [ ] Paleolithic Update
+* [ ] Neolithic Update
+* [ ] Bronze Age Update
+* [ ] Iron Age Update
