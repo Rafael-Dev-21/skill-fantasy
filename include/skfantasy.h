@@ -62,6 +62,7 @@ extern const int MAP_WIDTH;
 extern const int MAP_HEIGHT;
 extern const int VIEW_WIDTH;
 extern const int VIEW_HEIGHT;
+extern const int CHUNK_SIZE;
 
 extern Tile **map;
 extern Entity *player;
