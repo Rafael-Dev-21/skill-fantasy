@@ -1,7 +1,7 @@
 #include <skfantasy.h>
 
-const int MAP_WIDTH = 100;
-const int MAP_HEIGHT = 100;
+const int MAP_WIDTH = 1000;
+const int MAP_HEIGHT = 1000;
 const int VIEW_WIDTH = 50;
 const int VIEW_HEIGHT = 20;
 const int CHUNK_SIZE = 16;

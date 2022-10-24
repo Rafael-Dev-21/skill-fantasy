@@ -1,4 +1,5 @@
 #include <skfantasy.h>
+#include <math.h>
  
 Tile **genTerrain(void) {
   Tile **tiles = calloc(MAP_HEIGHT, sizeof(Tile *));
@@ -7,15 +8,15 @@ Tile **genTerrain(void) {
     for (int x = 0; x < MAP_WIDTH; x++) {
       float nx = x / (float)CHUNK_SIZE - 0.5f, ny = y / (float)CHUNK_SIZE - 0.5f;
       
-      float noise = fbm(nx, ny, 1, 3);
+      float e = (float)pow(fbm(nx, ny, 1, 3), 2);
 
-      if (noise < .4) {
+      if (e < .1) {
         tiles[y][x].ch = '~';
         tiles[y][x].color = WATER_PAIR;
-      } else if (noise < .45) {
+      } else if (e < .2) {
         tiles[y][x].ch = '~';
         tiles[y][x].color = SAND_PAIR;
-      } else if (noise < .8) {
+      } else if (e < .5) {
         tiles[y][x].ch = ',';
         tiles[y][x].color = GRASS_PAIR;
       } else {
