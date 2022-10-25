@@ -3,6 +3,7 @@
 
 #include <ncurses.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 // defines
 #define GRASS_PAIR    1

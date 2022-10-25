@@ -1,5 +1,5 @@
 CC = clang
-CFLAGS = -lncurses -lm -I./include/
+CFLAGS = -lncurses -lm -O3 -I./include/
 SOURCES = ./src/*.c
 
 all: skfantasy run clean
