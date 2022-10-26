@@ -1,9 +1,14 @@
 #ifndef SKFANTASY_H
 #define SKFANTASY_H
 
-#include <ncurses.h>
+#ifdef __MINGW32__
+  #include <curses.h>
+#else
+  #include <ncurses.h>
+#endif
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 // defines
 #define GRASS_PAIR    1
