@@ -7,7 +7,6 @@ all: skfantasy run clean
 skfantasy:
 	$(CC) $(SOURCES) $(CFLAGS) -o skfantasy
 
-
 run:
 	./skfantasy
 
