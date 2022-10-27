@@ -1,4 +1,5 @@
 #include <skfantasy.h>
+#include <game.h>
 
 const int MAP_WIDTH = 4096;
 const int MAP_HEIGHT = 4096;
@@ -10,7 +11,9 @@ Entity *player;
 Tile **map;
 
 int main(void) {
+  Game game;
   cursesSetup();
+  setupGame(&game);
 
   if (has_colors() == false) {
     endwin();
@@ -23,9 +26,7 @@ int main(void) {
   init_pair(WATER_PAIR, COLOR_CYAN, COLOR_BLUE);
   init_pair(MOUNTAIN_PAIR, COLOR_BLACK, COLOR_WHITE);
   init_pair(PLAYER_PAIR, COLOR_RED, COLOR_MAGENTA);
-
-  Position start_pos = {10, 20};
-  player = createPlayer(start_pos);
+  player = game.player;
   map = genTerrain();
 
   gameLoop();

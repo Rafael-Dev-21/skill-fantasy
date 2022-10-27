@@ -10,6 +10,9 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "position.h"
+#include "entity.h"
+
 // defines
 #define GRASS_PAIR    1
 #define EMPTY_PAIR    1
@@ -19,22 +22,12 @@
 #define PLAYER_PAIR   5
 
 // structures
-typedef struct {
-  int y;
-  int x;
-} Position;
 
 typedef struct {
   char ch;
   int color;
   bool walkable;
 } Tile;
-
-typedef struct {
-  Position pos;
-  char ch;
-  int color;
-} Entity;
 
 // engine
 void cursesSetup(void);
