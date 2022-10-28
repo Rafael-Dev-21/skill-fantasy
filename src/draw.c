@@ -3,7 +3,7 @@
 #define offsetY (player->pos.y - VIEW_HEIGHT / 2)
 #define offsetX (player->pos.x - VIEW_WIDTH / 2)
 
-void drawEntity(Entity *entity) {
+void drawEntity(struct entity *entity) {
   mvaddch(entity->pos.y + offsetY, entity->pos.x + offsetX,
           entity->ch | COLOR_PAIR(entity->color));
 }

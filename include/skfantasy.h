@@ -46,12 +46,12 @@ Tile **genTerrain(void);
 void freeMap(void);
 
 // player
-Entity *createPlayer(Position start_pos);
+struct entity *createPlayer(struct position start_pos);
 void handleInput(int input);
-void movePlayer(Position next);
+void movePlayer(struct position next);
 
 // drawing
-void drawEntity(Entity *entity);
+void drawEntity(struct entity *entity);
 void drawPlayer(void);
 void drawMap(void);
 void drawEverything(void);
@@ -64,6 +64,6 @@ extern const int VIEW_HEIGHT;
 extern const int CHUNK_SIZE;
 
 extern Tile **map;
-extern Entity *player;
+extern struct entity *player;
 
 #endif

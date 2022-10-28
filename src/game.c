@@ -1,55 +1,55 @@
 #include <game.h>
 #include <skfantasy.h>
 
-void setupGame(GamePtr game)
+void setup_game(struct game *game)
 {
-  Position startPos = {10, 20};
+  struct position start_pos = {10, 20};
 
   // Yes, I *do* know the evils of hardcoding
-  game->player = createEntity(startPos, '@', 5);
-  game->curInput = -1;
+  game->player = create_entity(start_pos, '@', 5);
+  game->current_input = -1;
 }
 
-void updateGame(GamePtr game)
+void update_game(struct game *game)
 {
-  Position newPos = { game->player->pos.y, game->player->pos.x };
+  struct position new_pos = { game->player->pos.y, game->player->pos.x };
 
-  switch (game->curInput)
+  switch (game->current_input)
   {
     case 'k':
-      newPos.y -= 1;
+      new_pos.y -= 1;
       break;
     case 'j':
-      newPos.y += 1;
+      new_pos.y += 1;
       break;
     case 'h':
-      newPos.x -= 1;
+      new_pos.x -= 1;
       break;
     case 'l':
-      newPos.x += 1;
+      new_pos.x += 1;
       break;
     default:
       break;
   }
 
-  moveEntity(game->player, newPos);
+  move_entity(game->player, new_pos);
 }
 
-void nextInput(GamePtr game)
+void next_input(struct game *game)
 {
-  game->curInput = getch();
+  game->current_input = getch();
 }
 
-void GameLoop(GamePtr game)
+void game_loop(struct game *game)
 {
-  while (game->curInput != 'q')
+  while (game->current_input != 'q')
   {
-    updateGame(game);
-    nextInput(game);
+    update_game(game);
+    next_input(game);
   }
 }
 
-void CloseGame(GamePtr game)
+void close_game(struct game *game)
 {
-  freeEntity(game->player);
+  free_entity(game->player);
 }

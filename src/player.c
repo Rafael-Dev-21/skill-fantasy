@@ -1,40 +1,40 @@
 #include <skfantasy.h>
 
-Entity *createPlayer(Position start_pos) {
-  Entity *newPlayer = calloc(1, sizeof(Entity));
+struct entity *createPlayer(struct position start_pos) {
+  struct entity *new_player = calloc(1, sizeof(*new_player));
 
-  newPlayer->pos.y = start_pos.y;
-  newPlayer->pos.x = start_pos.x;
-  newPlayer->ch = '@';
-  newPlayer->color = PLAYER_PAIR;
+  new_player->pos.y = start_pos.y;
+  new_player->pos.x = start_pos.x;
+  new_player->ch = '@';
+  new_player->color = PLAYER_PAIR;
 
-  return newPlayer;
+  return new_player;
 }
 
 void handleInput(int input) {
-  Position newPos = {player->pos.y, player->pos.x};
+  struct position new_pos = {player->pos.y, player->pos.x};
 
   switch (input) {
   case 'k':
-    newPos.y--;
+    new_pos.y--;
     break;
   case 'j':
-    newPos.y++;
+    new_pos.y++;
     break;
   case 'h':
-    newPos.x--;
+    new_pos.x--;
     break;
   case 'l':
-    newPos.x++;
+    new_pos.x++;
     break;
   default:
     break;
   }
 
-  movePlayer(newPos);
+  movePlayer(new_pos);
 }
 
-void movePlayer(Position next) {
+void movePlayer(struct position next) {
   if (map[next.y][next.x].walkable) {
     player->pos.y = next.y;
     player->pos.x = next.x;

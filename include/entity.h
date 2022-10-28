@@ -3,16 +3,14 @@
 
 #include "position.h"
 
-typedef struct {
-  Position pos;
-  char ch;
-  int color;
-} Entity;
+struct entity {
+	struct position pos;
+	char ch;
+	int color;
+};
 
-typedef Entity *EntityPtr;
-
-EntityPtr createEntity(Position startPos, char ch, int color);
-void freeEntity(EntityPtr entity);
-void moveEntity(EntityPtr entity, Position newPos);
+struct entity *create_entity(struct position start_pos, char ch, int color);
+void free_entity(struct entity *ent);
+void move_entity(struct entity *ent, struct position new_pos);
 
 #endif

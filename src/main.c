@@ -7,13 +7,13 @@ const int VIEW_WIDTH = 50;
 const int VIEW_HEIGHT = 20;
 const int CHUNK_SIZE = 16;
 
-Entity *player;
+struct entity *player;
 Tile **map;
 
 int main(void) {
-  Game game;
+  struct game game;
   cursesSetup();
-  setupGame(&game);
+  setup_game(&game);
 
   if (has_colors() == false) {
     endwin();

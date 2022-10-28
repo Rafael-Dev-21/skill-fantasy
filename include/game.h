@@ -3,17 +3,15 @@
 
 #include "entity.h"
 
-typedef struct {
-  EntityPtr player;
-  int curInput;
-} Game;
+struct game {
+  struct entity *player;
+  int current_input;
+};
 
-typedef Game *GamePtr;
-
-void setupGame(GamePtr game);
-void updateGame(GamePtr game);
-void nextInput(GamePtr game);
-void GameLoop(GamePtr game);
-void CloseGame(GamePtr game);
+void setup_game(struct game *game);
+void update_game(struct game *game);
+void next_input(struct game *game);
+void game_loop(struct game *game);
+void close_game(struct game *game);
 
 #endif
