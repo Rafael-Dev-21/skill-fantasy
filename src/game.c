@@ -1,6 +1,7 @@
 #include <common.h>
 #include <game.h>
 #include <colors.h>
+#include <draw.h>
 
 void setup_game(struct game *game)
 {
@@ -43,12 +44,14 @@ void game_loop(struct game *game)
 {
 	while (game->current_input != 'q') {
 		update_game(game);
+		draw_game(game);
 		next_input(game);
   }
 }
 
 void close_game(struct game *game)
 {
+	draw_close();
 	free_entity(game->player);
 	free_map(game->map);
 }

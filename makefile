@@ -9,7 +9,7 @@ all: skfantasy run clean
 skfantasy:
 	$(CC) $(SOURCES) $(CFLAGS) -o skfantasy
 
-skfantasy.exe:
+exe:
 	$(WINCC) $(SOURCES) $(WINCFLAGS) -o skfantasy
 
 run:

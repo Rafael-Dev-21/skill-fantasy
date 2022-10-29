@@ -1,6 +1,6 @@
-#include <skfantasy.h>
 #include <colors.h>
 #include <game.h>
+#include <draw.h>
 #include <map.h>
 
 const int VIEW_WIDTH = 50;
@@ -12,7 +12,7 @@ struct tile **map;
 
 int main(void) {
   struct game game;
-  cursesSetup();
+  draw_setup();
 
   if (setup_colors() == false) {
     endwin();
@@ -25,9 +25,9 @@ int main(void) {
   player = game.player;
   map = game.map;
 
-  gameLoop();
+  game_loop(&game);
 
-  closeGame();
+  close_game(&game);
 
   return 0;
 }

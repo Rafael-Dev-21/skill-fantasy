@@ -1,14 +1,7 @@
-#include <skfantasy.h>
+#include <noise.h>
 #include <colors.h>
 #include <map.h>
 #include <math.h>
-
-void freeMap(void) {
-  for (int y = 0; y < MAP_HEIGHT; y++) {
-    free(map[y]);
-  }
-  free(map);
-}
 
 enum tile_type get_tile(float elevation)
 {
@@ -75,7 +68,7 @@ struct position setup_map(struct tile **tiles)
 			break;
 		}
 
-		if (y == 0 || y == MAP_HEIGHT - 1 || x == 0 || x == MAP_WIDTH - 1) {
+		if (y == 0 || y >= MAP_HEIGHT - 1 || x == 0 || x >= MAP_WIDTH - 1) {
 			tiles[y][x].walkable = false;
 		}
 	}

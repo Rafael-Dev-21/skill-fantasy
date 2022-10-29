@@ -1,4 +1,4 @@
-#include <skfantasy.h>
+#include <noise.h>
 #include <position.h>
 #include <math.h>
 
