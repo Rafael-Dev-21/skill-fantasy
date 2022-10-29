@@ -32,7 +32,9 @@ void update_game(struct game *game)
 	default:
 		break;
 	}
-	move_entity(game->player, new_pos);
+	if (new_pos.y >= 0 && new_pos.y < MAP_HEIGHT && new_pos.x >= 0 && new_pos.x < MAP_WIDTH)
+	if (game->map[new_pos.y][new_pos.x].walkable)
+		move_entity(game->player, new_pos);
 }
 
 void next_input(struct game *game)

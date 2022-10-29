@@ -67,10 +67,6 @@ struct position setup_map(struct tile **tiles)
 			tiles[y][x].walkable = false;
 			break;
 		}
-
-		if (y == 0 || y >= MAP_HEIGHT - 1 || x == 0 || x >= MAP_WIDTH - 1) {
-			tiles[y][x].walkable = false;
-		}
 	}
 
 	return start_pos;
