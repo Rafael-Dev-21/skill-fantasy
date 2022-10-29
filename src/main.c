@@ -3,13 +3,6 @@
 #include <draw.h>
 #include <map.h>
 
-const int VIEW_WIDTH = 50;
-const int VIEW_HEIGHT = 20;
-const int CHUNK_SIZE = 16;
-
-struct entity *player;
-struct tile **map;
-
 int main(void) {
   struct game game;
   draw_setup();
@@ -21,9 +14,6 @@ int main(void) {
   }
 
   setup_game(&game);
-
-  player = game.player;
-  map = game.map;
 
   game_loop(&game);
 
