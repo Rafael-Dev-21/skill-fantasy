@@ -1,15 +1,14 @@
 #include <skfantasy.h>
 #include <colors.h>
 #include <game.h>
+#include <map.h>
 
-const int MAP_WIDTH = 128;
-const int MAP_HEIGHT = 128;
 const int VIEW_WIDTH = 50;
 const int VIEW_HEIGHT = 20;
 const int CHUNK_SIZE = 16;
 
 struct entity *player;
-Tile **map;
+struct tile **map;
 
 int main(void) {
   struct game game;
@@ -24,7 +23,7 @@ int main(void) {
   setup_game(&game);
 
   player = game.player;
-  map = genTerrain();
+  map = game.map;
 
   gameLoop();
 

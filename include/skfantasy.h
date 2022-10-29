@@ -5,22 +5,7 @@
 
 #include "position.h"
 #include "entity.h"
-
-// defines
-#define GRASS_PAIR    1
-#define EMPTY_PAIR    1
-#define SAND_PAIR     2
-#define WATER_PAIR    3
-#define MOUNTAIN_PAIR 4
-#define PLAYER_PAIR   5
-
-// structures
-
-typedef struct {
-  char ch;
-  int color;
-  bool walkable;
-} Tile;
+#include "map.h"
 
 // engine
 void cursesSetup(void);
@@ -35,7 +20,6 @@ float noise2d(float x, float y);
 float fbm(float x, float y, float freq, int depth);
 
 // map
-Tile **genTerrain(void);
 void freeMap(void);
 
 // player
@@ -50,13 +34,11 @@ void drawMap(void);
 void drawEverything(void);
 
 // externs
-extern const int MAP_WIDTH;
-extern const int MAP_HEIGHT;
 extern const int VIEW_WIDTH;
 extern const int VIEW_HEIGHT;
 extern const int CHUNK_SIZE;
 
-extern Tile **map;
+extern struct tile **map;
 extern struct entity *player;
 
 #endif

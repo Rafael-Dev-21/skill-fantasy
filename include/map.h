@@ -8,12 +8,10 @@
 #define MAP_HEIGHT 128
 
 enum tile_type {
-	TILE_EMPTY,
 	TILE_GRASS,
 	TILE_SAND,
 	TILE_WATER,
-	TILE_MOUNTAIN,
-	TILE_COUNT
+	TILE_MOUNTAIN
 };
 
 struct tile {

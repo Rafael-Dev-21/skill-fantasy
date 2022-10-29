@@ -2,9 +2,11 @@
 #define GAME_H
 
 #include "entity.h"
+#include "map.h"
 
 struct game {
   struct entity *player;
+  struct tile **map;
   int current_input;
 };
 
