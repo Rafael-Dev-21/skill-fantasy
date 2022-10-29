@@ -1,5 +1,5 @@
+#include <common.h>
 #include <entity.h>
-#include <stdlib.h>
 
 struct entity *create_entity(struct position start_pos, char ch, int color)
 {

@@ -1,12 +1,13 @@
+#include <common.h>
 #include <game.h>
-#include <skfantasy.h>
+#include <colors.h>
 
 void setup_game(struct game *game)
 {
   struct position start_pos = {10, 20};
 
   // Yes, I *do* know the evils of hardcoding
-  game->player = create_entity(start_pos, '@', 5);
+  game->player = create_entity(start_pos, '@', SKPAIR_PLAYER);
   game->current_input = -1;
 }
 

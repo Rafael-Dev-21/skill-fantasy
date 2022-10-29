@@ -1,4 +1,5 @@
 #include <skfantasy.h>
+#include <colors.h>
 
 struct entity *createPlayer(struct position start_pos) {
   struct entity *new_player = calloc(1, sizeof(*new_player));
@@ -6,7 +7,7 @@ struct entity *createPlayer(struct position start_pos) {
   new_player->pos.y = start_pos.y;
   new_player->pos.x = start_pos.x;
   new_player->ch = '@';
-  new_player->color = PLAYER_PAIR;
+  new_player->color = SKPAIR_PLAYER;
 
   return new_player;
 }

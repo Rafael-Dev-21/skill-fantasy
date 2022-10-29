@@ -1,14 +1,7 @@
 #ifndef SKFANTASY_H
 #define SKFANTASY_H
 
-#ifdef __MINGW32__
-  #include <curses.h>
-#else
-  #include <ncurses.h>
-#endif
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdbool.h>
+#include "common.h"
 
 #include "position.h"
 #include "entity.h"

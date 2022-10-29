@@ -1,6 +1,9 @@
 # skill-fantasy
 A opensource project of a survival roguelike.
 
+## Playlist
+<https://youtube.com/playlist?list=PLJsfx7Z0sXi7FZyrqkoQaW0OruHpnjxo->
+
 ## Build
 
 Make is the tool of choice. The game only supports linux, other OSes will be added later.
