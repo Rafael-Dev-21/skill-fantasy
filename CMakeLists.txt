@@ -24,6 +24,7 @@ else()
 	find_library(CURSES ncurses)
 endif()
 
+target_link_libraries(skcommon PUBLIC ${CURSES} m)
 target_link_libraries(skfantasy PUBLIC ${CURSES} m skcommon)
 
 add_executable(entity_not_null tests/entity_not_null.c)
