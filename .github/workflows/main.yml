@@ -2,6 +2,7 @@ name: skill-fantasy-main-workflow
 on:
   push:
     branch: [master]
+  workflow-dispach: true
 
 jobs:
   deploy-linux:
