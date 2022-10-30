@@ -41,11 +41,11 @@ jobs:
         run: |
           curl -L -o butler.zip https://broth.itch.ovh/butler/windows-amd64/LATEST/archive/default
           7z e butler.zip
-          ${GITHUB_WORKSPACE}\butler.exe -V
+          %~dp0butler.exe -V
       - name: Publish Windows
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_CREDENTIALS }}
         run: |
-          ${{GITHUB_WORKSPACE}}\butler.exe login
-          ${{GITHUB_WORKSPACE}}\butler.exe push skfantasy.zip rafael-dev-21/skill-fantasy:linux-x86-64-demo
-          ${{GITHUB_WORKSPACE}}\butler.exe logout
+          %~dp0butler.exe login
+          %~dp0butler.exe push skfantasy.zip rafael-dev-21/skill-fantasy:linux-x86-64-demo
+          %~dp0butler.exe logout
