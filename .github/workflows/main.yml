@@ -12,4 +12,4 @@ jobs:
         with:
           xmake-version: latest
       - run: xmake
-      - run: zip skfantasy.zip build/linux/armv7a/release/skfantasy
+      - run: zip skfantasy.zip build/linux/x86_64/release/skfantasy
