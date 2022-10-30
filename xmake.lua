@@ -1,3 +1,7 @@
+if is_plat("windows") then
+	add_require("pdcurses")
+end
+
 target("skfantasy")
 	set_kind("binary")
 	add_files("src/*.c")
