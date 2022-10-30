@@ -13,13 +13,19 @@ jobs:
           xmake-version: latest
       - run: xmake -y
       - run: zip skfantasy.zip build/linux/x86_64/release/skfantasy
-      - uses: manleydev/butler-publish-itchio-action@master
+      - name: Install Butler
+        run: |
+          curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default
+          unzip butler.zip
+          chmod +x butler
+          ./butler -V
+      - name: Publish Linux
         env:
-          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-          CHANNEL: linux-x86-64-demo
-          ITCH_GAME: skill-fantasy
-          ITCH_USER: rafael-dev-21
-          PACKAGE: skfantasy.zip
+          BUTLER_API_KEY: ${{ secrets.BUTLER_CREDENTIALS }}
+        run: |
+          ./butler login
+          ./butler push skfantasy.zip rafael-dev-21/skill-fantasy:linux-x86-64-demo
+          ./butler logout
 
   deploy-windows:
     runs-on: windows-latest
@@ -30,10 +36,16 @@ jobs:
           xmake-version: latest
       - run: xmake -y
       - run: 7z a -tZip skfantasy.zip pdcurses.dll build/windows/x64/release/skfantasy.exe
-      - uses: manleydev/butler-publish-itchio-action@master
+      - run: choco install curl -y
+      - name: Install Butler
+        run: |
+          curl -L -o butler.zip https://broth.itch.ovh/butler/windows-amd64/LATEST/archive/default
+          7z x butler.zip
+          butler.exe -V
+      - name: Publish Windows
         env:
-          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-          CHANNEL: windows-x64-demo
-          ITCH_GAME: skill-fantasy
-          ITCH_USER: rafael-dev-21
-          PACKAGE: skfantasy.zip
+          BUTLER_API_KEY: ${{ secrets.BUTLER_CREDENTIALS }}
+        run: |
+          butler.exe login
+          butler.exe push skfantasy.zip rafael-dev-21/skill-fantasy:linux-x86-64-demo
+          butler.exe logout
