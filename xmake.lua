@@ -1,5 +1,5 @@
 if is_plat("windows") then
-	add_require("pdcurses")
+	add_requires("pdcurses")
 end
 
 target("skfantasy")

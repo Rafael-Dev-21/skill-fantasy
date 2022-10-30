@@ -22,4 +22,4 @@ jobs:
         with:
           xmake-version: latest
       - run: xmake
-      - run: 7z a -tZip skfantasy.zip pdcurses.dll build/windows/x86_64/release/skfantasy.exe
+      - run: 7z a -tZip skfantasy.zip pdcurses.dll build/windows/x64/release/skfantasy.exe
