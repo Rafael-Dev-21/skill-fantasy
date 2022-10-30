@@ -1,7 +1,7 @@
 #ifndef SK_COMMON_H
 #define SK_COMMON_H
 
-#ifdef __MINGW32__
+#ifdef __WIN32__
   #include <curses.h>
 #else
   #include <ncurses.h>
