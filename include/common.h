@@ -1,7 +1,7 @@
 #ifndef SK_COMMON_H
 #define SK_COMMON_H
 
-#ifdef __WIN32__
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32)
   #include <curses.h>
 #else
   #include <ncurses.h>
