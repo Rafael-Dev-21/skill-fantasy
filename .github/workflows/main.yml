@@ -40,7 +40,7 @@ jobs:
       - name: Install Butler
         run: |
           curl -L -o butler.zip https://broth.itch.ovh/butler/windows-amd64/LATEST/archive/default
-          7z x butler.zip
+          7z e butler.zip
           butler.exe -V
       - name: Publish Windows
         env:
