@@ -14,15 +14,3 @@ In teory, this game runs o windows, but i can't test. Do this:
 * install mingw and pdcurses
 * change `<ncurses.h>` to `<curses.h>` in include/skfantasy.h
 * execute run.bat
-
-## todo
-
-* [ ] world generation
-* [ ] resource gathering
-* [ ] crafting
-* [ ] progression
-* [ ] save and load
-* [ ] Paleolithic Update
-* [ ] Neolithic Update
-* [ ] Bronze Age Update
-* [ ] Iron Age Update
