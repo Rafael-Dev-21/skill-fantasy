@@ -4,8 +4,8 @@
 #include "common.h"
 #include "position.h"
 
-#define MAP_WIDTH 128
-#define MAP_HEIGHT 128
+#define MAP_WIDTH 1024
+#define MAP_HEIGHT 1024
 
 enum tile_type {
 	TILE_GRASS,
