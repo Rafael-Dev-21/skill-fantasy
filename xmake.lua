@@ -8,7 +8,6 @@ target("skfantasy")
 	add_includedirs("$(projectdir)/include")
 	if is_plat("windows") then
 		add_installfiles("$(projectdir)/pdcurses.dll")
-		add_deps("pdcurses")
 		add_links("pdcurses")
 	else
 		add_links("ncurses")
