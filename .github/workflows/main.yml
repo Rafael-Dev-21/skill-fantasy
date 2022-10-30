@@ -1,0 +1,15 @@
+name: skill-fantasy-main-workflow
+on:
+  push:
+    branch: [master]
+
+jobs:
+  deploy-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          xmake-version: latest
+      - run: xmake
+      - run: zip skfantasy.zip build/linux/armv7a/release/skfantasy
