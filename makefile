@@ -1,7 +1,7 @@
 CC = clang
 WINCC = i686-w64-mingw32-clang
-CFLAGS = -lncurses -lm -O3 -I./include/
-WINCFLAGS = -lpdcurses -lm -O3 -I./include/
+CFLAGS = -lncurses -lm -O3 -I./include/ -Wall -Werror -pedantic -g
+WINCFLAGS = -lpdcurses -lm -O3 -I./include/ -Wall -Werror -pedantic
 SOURCES = ./src/*.c
 
 all: skfantasy run clean
