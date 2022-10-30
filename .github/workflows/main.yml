@@ -46,6 +46,6 @@ jobs:
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_CREDENTIALS }}
         run: |
-          ${GITHUB_WORKSPACE}\butler.exe login
-          ${GITHUB_WORKSPACE}\butler.exe push skfantasy.zip rafael-dev-21/skill-fantasy:linux-x86-64-demo
-          ${GITHUB_WORKSPACE}\butler.exe logout
+          ${{GITHUB_WORKSPACE}}\butler.exe login
+          ${{GITHUB_WORKSPACE}}\butler.exe push skfantasy.zip rafael-dev-21/skill-fantasy:linux-x86-64-demo
+          ${{GITHUB_WORKSPACE}}\butler.exe logout
