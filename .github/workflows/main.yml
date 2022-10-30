@@ -13,6 +13,13 @@ jobs:
           xmake-version: latest
       - run: xmake -y
       - run: zip skfantasy.zip build/linux/x86_64/release/skfantasy
+      - uses: manleydev/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+          CHANNEL: linux-x86-64-demo
+          ITCH_GAME: skill-fantasy
+          ITCH_USER: rafael-dev-21
+          PACKAGE: skfantasy.zip
 
   deploy-windows:
     runs-on: windows-latest
@@ -23,3 +30,10 @@ jobs:
           xmake-version: latest
       - run: xmake -y
       - run: 7z a -tZip skfantasy.zip pdcurses.dll build/windows/x64/release/skfantasy.exe
+      - uses: manleydev/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+          CHANNEL: windows-x64-demo
+          ITCH_GAME: skill-fantasy
+          ITCH_USER: rafael-dev-21
+          PACKAGE: skfantasy.zip
