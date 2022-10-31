@@ -12,7 +12,7 @@ all: linux
 
 windows: CC=i686-w64-mingw32-gcc
 windows: INCLUDES=-Iinclude -I.
-windows: LIBS=-l./pdcurses
+windows: LIBS=-L. -lpdcurses
 windows: ITEMS=skfantasy.exe pdcurses.dll
 windows: PACKAGE=skfantasy-windows.zip
 windows: pdcurses build package clean
