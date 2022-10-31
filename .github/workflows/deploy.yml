@@ -30,4 +30,4 @@ jobs:
           CHANNEL: windows
           ITCH_GAME: skill-fantasy
           ITCH_USER: rafael-dev-21
-          PACKAGE: skfantasy-linux.zip
+          PACKAGE: skfantasy-windows.zip
