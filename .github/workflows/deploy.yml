@@ -1,0 +1,35 @@
+name: CI Deploy
+
+on:
+  push:
+    branches: [master]
+  workflow_dispach:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        run: ./install-deps.sh
+      - name: Build Linux
+        run: make linux
+      - name: Build Windows
+        run: make windows
+      - name: Deploy Linux to Itch.io
+        uses: manleydev/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+          CHANNEL: linux
+          ITCH_GAME: skill-fantasy
+          ITCH_USER: rafael-dev-21
+          PACKAGE: skfantasy-linux.zip
+      - name: Deploy Windows to Itch.io
+        uses: manleydev/butler-publish-itchio-acti
+on@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+          CHANNEL: windows
+          ITCH_GAME: skill-fantasy
+          ITCH_USER: rafael-dev-21
+          PACKAGE: skfantasy-linux.zip
