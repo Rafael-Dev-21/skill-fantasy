@@ -1,14 +1,14 @@
-CC=
+CC=clang
 SOURCES=src/*.c
 INCLUDES=-Iinclude
-LIBS=
+LIBS=-lncurses -lm
 CFLAGS=-g -Wall -Werror -pedantic $(INCLUDES) $(LIBS)
 BIN=skfantasy
-ITEMS=
-PACKAGE=
+ITEMS=$(BIN)
+PACKAGE=skfantasy-linux.zip
 RM=rm -rf
 
-all: windows linux
+all: linux
 
 windows: CC=i686-w64-mingw32-clang
 windows: LIBS=-lpdcurses
@@ -16,10 +16,7 @@ windows: ITEMS=skfantasy.exe pdcurses.dll
 windows: PACKAGE=skfantasy-windows.zip
 windows: build package clean
 
-linux: CC=clang
-linux: LIBS=-lncurses -lm
-linux: ITEMS=$(BIN)
-linux: PACKAGE=skfantasy-linux.zip
+
 linux: build package clean
 
 build:
@@ -27,6 +24,9 @@ build:
 
 package:
 	zip $(PACKAGE) $(ITEMS)
+
+run: build
+	./skfantasy
 
 clean:
 	$(RM) skfantasy skfantasy.exe
