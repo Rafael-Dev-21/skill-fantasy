@@ -25,8 +25,7 @@ jobs:
           ITCH_USER: rafael-dev-21
           PACKAGE: skfantasy-linux.zip
       - name: Deploy Windows to Itch.io
-        uses: manleydev/butler-publish-itchio-acti
-on@master
+        uses: manleydev/butler-publish-itchio-action@master
         env:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
           CHANNEL: windows
