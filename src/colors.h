@@ -4,12 +4,12 @@
 #include "common.h"
 
 enum game_colors {
-	SKPAIR_GRASS = 1,
-	SKPAIR_SAND,
-	SKPAIR_WATER,
-	SKPAIR_MOUNTAIN,
-	SKPAIR_PLAYER,
-	SKPAIR_COUNT
+  SKPAIR_GRASS = 1,
+  SKPAIR_SAND,
+  SKPAIR_WATER,
+  SKPAIR_MOUNTAIN,
+  SKPAIR_PLAYER,
+  SKPAIR_COUNT
 };
 
 bool setup_colors(void);
