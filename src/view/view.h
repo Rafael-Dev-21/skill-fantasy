@@ -1,5 +1,5 @@
-#ifndef SK_COMMON_H
-#define SK_COMMON_H
+#ifndef SK_VIEW_H
+#define SK_VIEW_H
 
 #ifdef __cplusplus
 extern "C" {

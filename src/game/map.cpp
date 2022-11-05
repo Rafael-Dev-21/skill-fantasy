@@ -1,7 +1,8 @@
 #include "map.h"
-#include "colors.h"
-#include "noise.h"
+
 #include <cmath>
+
+#include "noise.h"
 
 TileLayer::TileLayer(int width, int height) : width(width), height(height) {}
 TileLayer::~TileLayer() = default;
@@ -52,9 +53,7 @@ bool TileLayer::inBounds(int y, int x) {
 }
 
 bool TileLayer::walkable(int y, int x) {
-  if (!inBounds(y, x))
-    return false;
-  if (tiles.at(y).at(x) == TILE_MOUNTAIN)
-    return false;
+  if (!inBounds(y, x)) return false;
+  if (tiles.at(y).at(x) == TILE_MOUNTAIN) return false;
   return true;
 }

@@ -1,13 +1,12 @@
-#include "colors.h"
-#include "draw.h"
-#include "game.h"
-#include "map.h"
+#include "game/game.h"
+#include "view/colors.h"
+#include "view/draw.h"
 
-int main(void) {
-  draw::setup();
+int main() {
+  view::draw::setup();
 
-  if (!setup_colors()) {
-    draw::close();
+  if (!view::colors::setup()) {
+    view::draw::close();
     printf("Your terminal does not support color\n");
     return -1;
   }

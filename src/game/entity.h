@@ -4,14 +4,12 @@
 #include "position.h"
 
 struct Entity {
-public:
-  Entity(Position pos, char ch, int color);
+ public:
+  Entity(Position pos);
   ~Entity();
   void move(Position next);
 
   Position pos;
-  char ch;
-  int color;
 };
 
 #endif

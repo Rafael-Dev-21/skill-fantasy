@@ -1,8 +1,8 @@
 #include "colors.h"
 
-bool setup_colors(void) {
-  if (!has_colors())
-    return false;
+namespace view {
+bool colors::setup() {
+  if (!has_colors()) return false;
 
   start_color();
 
@@ -14,3 +14,5 @@ bool setup_colors(void) {
 
   return true;
 }
+
+};  // namespace view

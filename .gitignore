@@ -1,2 +1,10 @@
+*.obj
+*.bin
+*.out
+*.dll
+*.so
+*.a
+*.lib
+*.dylib
+*.app
 build/
-.xmake/

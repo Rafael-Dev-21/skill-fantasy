@@ -2,12 +2,12 @@
 #define GAME_H
 
 #include <array>
-#include "colors.h"
+
 #include "entity.h"
 #include "map.h"
 
 struct Game {
-public:
+ public:
   Game();
   ~Game();
 
@@ -16,8 +16,8 @@ public:
   void gameLoop();
   void close();
 
-  Entity player = Entity({0, 0}, '@', SKPAIR_PLAYER);
-  std::array<TileLayer, 2> layers;
+  Entity player = Entity({0, 0});
+  std::array<TileLayer, 2> layers{{{128, 128}, {128, 128}}};
 
   int currentLayer;
   int currentInput;

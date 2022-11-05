@@ -1,6 +1,8 @@
 #include "noise.h"
-#include "position.h"
+
 #include <cmath>
+
+#include "position.h"
 namespace noise {
 static int p[] = {
     151, 160, 137, 91,  90,  15,  131, 13,  201, 95,  96,  53,  194, 233, 7,
@@ -91,4 +93,4 @@ float fbm(float x, float y, float freq, int depth) {
   return fin / div;
 }
 
-}; // namespace noise
+};  // namespace noise

@@ -1,9 +1,11 @@
 #ifndef COLORS_H
 #define COLORS_H
 
-#include "common.h"
+#include "view.h"
 
-enum game_colors {
+namespace view {
+namespace colors {
+enum {
   SKPAIR_GRASS = 1,
   SKPAIR_SAND,
   SKPAIR_WATER,
@@ -12,6 +14,10 @@ enum game_colors {
   SKPAIR_COUNT
 };
 
-bool setup_colors(void);
+bool setup();
+
+};  // namespace colors
+
+};  // namespace view
 
 #endif

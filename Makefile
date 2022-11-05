@@ -1,8 +1,8 @@
 CC=clang++
-SOURCES=src/*.cpp
+SOURCES=$(shell find src -type f -name *.cpp)
 INCLUDES=
 LIBS=-lncurses -ldl
-CFLAGS=-g -Wall -Werror -Wextra $(INCLUDES) $(LIBS)
+CFLAGS=-g -Wall -Werror -Wextra -O2 $(INCLUDES) $(LIBS)
 BIN=skfantasy
 ITEMS=$(BIN)
 PACKAGE=skfantasy-linux.zip

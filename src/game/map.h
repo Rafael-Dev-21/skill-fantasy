@@ -1,12 +1,9 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "common.h"
-#include "position.h"
 #include <vector>
 
-#define MAP_WIDTH 1024
-#define MAP_HEIGHT 1024
+#include "position.h"
 
 enum TileType : int { TILE_GRASS, TILE_SAND, TILE_WATER, TILE_MOUNTAIN };
 
@@ -19,7 +16,7 @@ struct TileLayer {
   bool inBounds(int y, int x);
   bool walkable(int y, int x);
 
-private:
+ private:
   int getTileType(float elevation);
 
   int width;

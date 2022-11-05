@@ -1,8 +1,6 @@
-#include "common.h"
 #include "entity.h"
 
-Entity::Entity(Position pos, char ch, int color)
-    : pos(pos), ch(ch), color(color) {}
+Entity::Entity(Position pos) : pos(pos) {}
 
 Entity::~Entity() = default;
 
