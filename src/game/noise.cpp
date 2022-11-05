@@ -2,7 +2,6 @@
 
 #include <cmath>
 
-#include "position.h"
 namespace noise {
 static int p[] = {
     151, 160, 137, 91,  90,  15,  131, 13,  201, 95,  96,  53,  194, 233, 7,
@@ -41,15 +40,22 @@ static int p[] = {
     93,  222, 114, 67,  29,  24,  72,  243, 141, 128, 195, 78,  66,  215, 61,
     156, 180};
 
-static Position grads[] = {{1, 0},  {1, 1},   {0, 1},  {-1, 1},
-                           {-1, 0}, {-1, -1}, {0, -1}, {1, -1}};
-
 float lerp(float x, float y, float s) { return x + s * (y - x); }
 
 static float fade(float t) { return t * t * t * (t * (t * 6 - 15) + 10); }
 
-static float grad(int hash, float x, float y) {
-  return grads[hash].x * x + grads[hash].y * y;
+static float grad2d(int hash, float x, float y) {
+  switch (hash & 0x7) {
+    case 0x0: return y;
+    case 0x1: return x + y;
+    case 0x2: return x;
+    case 0x3: return x - y;
+    case 0x4: return -y;
+    case 0x5: return -x - y;
+    case 0x6: return -x;
+    case 0x7: return -x + y;
+    default: return 0;
+  }
 }
 
 float noise2d(float x, float y) {
@@ -66,15 +72,15 @@ float noise2d(float x, float y) {
   int g1 = p[ix + p[iy]], g2 = p[ix + 1 + p[iy]], g3 = p[ix + p[iy + 1]],
       g4 = p[ix + 1 + p[iy + 1]];
 
-  float n1 = grad(g1 & 7, x, y), n2 = grad(g2 & 7, x - 1, y),
-        n3 = grad(g3 & 7, x, y - 1), n4 = grad(g4 & 7, x - 1, y - 1);
+  float n1 = grad2d(g1, x, y), n2 = grad2d(g2, x - 1, y),
+        n3 = grad2d(g3, x, y - 1), n4 = grad2d(g4, x - 1, y - 1);
 
   float y1 = lerp(n1, n2, fx), y2 = lerp(n3, n4, fx);
 
   return (lerp(y1, y2, fy) + 1) / 2;
 }
 
-float fbm(float x, float y, float freq, int depth) {
+float fbm(float x, float y, float freq, int depth, std::function<float(float, float)> noise_fn) {
   float xa = x * freq;
   float ya = y * freq;
   float amp = 1.0;
@@ -84,7 +90,7 @@ float fbm(float x, float y, float freq, int depth) {
   int i;
   for (i = 0; i < depth; i++) {
     div += amp;
-    fin += noise2d(xa, ya) * amp;
+    fin += noise_fn(xa, ya) * amp;
     amp /= 2;
     xa *= 2;
     ya *= 2;

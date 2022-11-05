@@ -17,7 +17,7 @@ struct Game {
   void close();
 
   Entity player = Entity({0, 0});
-  std::array<TileLayer, 2> layers{{{128, 128}, {128, 128}}};
+  std::array<TileLayer, 2> layers;
 
   int currentLayer;
   int currentInput;
