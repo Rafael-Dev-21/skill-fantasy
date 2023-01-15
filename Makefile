@@ -10,7 +10,7 @@ RM=rm -rf
 
 all: linux
 
-windows: CC=i686-w64-mingw32-g++
+windows: CC=i686-w64-mingw32-clang++
 windows: INCLUDES=-I.
 windows: LIBS=-L. -lpdcurses -static-libgcc -static-libstdc++
 windows: ITEMS=skfantasy.exe pdcurses.dll
