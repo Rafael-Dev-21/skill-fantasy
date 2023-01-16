@@ -12,9 +12,15 @@ jobs:
       - name: Install Dependencies
         run: ./install-deps.sh
       - name: Build Linux
-        run: make linux
+        uses: xmake-io/github-action-setup-xmake@v1
+        run: |
+          xmake f
+          xmake
       - name: Build Windows
-        run: make windows
+        uses: xmake-io/github-action-setup-xmake@v1
+        run: |
+          xmake f -p mingw
+          xmake
       - name: Deploy Linux to Itch.io
         uses: manleydev/butler-publish-itchio-action@master
         env:
@@ -22,7 +28,7 @@ jobs:
           CHANNEL: linux
           ITCH_GAME: skill-fantasy
           ITCH_USER: rafael-dev-21
-          PACKAGE: skfantasy-linux.zip
+          PACKAGE: build/linux/x86_64/release
       - name: Deploy Windows to Itch.io
         uses: manleydev/butler-publish-itchio-action@master
         env:
@@ -30,4 +36,4 @@ jobs:
           CHANNEL: windows
           ITCH_GAME: skill-fantasy
           ITCH_USER: rafael-dev-21
-          PACKAGE: skfantasy-windows.zip
+          PACKAGE: build/windows/x86_64/release
