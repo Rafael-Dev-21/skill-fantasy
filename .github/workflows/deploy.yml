@@ -36,4 +36,4 @@ jobs:
           CHANNEL: windows
           ITCH_GAME: skill-fantasy
           ITCH_USER: rafael-dev-21
-          PACKAGE: build/windows/x86_64/release
+          PACKAGE: build/mingw/x86_64/release
