@@ -1,4 +1,4 @@
-#include <ncurses.h>
+#include "common.hpp"
 #include "render_system.hpp"
 
 #define RENDER_MASK (COMPONENT_POS | COMPONENT_DRAW)
