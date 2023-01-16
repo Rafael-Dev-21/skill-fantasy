@@ -19,8 +19,8 @@ jobs:
           xmake
       - name: Build Windows
         run: |
-          xmake f -p mingw
-          xmake -y
+          xmake f -p mingw -y
+          xmake
       - name: Deploy Linux to Itch.io
         uses: manleydev/butler-publish-itchio-action@master
         env:
