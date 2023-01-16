@@ -1,5 +1,5 @@
-#include <ncurses.h>
-#include "colors.h"
+#include "common.hpp"
+#include "colors.hpp"
 
 void initPairs() {
     init_pair(GRASS_PAIR, COLOR_YELLOW, COLOR_GREEN);

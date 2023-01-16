@@ -1,22 +1,22 @@
 {
-    tool_target_skillfantasy_linux_armv7a_ld = {
-        program = "/data/data/com.termux/files/usr/bin/g++",
-        toolname = "clangxx",
-        toolchain_info = {
-            name = "gcc",
-            cachekey = "gcc_arch_armv7a_plat_linux",
-            plat = "linux",
-            arch = "armv7a"
-        }
-    },
-    tool_target_skillfantasy_linux_armv7a_cc = {
+    tool_target_skfantasy_linux_armv7a_cxx = {
         program = "/data/data/com.termux/files/usr/bin/gcc",
-        toolname = "clang",
         toolchain_info = {
+            arch = "armv7a",
             name = "gcc",
-            cachekey = "gcc_arch_armv7a_plat_linux",
             plat = "linux",
-            arch = "armv7a"
-        }
+            cachekey = "gcc_arch_armv7a_plat_linux"
+        },
+        toolname = "clang"
+    },
+    tool_target_skfantasy_linux_armv7a_ld = {
+        program = "/data/data/com.termux/files/usr/bin/g++",
+        toolchain_info = {
+            arch = "armv7a",
+            name = "gcc",
+            plat = "linux",
+            cachekey = "gcc_arch_armv7a_plat_linux"
+        },
+        toolname = "clangxx"
     }
 }
