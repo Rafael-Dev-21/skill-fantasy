@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef __MINGW32__
+#ifndef __linux__
 #include <curses.h>
 #else
 #include <ncurses.h>
