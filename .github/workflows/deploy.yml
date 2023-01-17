@@ -17,15 +17,15 @@ jobs:
         run: |
           xmake f -p linux -a x86_64
           xmake
-          xmake f -a i686
+          xmake f -p linux -a i686
           xmake
-          xmake f -a armv7a
+          xmake f -p linux -a armv7a
           xmake
       - name: Build Windows
         run: |
           xmake f -p mingw -a x86_64 -y
           xmake
-          xmake f -a i686 -y
+          xmake f -p mingw -a i686 -y
           xmake
       - name: Deploy Linux x86_64 to Itch.io
         uses: manleydev/butler-publish-itchio-action@master
