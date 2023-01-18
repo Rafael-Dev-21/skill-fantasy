@@ -9,6 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Cache Xmake
+        id: cache-xmake
+        uses: actions/cache@v3
+        with:
+          path: ~/.xmake
       - name: Install Dependencies
         run: ./install-deps.sh
       - name: Setup Xmake
