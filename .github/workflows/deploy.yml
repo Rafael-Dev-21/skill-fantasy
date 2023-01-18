@@ -15,11 +15,11 @@ jobs:
         uses: xmake-io/github-action-setup-xmake@v1
       - name: Build Linux
         run: |
-          xmake f -p linux -a x86_64
+          xmake f -p linux -a x86_64 -y
           xmake
-          xmake f -p linux -a i686
+          xmake f -p linux -a i686 -y
           xmake
-          xmake f -p linux -a armv7a
+          xmake f -p linux -a armv7a -y
           xmake
       - name: Build Windows
         run: |
