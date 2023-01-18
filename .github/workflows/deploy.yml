@@ -13,7 +13,9 @@ jobs:
         id: cache-xmake
         uses: actions/cache@v3
         with:
-          path: ~/.xmake
+          path: |
+            ~/.xmake
+            ./build
           key: ${{ runner.os }}-build-xmake
       - name: Install Dependencies
         run: ./install-deps.sh
