@@ -1,4 +1,4 @@
-add_requires("pdcurses", {configs = {port = "sdl"}})
+add_requires("pdcurses")
 
 target("skfantasy")
   set_kind("binary")
