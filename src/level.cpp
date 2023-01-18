@@ -19,7 +19,7 @@ void Level::genOverworld()
             int index = row * width + col;
 
             tiles[index].ch = ',';
-            tiles[index].color = GRASS_PAIR;
+            tiles[index].color = COLOR_PAIR(GRASS_PAIR);
             tiles[index].solid = false;
             tiles[index].visible = true;
         }
@@ -39,7 +39,7 @@ void Level::render(Rect viewport)
 
             if (!tile.visible) continue;
 
-            mvaddch(y, x, tile.ch | COLOR_PAIR(tile.color));
+            mvaddch(y, x, tile.ch | tile.color);
         }
     }
 }
