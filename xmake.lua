@@ -6,5 +6,5 @@ target("skfantasy")
   if is_plat("mingw") then
     add_ldflags("-static-libgcc", "-static-libstdc++")
   else
-    add_links("pdcurses")
+    add_packages("pdcurses")
   end
