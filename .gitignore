@@ -7,6 +7,4 @@
 *.lib
 *.dylib
 *.app
-build/
-.xmake/
-docs/
+*.exe

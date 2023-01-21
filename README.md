@@ -6,8 +6,4 @@ A open source project of a survival/colony sim roguelike.
 
 ## Build
 
-pretty simple.
-
-```bash
-xmake
-```
+run make on linux, or make.bat on windows with mingw and pdcurses installed.
