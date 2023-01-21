@@ -15,6 +15,8 @@ package: skfantasy
 	tar -czf skfantasy-linux.tar.gz skfantasy
 	rm -rf skfantasy
 
+docs:
+	doxygen Doxyfile
 
 clean:
-	rm -rf skfantasy
+	rm -rf skfantasy docs

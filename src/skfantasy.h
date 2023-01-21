@@ -1,3 +1,8 @@
+/**
+ * @file skfantasy.h
+ * @brief The header of the main module of the game
+ */
+
 #ifndef SKFANTASY_H
 #define SKFANTASY_H
 
@@ -11,18 +16,17 @@
 #include <curses.h>
 #endif
 
-/* defines */
+/****************************
+*   DEFINES
+*****************************/
 #define MAP_SIZE     128
 #define ENTITY_COUNT 128
 
+/****************************
+*   ENUMS
+*****************************/
 /**
- * ---------------------------
- * enums
- * ---------------------------
- */
-
-/**
- * Color pairs
+ * @brief Color pairs
  */
 enum {
   PAIR_GRASS = 1,
@@ -30,14 +34,11 @@ enum {
   PAIR_COUNT
 };
 
+/****************************
+*   STRUCTS
+*****************************/
 /**
- * ----------------------------
- * structs
- * ----------------------------
- */
-
-/**
- * Represents a location
+ * @brief Represents a location
  */
 struct loc
 {
@@ -46,7 +47,7 @@ struct loc
 };
 
 /**
- * Represents a level
+ * @brief Represents a level
  */
 struct level
 {
@@ -55,7 +56,7 @@ struct level
 };
 
 /**
- * Represents a entity
+ * @brief Represents a entity
  */
 struct entity
 {
@@ -64,8 +65,9 @@ struct entity
   int appaerance;
 };
 
-/* functions */
-
+/****************************
+*   PROTOTYPES
+*****************************/
 /* level */
 void level_gen_wild(struct level *level);
 void level_render(struct level *level);
