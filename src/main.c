@@ -1,8 +1,3 @@
-/**
- * @file main.c
- * @brief Main file of the game
- */
-
 #include "skfantasy.h"
 
 struct level level;

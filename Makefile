@@ -1,6 +1,13 @@
 CC = gcc
-CFLAGS = -lncurses -ltinfo -Wall -Wextra -Werror -pedantic -std=c2x -g
+CFLAGS = -lncurses -ltinfo -Wall -Wextra -Werror -std=c2x -DUSE_NCURSES
 SOURCES = ./src/*.c
+MODE = release
+
+ifeq ($(MODE),release)
+	CFLAGS += -O2
+else ifeq ($(MODE),debug)
+	CFLAGS += -g -Og -fsanitize=address,undefined -DDEBUG
+endif
 
 all: skfantasy run clean
 
@@ -15,7 +22,7 @@ package: skfantasy
 	tar -czf skfantasy-linux.tar.gz skfantasy
 	rm -rf skfantasy
 
-docs:
+docs: clean
 	doxygen Doxyfile
 
 clean:

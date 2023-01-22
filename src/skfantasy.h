@@ -1,6 +1,6 @@
 /**
  * @file skfantasy.h
- * @brief The header of the main module of the game
+ * @brief Game's main module
  */
 
 #ifndef SKFANTASY_H
@@ -19,7 +19,13 @@
 /****************************
 *   DEFINES
 *****************************/
-#define MAP_SIZE     128
+/**
+ * @brief Both width and height of the level
+ */
+#define LEVEL_SIZE   128
+/**
+ * @brief Number of entities
+ */
 #define ENTITY_COUNT 128
 
 /****************************
@@ -48,11 +54,12 @@ struct loc
 
 /**
  * @brief Represents a level
+ * Represents a level of the world, with both visual and logic grids.
  */
 struct level
 {
-  int visual[MAP_SIZE][MAP_SIZE];
-  bool logic[MAP_SIZE][MAP_SIZE];
+  int visual[LEVEL_SIZE][LEVEL_SIZE];
+  bool logic[LEVEL_SIZE][LEVEL_SIZE];
 };
 
 /**
@@ -69,7 +76,15 @@ struct entity
 *   PROTOTYPES
 *****************************/
 /* level */
+/**
+ * @brief Generate a wilderness level
+ * @param level The level
+ */
 void level_gen_wild(struct level *level);
+/**
+ * @brief Render the level
+ * @param level The level
+ */
 void level_render(struct level *level);
 
 /* game */

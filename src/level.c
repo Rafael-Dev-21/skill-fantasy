@@ -1,6 +1,6 @@
 #include "skfantasy.h"
 
-struct tile
+static struct tile
 {
   char sprite;
   int appaerance;
@@ -8,9 +8,9 @@ struct tile
 
 void level_gen_wild(struct level *level)
 {
-  for (int row = 0; row < MAP_SIZE; ++row)
+  for (int row = 0; row < LEVEL_SIZE; ++row)
   {
-    for (int col = 0; col < MAP_SIZE; ++col)
+    for (int col = 0; col < LEVEL_SIZE; ++col)
     {
       if (((row % 2) == 0) && ((col % 2) == 0))
       {
@@ -29,9 +29,9 @@ void level_gen_wild(struct level *level)
 void
 level_render(struct level *level)
 {
-  for (int row = 0; row < MAP_SIZE; ++row)
+  for (int row = 0; row < LEVEL_SIZE; ++row)
   {
-      for (int col = 0; col < MAP_SIZE; ++col)
+      for (int col = 0; col < LEVEL_SIZE; ++col)
       {
         struct tile tile = tileset[level->visual[row][col]];
 
