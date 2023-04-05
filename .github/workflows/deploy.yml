@@ -12,4 +12,4 @@ jobs:
       - name: Setup Xmake
         uses: xmake-io/github-action-setup-xmake@v1
       - name: Build Linux
-        run: make package
+        run: xmake

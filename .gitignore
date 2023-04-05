@@ -8,3 +8,5 @@
 *.dylib
 *.app
 *.exe
+build
+.xmake
