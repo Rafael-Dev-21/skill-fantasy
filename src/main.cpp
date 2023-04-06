@@ -11,6 +11,6 @@ int main(void)
 	NCursesView view(system, game);
 
 	game.run();
-
+	
 	return 0;
-}
+}	

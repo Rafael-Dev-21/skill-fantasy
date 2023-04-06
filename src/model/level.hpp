@@ -1,14 +1,13 @@
 #pragma once
 
 #include <functional>
-#include <vector>
-#include <array>
+#include <map>
 
 #include "../events.hpp"
 #include "../noise.hpp"
 #include "object.hpp"
 
-#define LEVEL_SIZE 1024
+#define LEVEL_SIZE 2048
 
 enum TileType {
 	NO_TILE,
@@ -45,5 +44,5 @@ public:
 
 private:
 
-	std::array<std::array<Tile, LEVEL_SIZE>, LEVEL_SIZE> m_tiles;
+	std::map<std::pair<int, int>, Tile> m_tiles;
 };

@@ -52,7 +52,7 @@ void NCursesView::renderLevel()
 			int y = j - cameraPos.y();
 			int x = i - cameraPos.x();
 
-			if (j < 0 || j > LEVEL_SIZE - 1 || i < 0 || i > LEVEL_SIZE - 1) {
+			if (j < 0 || j > LEVEL_SIZE - 1 || i < -LEVEL_SIZE || i > 0) {
 				mvaddch(y, x, ' ');
 			} else {
 				renderTile(y, x, level->at(j, i));
