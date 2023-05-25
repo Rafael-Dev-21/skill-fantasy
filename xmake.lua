@@ -6,5 +6,5 @@ target("skfantasy")
 	add_includedirs("include")
 	add_links("ncurses", "tinfo")
 	set_warnings("all", "error")
-	set_languages("c99")
+	set_languages("c11")
 
