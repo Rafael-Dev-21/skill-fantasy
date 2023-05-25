@@ -6,5 +6,9 @@ target("skfantasy")
 	add_includedirs("include")
 	add_links("ncurses", "tinfo")
 	set_warnings("all", "error")
-	set_languages("c11")
+	if is_plat("linux") then
+		set_languages("gnu11")
+	else
+		set_languages("c11")
+	end
 
