@@ -9,11 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup Ruby-Packer
+      - name: Setup
         run: |
           sudo apt install squashfs-tools
           curl -L https://gw.alipayobjects.com/os/enclose-prod/1fd23e6b-d48f-4ed0-94dd-f0f539960253/rubyc-v0.4.0-linux-x64.gz | gunzip >> rubyc
           chmod +x rubyc
+      - name: Install deps
+        run: bundle install
       - name: Build Linux
         run: ./rubyc -oskfantasy skfantasy.rb
       - name: Build Windows
