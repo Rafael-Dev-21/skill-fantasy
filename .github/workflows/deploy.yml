@@ -19,9 +19,9 @@ jobs:
           sudo gem install bundler
           sudo bundler install
       - name: Build Linux
-        run: ./rubyc --make-args="CCFLAGS='-fcommon'" -oskfantasy skfantasy.rb
+        run: ./rubyc --make-args="CFLAGS='-fcommon'" -oskfantasy skfantasy.rb
       - name: Build Windows
-        run: ./rubyc --make-args="CCFLAGS='-fcommon'" -oskfantasy.exe skfantasy.rb
+        run: ./rubyc --make-args="CFLAGS='-fcommon'" -oskfantasy.exe skfantasy.rb
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
