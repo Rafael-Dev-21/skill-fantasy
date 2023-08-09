@@ -6,4 +6,8 @@ A open source project of a survival/colony sim roguelike.
 
 ## Build
 
-run make on linux, or make.bat on windows with mingw and pdcurses installed.
+use [ruby packer](https://github.com/pmq20/ruby-packer)
+
+```
+rubyc -o skfantasy skfantasy.rb
+```

@@ -9,7 +9,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup Xmake
-        uses: xmake-io/github-action-setup-xmake@v1
+      - name: Setup Ruby-Packer
+        run: |
+          sudo apt install squashfs-tools
+          curl -L https://gw.alipayobjects.com/os/enclose-prod/1fd23e6b-d48f-4ed0-94dd-f0f539960253/rubyc-v0.4.0-linux-x64.gz | gunzip >> rubyc
       - name: Build Linux
-        run: xmake
+        run: ./rubyc -oskfantasy skfantasy.rb
+      - name: Build Windows
+        run: ./rubyc -oskfantasy.exe skfantasy.rb
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          path: |
+            skfantasy
+            skfantasy.exe
