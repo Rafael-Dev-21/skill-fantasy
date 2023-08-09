@@ -11,8 +11,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Setup
         run: |
-          sudo apt install squashfs-tools
-          curl -L http://enclose.io/rubyc/rubyc-linux-x64.gz | gunzip > rubyc
+          curl -O https://github.com/pmq20/ruby-packer/releases/download/linux-x64/rubyc
           chmod +x rubyc
           ./rubyc --help
       - name: Install deps
