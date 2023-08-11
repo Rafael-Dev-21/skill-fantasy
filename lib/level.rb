@@ -3,27 +3,32 @@ require 'async'
 require_relative 'noise'
 
 class Tile
-  attr_accessor :char, :color, :type, :walkable
+  attr_accessor :char, :color, :type, :biome
 
-  def initialize(type)
+  def initialize(type, biome)
     @type = type
-
-    @walkable = true
+    @biome = biome
 
     case @type
     when :grass then
       @char = ','
-      @color = 1
+      case @biome
+      when :forest then
+        @color = 6
+      when :tundra then
+        @color = 7
+      else
+        @color = 1
+      end
     when :sand then
       @char = '~'
       @color = 2
     when :water then
       @char = '~'
       @color = 3
-    when :mountain then
-      @char = '^'
+    when :stone then
+      @char = '.'
       @color = 4
-      @walkable = false
     else
       @char = ' '
       @color = 0
@@ -31,20 +36,55 @@ class Tile
   end
 end
 
-def get_tile(elevation)
-  if elevation < 0.1
+def get_tile(elevation, biome)
+  if elevation < 0.2
     :water
-  elsif elevation < 0.2
+  elsif elevation < 0.3
     :sand
-  elsif elevation < 0.5
-    :grass
+  elsif elevation < 0.6
+    if biome == :desert
+      :sand
+    else
+      :grass
+    end
   else
-    :mountain
+    :stone
   end
 end
 
+def get_biome(moisture, temperature)
+  if temperature > 0.5
+    if moisture < 0.3
+      return :desert
+    end
+
+    if moisture < 0.5
+      return :plains
+    end
+
+    return :forest
+  end
+
+  if temperature > 0.3
+    if moisture < 0.2
+      return :desert
+    end
+    return :plains
+  end
+
+  if moisture < 0.1
+    return :desert
+  end
+
+  if moisture < 0.2
+    return :plains
+  end
+
+  return :tundra
+end
+
 class Map
-  attr_accessor :width, :height, :tiles, :spawn
+  attr_accessor :tiles, :spawn
 
   def initialize(size = 32, radius = 2)
     Sync do
@@ -61,7 +101,7 @@ class Map
 
       @spawn = nil
 
-      @noise = Noise.new
+      @noise = Perlin.new
 
       @tiles = {}
 
@@ -122,15 +162,18 @@ class Map
           ny = y.to_f / @size - 0.5
           nx = x.to_f / @size - 0.5
 
-          e = (@noise.fbm(nx, ny, 1, 3) * 1.2) ** 2.75
+          e = @noise.value(nx, ny)
+          m = @noise.value(nx + 1, ny)
+          t = @noise.value(nx, ny + 1)
 
-          type = get_tile e
+          biome = get_biome(m, t)
+          type = get_tile(e, biome)
 
-          if type == :grass and not @spawn
+          if type != :water and not @spawn
             @spawn = Point.new(y, x)
           end
 
-          @tiles[index(y, x)] = Tile.new type
+          @tiles[index(y, x)] = Tile.new(type, biome)
         end
       end
     end

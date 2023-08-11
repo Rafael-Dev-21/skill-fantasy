@@ -15,6 +15,7 @@ class View
     init_screen
     noecho
     curs_set 0
+    Curses.timeout = 0
 
     if !colors?
       close_screen
@@ -68,6 +69,14 @@ class View
       addstr("res=#{cols}x#{lines}")
       setpos(1, 0)
       addstr("#{game.player.pos}")
+
+      begin
+        y = game.player.pos.y
+        x = game.player.pos.x
+        tile = game.map.tile_at(y, x)
+        setpos(2, 0)
+        addstr(":#{tile.biome}")
+      end
     end
 
     refresh
@@ -86,10 +95,12 @@ class View
       start_color
 
       init_pair(1, 3, 2)
-      init_pair(2, 3, 7)
-      init_pair(3, 6, 4)
-      init_pair(4, 0, 7)
+      init_pair(2, 3, 230)
+      init_pair(3, 14, 12)
+      init_pair(4, 0, 8)
       init_pair(5, 1, 5)
+      init_pair(6, 3, 22)
+      init_pair(7, 3, 73)
 
       true
     end

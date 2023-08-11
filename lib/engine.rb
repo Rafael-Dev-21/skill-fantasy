@@ -13,7 +13,7 @@ class Engine
   def initialize(debug = false)
     @debug = debug
 
-    @map = Map.new()
+    @map = Map.new(16, 2)
     startpos = @map.spawn.dup
 
     @player = Entity.new(startpos, '@', 5)
@@ -33,12 +33,12 @@ class Engine
       newpos.x -= 1
     when 'l' then
       newpos.x += 1
+    when 'd' then
+      @debug = !@debug
     end
 
-    if @map.tile_at(newpos.y, newpos.x).type != :mountain
-      @player.move(newpos)
-      @map.check_chunks newpos
-    end
+    @player.move(newpos)
+    Async { @map.check_chunks newpos }
   end
 
   def input
@@ -48,9 +48,9 @@ class Engine
   def run
     if @view.ok
       while @curr_input != 'q'
+        input
         update
         @view.game self
-        input
       end
     end
   end
