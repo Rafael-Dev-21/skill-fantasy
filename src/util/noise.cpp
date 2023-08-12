@@ -15,7 +15,9 @@ float Noise::fbm(float x, float y, FBMParams params)
 		freq *= params.lacunarity;
 		freq *= params.persistence;
 	}
-	return result / divider;
+	if (divider < 0)
+        return result;
+    return result / divider;
 }
 
 Perlin::Perlin()

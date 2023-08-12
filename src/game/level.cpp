@@ -84,7 +84,7 @@ void Level::genWorld()
 
 	Perlin noise;
 
-	float limit = sqrt(0.5);
+	float limit = 1;
 
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
