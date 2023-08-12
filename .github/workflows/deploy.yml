@@ -17,7 +17,6 @@ jobs:
           actions-cache-key: ubuntu-deploy
       - name: Install Mingw
         run: |
-          sudo update-alternatives --config x86_64-w64-mingw32-g++
           sudo apt-get install mingw-w64
           sudo update-alternatives --config x86_64-w64-mingw32-g++
       - name: Build Linux
