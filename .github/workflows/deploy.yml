@@ -15,15 +15,17 @@ jobs:
           sudo apt-get install mingw-w64
       - name: Build Linux
         run: |
-          xmake f -m release -p linux
+          xmake f -m release -p linux -a x86_64
+          xmake
+          xmake f -m release -p linux -a aarch64
           xmake
           xmake f -m release -p linux -a armv7a
           xmake
       - name: Build Windows
         run: |
-          xmake f -p windows -a i386 -m release
+          xmake f -m release -p mingw -a i386
           xmake
-          zmake f -a x86_64 -p windows -m release
+          zmake f -m release -p mingw -a x86_64
           xmake
       - name: Upload
         uses: actions/upload-artifact@v3

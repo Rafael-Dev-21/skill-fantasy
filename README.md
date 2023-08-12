@@ -6,8 +6,9 @@ A open source project of a survival/colony sim roguelike.
 
 ## Build
 
-use [ruby packer](https://github.com/pmq20/ruby-packer)
+use xmake.
 
-```
-rubyc -o skfantasy skfantasy.rb
+```sh
+xmake build
+xmake run
 ```
