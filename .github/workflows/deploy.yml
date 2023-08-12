@@ -9,7 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup
+      - name: Cache
+        uses: actions/cache@v3
+      - name: Setup Xmake
+        uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          xmake-version: latest
+          actions-cache-folder: '.xmake-cache'
+      - name: Install Mingw
         run: |
           curl -fsSL https://xmake.io/shget.text | bash
           sudo apt-get install mingw-w64
@@ -17,14 +24,8 @@ jobs:
         run: |
           xmake f -m release -p linux -a x86_64
           xmake
-          xmake f -m release -p linux -a aarch64
-          xmake
-          xmake f -m release -p linux -a armv7a
-          xmake
       - name: Build Windows
         run: |
-          xmake f -m release -p mingw -a i386 -y
-          xmake
           xmake f -m release -p mingw -a x86_64 -y
           xmake
       - name: Upload
