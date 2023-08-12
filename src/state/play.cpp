@@ -15,7 +15,7 @@ static void renderAll()
 }
 
 static void movePlayer(int x, int y) {
-    player->move(Vector(x, y));
+    player->move(IVector(x, y));
     beep();
 }
 
