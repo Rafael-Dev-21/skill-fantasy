@@ -9,13 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Cache
-        uses: actions/cache@v3
       - name: Setup Xmake
         uses: xmake-io/github-action-setup-xmake@v1
         with:
           xmake-version: latest
           actions-cache-folder: '.xmake-cache'
+          actions-cache-key: ubuntu-deploy
       - name: Install Mingw
         run: |
           curl -fsSL https://xmake.io/shget.text | bash
