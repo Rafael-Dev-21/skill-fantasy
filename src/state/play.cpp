@@ -4,11 +4,8 @@
 
 static void renderAll()
 {
-    int cols, rows;
-    getmaxyx(stdscr, rows, cols);
-
 	if (player && level) {
-	auto center = IPoint(cols / 2, rows / 2);
+	auto center = IPoint(COLS / 2, LINES / 2);
 
 	auto origin = player->getPosition() - center;
 

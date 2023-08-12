@@ -72,28 +72,28 @@ void Level::genWorld()
 {
 	bool spawnSet = false;
 
-	float size = 32.0;
+	float size = 64.0;
 
 	FBMParams params;
 
 	params.amplitude = 1;
-	params.persistence = 1.0 / 3.0;
+	params.persistence = 0.5;
 	params.frequency = 1;
-	params.lacunarity = 3.0;
-	params.octaves = 10;
+	params.lacunarity = 2;
+	params.octaves = 3;
 
 	Perlin noise;
 
-	float limit = 1;
+	float limit = sqrt(0.5);
 
 	for (int y = 0; y < height; y++) {
 		for (int x = 0; x < width; x++) {
-			float nx = x / size - 0.5;
+	    	float nx = x / size - 0.5;
 			float ny = y / size - 0.5;
 
 			float e = noise.fbm(nx, ny, params);
 			e = Math::normalize(e, -limit, limit);
-			e = std::round(e * 12.0);
+			e = std::round(e * 32.0);
 
 			TileType type = getTile(e);
 
@@ -110,11 +110,11 @@ void Level::genWorld()
 
 TileType Level::getTile(float e)
 {
-	if (e < 5)
+	if (e < 14)
 		return TileType::WATER;
-	else if (e < 6)
+	else if (e < 17)
 		return TileType::SAND;
-	else if (e < 10)
+	else if (e < 26)
 		return TileType::GRASS;
 	else
 		return TileType::STONE;

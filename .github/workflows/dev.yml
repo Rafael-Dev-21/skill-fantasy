@@ -2,7 +2,7 @@ name: CI Deploy
 
 on:
   push:
-    branches: [master]
+    branches: [dev]
 
 jobs:
   build:
@@ -22,15 +22,15 @@ jobs:
           sudo apt-get install mingw-w64
       - name: Build Linux
         run: |
-          xmake f -m release -p linux -a x86_64
+          xmake f -m debug -p linux -a x86_64
           xmake
-          xmake f -m release -p linux -a aarch64
+          xmake f -m debug -p linux -a aarch64
           xmake
       - name: Build Windows
         run: |
-          xmake f -m release -p mingw -a x86_64 -y
+          xmake f -m debug -p mingw -a x86_64 -y
           xmake
-          xmake f -m release -p mingw -a i386 -y
+          xmake f -m debug -p mingw -a i386 -y
           xmake
       - name: Upload
         uses: actions/upload-artifact@v3
