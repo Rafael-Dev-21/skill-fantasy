@@ -3,7 +3,11 @@
 #include "engine.hpp"
 
 static void printTitle() {
-	int startx = COLS / 2 - 8;
+    int cols, rows, startx;
+
+    getmaxyx(stdscr, rows, cols);
+
+    startx = cols / 2 - 8;
 
 	clear();
 	mvaddstr(2, startx, "#== # # =#= #   #  ");

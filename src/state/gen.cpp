@@ -1,5 +1,4 @@
 #include <cmath>
-#include <ctime>
 #include <chrono>
 #ifdef __MINGW32__
 #include "mingw.thread.h"
@@ -12,9 +11,13 @@
 
 EngineState genAction()
 {
+    int cols, rows;
+
+    getmaxyx(stdscr, rows, cols);
+
 	clear();
 	srand(50);
-	mvaddstr(5, COLS / 2 - 8, "Creating world...");
+	mvaddstr(5, cols / 2 - 8, "Creating world...");
     refresh();
 
 	level = new Level(1024, 1024);
@@ -22,7 +25,7 @@ EngineState genAction()
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-    mvaddstr(8, COLS / 2 - 7, "[Press any key]");
+    mvaddstr(8, cols / 2 - 7, "[Press any key]");
     refresh();
     getch();
 
