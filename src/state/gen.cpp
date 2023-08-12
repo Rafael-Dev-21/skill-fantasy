@@ -15,6 +15,9 @@ EngineState genAction()
 
     getmaxyx(stdscr, rows, cols);
 
+    mvprintw(0, 0, "%dx%d", cols, rows);
+    getch();
+
 	clear();
 	srand(50);
 	mvaddstr(5, cols / 2 - 8, "Creating world...");
