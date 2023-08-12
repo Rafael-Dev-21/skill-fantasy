@@ -3,7 +3,7 @@
 #include <chrono>
 #include <thread>
 
-#include <ncurses.h>
+#include <curses.h>
 
 #include "engine.hpp"
 

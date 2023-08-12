@@ -2,7 +2,7 @@
 #include "noise.hpp"
 #include "math.hpp"
 
-#include <ncurses.h>
+#include <curses.h>
 
 Tile::Tile(TileType type) :
 	type(type)
