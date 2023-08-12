@@ -30,6 +30,7 @@ jobs:
           xmake f -m release -p mingw -a x86_64 -y
           xmake
           xmake f -m release -p mingw -a i386 -y
+          xmake
       - name: Upload
         uses: actions/upload-artifact@v3
         with:

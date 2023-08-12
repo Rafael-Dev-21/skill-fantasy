@@ -11,7 +11,7 @@ target("skfantasy")
 	if is_plat("windows") or is_plat("mingw") then
 		add_packages("pdcurses")
         add_cxxflags("-static-libgcc",
-                     "-static-libgcc_seh-1",
+                     "-static-libgcc_s_seh-1",
                      "-static-libstdc++",
                      "-static-libstdc++-6",
                      "-static-libwinpthread",
