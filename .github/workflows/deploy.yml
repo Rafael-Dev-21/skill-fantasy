@@ -18,7 +18,7 @@ jobs:
       - name: Install Mingw
         run: |
           sudo apt-get install mingw-w64
-          sudo update-alternatives --config x86_64-w64-mingw32-g++
+          echo '1' | sudo update-alternatives --config x86_64-w64-mingw32-g++
       - name: Build Linux
         run: |
           xmake f -m release -p linux -a x86_64
