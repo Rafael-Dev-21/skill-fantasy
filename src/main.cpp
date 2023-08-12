@@ -1,9 +1,5 @@
 #include "engine.hpp"
 
-#include <ncurses.h>
-
-#include <cmath>
-
 Level *level = nullptr;
 Entity *player = nullptr;
 
