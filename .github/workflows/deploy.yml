@@ -23,10 +23,13 @@ jobs:
         run: |
           xmake f -m release -p linux -a x86_64
           xmake
+          xmake f -m release -p linux -a aarch64
+          xmake
       - name: Build Windows
         run: |
           xmake f -m release -p mingw -a x86_64 -y
           xmake
+          xmake f -m release -p mingw -a i386 -y
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
