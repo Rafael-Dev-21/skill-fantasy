@@ -16,9 +16,7 @@ jobs:
           actions-cache-folder: '.xmake-cache'
           actions-cache-key: ubuntu-deploy
       - name: Install Mingw
-        run: |
-          curl -fsSL https://xmake.io/shget.text | bash
-          sudo apt-get install mingw-w64
+        run: sudo apt-get install mingw-w64
       - name: Build Linux
         run: |
           xmake f -m release -p linux -a x86_64
