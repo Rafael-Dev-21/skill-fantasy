@@ -15,8 +15,6 @@ float Noise::fbm(float x, float y, FBMParams params)
 		freq *= params.lacunarity;
 		amp *= params.persistence;
 	}
-	if (divider == 0)
-        return result;
     return result / divider;
 }
 
