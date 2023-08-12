@@ -10,6 +10,7 @@ target("skfantasy")
 	add_includedirs("include")
 	if is_plat("windows") then
 		add_packages("pdcurses")
+        add_cxxflags("-static-libgcc", "-static-libstdc++")
 	else
 		add_links("ncurses")
 	end

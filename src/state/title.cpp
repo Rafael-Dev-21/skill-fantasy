@@ -23,7 +23,7 @@ EngineState titleAction() {
 	case 'q':
 		return ENGINE_EXIT;
 	case 's':
-		return ENGINE_PLAY;
+		return ENGINE_GEN;
 	default:
 		return ENGINE_TITLE;
 	}

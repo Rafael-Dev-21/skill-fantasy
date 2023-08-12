@@ -11,9 +11,7 @@ int main(void)
 {
 	Engine game;
 
-	player = new Entity(IPoint(0, 0), '@', 5);
-
-	// game.run();
+	game.run();
 
 	delete level;
 	delete player;
