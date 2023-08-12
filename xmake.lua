@@ -1,7 +1,7 @@
 add_rules("mode.debug", "mode.release")    
 
 if is_plat("windows") or is_plat("mingw") then
-	add_requires("pdcurses")
+	add_requires("pdcurses", { configs = { port = "wincon" } })
 end
 
 target("skfantasy")

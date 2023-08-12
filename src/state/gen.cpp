@@ -17,7 +17,7 @@ EngineState genAction()
 	mvaddstr(5, COLS / 2 - 8, "Creating world...");
     refresh();
 
-	level = new Level();
+	level = new Level(1024, 1024);
 	player = new Entity(IPoint(10, 10), '@', 5);
 
     std::this_thread::sleep_for(std::chrono::milliseconds(500));

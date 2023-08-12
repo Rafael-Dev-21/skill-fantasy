@@ -14,32 +14,32 @@ static void renderAll()
 	}
 }
 
+static void movePlayer(int x, int y) {
+    player->move(Vector(x, y));
+    beep();
+}
+
 static EngineState handleInput()
 {
-	IVector dir;
-
 	switch(getch()) {
 	case 'q':
 		delete level; level = nullptr;
 		delete player; player = nullptr;
 		return ENGINE_TITLE;
 	case 'h':
-		dir.x = -1;
+		movePlayer(-1, 0);
 		break;
 	case 'j':
-		dir.y = 1;
+		movePlayer(0, 1);
 		break;
 	case 'k':
-		dir.y = -1;
+		movePlayer(0, -1);
 		break;
 	case 'l':
-		dir.x = 1;
+		movePlayer(1, 0);
 		break;
 	}
-
-	player->move(dir);
-
-	return ENGINE_PLAY;
+    return ENGINE_PLAY;
 }
 
 EngineState playAction()
