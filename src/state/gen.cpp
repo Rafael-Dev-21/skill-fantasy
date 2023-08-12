@@ -1,7 +1,12 @@
 #include <cmath>
 #include <ctime>
 #include <chrono>
+
+#ifdef __MINGW32__
+#include <mingw.thread.h>
+#else
 #include <thread>
+#endif
 
 #include <curses.h>
 
