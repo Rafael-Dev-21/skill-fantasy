@@ -16,7 +16,7 @@ EngineState genAction() {
   mvaddstr(5, COLS / 2 - 8, "Creating world...");
   refresh();
 
-  level = new Level();
+  level = new Level(32, 2);
   while (true) {
     if (level->isSpawnSet()) {
       player = new Entity(level->getSpawn(), '@', 5);
