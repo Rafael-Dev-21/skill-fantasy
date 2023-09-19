@@ -3,6 +3,12 @@
 #include <cmath>
 #include <cstdlib>
 
+#ifdef __MINGW32__
+export "C" {
+  #include <drand48.h>
+};
+#endif
+
 namespace Math {
 float lerp(float a, float b, float t);
 float smooth(float t);
