@@ -1,43 +1,59 @@
 #pragma once
 
-#include <vector>
-#include "geom.hpp"
+#include <map>
+#include <utility>
 
-enum class TileType {
-	GRASS,
-	WATER,
-	SAND,
-	STONE
-};
+#include "geom.hpp"
+#include "noise.hpp"
+#include "objects.hpp"
+
+enum class TileType { GRASS, WATER, SAND, STONE };
+
+enum class Biome { DESERT, PLAINS, FOREST, TUNDRA };
 
 struct Tile {
-	Tile(TileType type = TileType::GRASS);
+  Tile(TileType type = TileType::GRASS, Biome biome = Biome::PLAINS);
 
-	TileType type;
-	int sprite;
-	int colors;
+  TileType type;
+  Biome biome;
+  int sprite;
+  int colors;
+  
+  FixedObject *fixedObject = nullptr;
+  LooseObject *looseObject = nullptr;
 };
 
 class Level {
-public:
-	Level(int width = 128, int height = 128);
+ public:
+  Level(int chunkSize = 32, int chunkRadius = 2);
 
-	Tile tileAt(int x, int y);
+  Tile tileAt(int x, int y);
 
-	void render(IVector cameraOrigin);
+  void render(IVector cameraOrigin);
 
-	IPoint getSpawn();
+  IPoint getSpawn();
 
-	bool inBounds(int x, int y);
+  bool inBounds(int x, int y);
 
-private:
-	void genWorld();
-	TileType getTile(float e);
-	int indexOf(int x, int y);
+  bool isSpawnSet();
 
-	std::vector<Tile> tiles;
-	int width;
-	int height;
+  void checkChunks(IPoint point);
 
-	IPoint spawn;
+ private:
+  void genInitial();
+  void genChunk(int chunkX, int chunkY);
+  TileType getTile(float e, Biome b);
+  Biome getBiome(float m, float t);
+
+  std::map<std::pair<int, int>, Tile> tiles;
+  std::map<std::pair<int, int>, bool> chunkVisited;
+  int chunkSize;
+  int chunkRadius;
+
+  bool spawnSet = false;
+
+  IPoint spawn;
+  Simplex noise;
+  FBMParams heightParams;
+  FBMParams biomeParams;
 };

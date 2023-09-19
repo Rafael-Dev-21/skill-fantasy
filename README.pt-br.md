@@ -1,16 +1,15 @@
-# Skill Fantasy
+#Skill Fantasy
 
-Um projeto de jogo de sobrevivência no terminal que venho desenvolvendo a um tempo.
+Um projeto de jogo de sobrevivência no terminal que venho desenvolvendo a um
+        tempo.
 
-# Playlist
+#Playlist
 
-<https://youtube.com/playlist?list=PLJsfx7Z0sXi7FZyrqkoQaW0OruHpnjxo->
+    < https :  // youtube.com/playlist?list=PLJsfx7Z0sXi7FZyrqkoQaW0OruHpnjxo->
 
-# Compilar
+#Compilar
 
-use xmake.
+               use xmake.
 
-```sh
-xmake build
-xmake run
+```sh xmake build xmake run
 ```

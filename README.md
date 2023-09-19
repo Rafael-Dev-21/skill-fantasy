@@ -1,14 +1,12 @@
-# skill-fantasy
-A open source project of a survival/colony sim roguelike.
+#skill - fantasy
+A open source project of a survival / colony sim roguelike.
 
-## Playlist
-<https://youtube.com/playlist?list=PLJsfx7Z0sXi7FZyrqkoQaW0OruHpnjxo->
+                                      ##Playlist <
+    https :  // youtube.com/playlist?list=PLJsfx7Z0sXi7FZyrqkoQaW0OruHpnjxo->
 
-## Build
+             ##Build
 
-use xmake.
+                 use xmake.
 
-```sh
-xmake build
-xmake run
+```sh xmake build xmake run
 ```

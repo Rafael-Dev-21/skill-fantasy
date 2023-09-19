@@ -1,5 +1,6 @@
-#include <cmath>
 #include <chrono>
+#include <cmath>
+#include <ctime>
 #ifdef __MINGW32__
 #include "mingw.thread.h"
 #else
@@ -9,30 +10,27 @@
 
 #include "engine.hpp"
 
-EngineState genAction()
-{
-    int cols, rows;
+EngineState genAction() {
+  clear();
+  srand(time(NULL));
+  mvaddstr(5, COLS / 2 - 8, "Creating world...");
+  refresh();
 
-    getmaxyx(stdscr, rows, cols);
+  level = new Level();
+  while (true) {
+    if (level->isSpawnSet()) {
+      player = new Entity(level->getSpawn(), '@', 5);
+      break;
+    }
+  }
 
-    mvprintw(0, 0, "%dx%d", cols, rows);
-    getch();
+  std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-	clear();
-	srand(50);
-	mvaddstr(5, cols / 2 - 8, "Creating world...");
-    refresh();
+  mvaddstr(8, COLS / 2 - 7, "[Press any key]");
+  refresh();
+  getch();
 
-	level = new Level(1024, 1024);
-	player = new Entity(IPoint(10, 10), '@', 5);
+  clear();
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
-
-    mvaddstr(8, cols / 2 - 7, "[Press any key]");
-    refresh();
-    getch();
-
-	clear();
-
-	return ENGINE_PLAY;
+  return ENGINE_PLAY;
 }

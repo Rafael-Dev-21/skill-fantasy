@@ -3,14 +3,13 @@
 Level *level = nullptr;
 Entity *player = nullptr;
 
-int main(void)
-{
-	Engine game;
+int main(void) {
+  Engine game(false);
 
-	game.run();
+  game.run();
 
-	delete level;
-	delete player;
-	
-	return 0;
+  delete level;
+  delete player;
+
+  return 0;
 }
