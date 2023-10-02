@@ -8,6 +8,7 @@ target("skfantasy")
   set_kind("binary")
   add_files("src/**.cpp")
   add_includedirs("include")
+  set_languages("c++11")
   if is_plat ("windows") or is_plat("mingw") then
     add_packages("pdcurses")
     add_includedirs("mingw-std-threads")

@@ -20,29 +20,34 @@ class Noise {
 
 class Perlin : public Noise {
  public:
-  Perlin();
+  Perlin(unsigned seed);
 
   float value(float x, float y) override;
+  
+  private:
   void calcPermutations();
-
- private:
   float dotGradient(int hash, float x, float y);
 
-  int perms[512];
+  std::vector<unsigned> perms;
+  
+  unsigned seed;
 
   static FVector grads[8];
 };
 
 class Simplex : public Noise {
  public:
-  Simplex();
+  Simplex(unsigned seed);
 
   float value(float x, float y) override;
+  
+  private:
   void calcPermutations();
-
- private:
   float dotGradient(int g[3], float x, float y);
 
-  int perms[512];
+  std::vector<unsigned> perms;
+  
+  unsigned seed;
+  
   static int grads[12][3];
 };

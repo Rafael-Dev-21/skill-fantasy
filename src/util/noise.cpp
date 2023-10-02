@@ -1,8 +1,9 @@
 #include "util/noise.hpp"
+#include "util/math.hpp"
 
 #include <cmath>
-
-#include "util/math.hpp"
+#include <random>
+#include <algorithm>
 
 float Noise::fbm(float x, float y, FBMParams params) {
   float result = params.amplitude;
@@ -17,7 +18,11 @@ float Noise::fbm(float x, float y, FBMParams params) {
   return result;
 }
 
-Perlin::Perlin() { calcPermutations(); }
+Perlin::Perlin(unsigned seed) :
+  seed(seed)
+{
+  calcPermutations();
+}
 
 FVector Perlin::grads[] = {FVector(1, 0),  FVector(1, -1), FVector(0, -1),
                            FVector(1, 1),  FVector(0, 1),  FVector(-1, 1),
@@ -49,13 +54,13 @@ float Perlin::value(float x, float y) {
 }
 
 void Perlin::calcPermutations() {
-  using namespace Math;
+  for (int i = 0; i < 256; i++) perms.push_back(i);
+  
+  std::mt19937 gen(seed);
 
-  for (int i = 0; i < 256; i++) perms[i] = i;
+  std::shuffle(perms.begin(), perms.end(), gen);
 
-  shuffle(perms, 256);
-
-  for (int i = 0; i < 256; i++) perms[i + 256] = perms[i];
+  for (int i = 0; i < 256; i++) perms.push_back(perms[i]);
 }
 
 float Perlin::dotGradient(int hash, float x, float y) {
@@ -64,7 +69,11 @@ float Perlin::dotGradient(int hash, float x, float y) {
   return FVector::dot(FVector(x, y), gradient);
 }
 
-Simplex::Simplex() { calcPermutations(); }
+Simplex::Simplex(unsigned seed) :
+  seed(seed)
+{
+  calcPermutations();
+}
 
 int Simplex::grads[12][3] = {{1, 1, 0}, {-1, 1, 0}, {1, -1, 0}, {-1, -1, 0},
                              {1, 0, 1}, {-1, 0, 1}, {1, 0, -1}, {-1, 0, -1},
@@ -73,11 +82,11 @@ int Simplex::grads[12][3] = {{1, 1, 0}, {-1, 1, 0}, {1, -1, 0}, {-1, -1, 0},
 float Simplex::value(float x, float y) {
   float n0, n1, n2;
 
-  const float F2 = 0.5 * (sqrt(3.0) - 1.0);
+  const float F2 = 0.5 * (std::sqrt(3.0) - 1.0);
   float s = (x + y) * F2;
   int i = floor(x + s);
   int j = floor(y + s);
-  const float G2 = (3.0 - sqrt(3.0)) / 6.0;
+  const float G2 = (3.0 - std::sqrt(3.0)) / 6.0;
   float t = (i + j) * G2;
   float X0 = i - t;
   float Y0 = j - t;
@@ -132,13 +141,13 @@ float Simplex::value(float x, float y) {
 }
 
 void Simplex::calcPermutations() {
-  using namespace Math;
+  for (int i = 0; i < 256; i++) perms.push_back(i);
+  
+  std::mt19937 gen(seed);
 
-  for (int i = 0; i < 256; i++) perms[i] = i;
+  std::shuffle(perms.begin(), perms.end(), gen);
 
-  shuffle(perms, 256);
-
-  for (int i = 0; i < 256; i++) perms[i + 256] = perms[i];
+  for (int i = 0; i < 256; i++) perms.push_back(perms[i]);
 }
 
 float Simplex::dotGradient(int g[3], float x, float y) {

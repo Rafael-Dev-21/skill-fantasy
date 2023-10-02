@@ -1,4 +1,6 @@
+extern "C" {
 #include <curses.h>
+}
 
 #include "view/curses.hpp"
 

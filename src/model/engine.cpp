@@ -1,13 +1,6 @@
 #include <chrono>
-#ifdef __MINGW32__
-#include "mingw.thread.h"
-#else
 #include <thread>
-#endif
 #include <fstream>
-
-#include <cstdlib>
-#include <ctime>
 
 #include "model/engine.hpp"
 
@@ -42,7 +35,6 @@ void Engine::notify(Event ev) {
     state = ev.as.change.state;
     
     if (state == ST_GEN) {
-      srand(time(nullptr));
       world = new World();
       player = new Entity(world->getSpawn());
         

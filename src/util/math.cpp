@@ -1,7 +1,5 @@
 #include "util/math.hpp"
 
-#include <cmath>
-
 float Math::lerp(float a, float b, float t) {
   if (0.0 > t) return a;
   if (1.0 < t) return b;

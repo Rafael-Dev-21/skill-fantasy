@@ -3,7 +3,7 @@
 #include <map>
 #include <utility>
 
-#include <ctime>
+#include <chrono>
 
 #include "util/geom.hpp"
 #include "util/noise.hpp"
@@ -30,7 +30,7 @@ struct WorldParams {
   int height = 44000;
   int chunkSize = 32;
   int chunkRadius = 2;
-  int seed = time(nullptr);
+  int seed = std::chrono::system_clock::now().time_since_epoch().count();
   int maxAltitude = 32;
   int minAltitude = 5;
   int limitAltitude = 64;

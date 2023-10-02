@@ -1,7 +1,5 @@
 #include "model/entity.hpp"
 
-#include <curses.h>
-
 Entity::Entity(IPoint pos):
   position(pos)
 {}

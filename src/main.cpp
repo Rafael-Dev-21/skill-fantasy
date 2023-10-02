@@ -1,9 +1,5 @@
 #include <chrono>
-#ifdef __MINGW32__
-#include "mingw.thread.h"
-#else
 #include <thread>
-#endif
 
 #include "controller/curses.hpp"
 #include "model/engine.hpp"

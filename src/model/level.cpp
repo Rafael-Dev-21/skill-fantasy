@@ -35,7 +35,8 @@ Tile::Tile(TileType type, Biome biome) : type(type), biome(biome) {
 }
 
 World::World(WorldParams params):
-  worldParams(params)
+  worldParams(params),
+  noise(Simplex(params.seed))
 {
 
   fbmParams.amplitude = 0.5;
@@ -116,7 +117,7 @@ void World::genChunk(int chunkX, int chunkY) {
     for (int x = startX; x < endX; x++) {
       float e = noise.fbm(x + noise.fbm(x, y, fbmParams), y + noise.fbm(x, y, fbmParams), fbmParams);
       float m = noise.fbm(x + 1000, y, fbmParams);
-      float t = e*e + worldParams.poles + (worldParams.equator-worldParams.poles) * sinf(M_PI * ((float)y / worldParams.height));
+      float t = e*e + worldParams.poles + (worldParams.equator-worldParams.poles) * std::sinf(M_PI * ((float)y / worldParams.height));
 
       auto biome = getBiome(m, t);
       auto type = getTile(e * worldParams.maxAltitude, biome);
