@@ -46,7 +46,7 @@ void CursesView::drawTitle() {
   mvaddstr(3, startx, "#=# ##   #  #   #  ");
   mvaddstr(4, startx, "==# # # =#= #== #==");
   mvaddstr(5, startx, "@====>FANTASY<====@");
-  mvaddstr(6, startx, "v0.1.0");
+  mvaddstr(6, startx, engine.getVersion().c_str());
 
   mvaddstr(8, startx, "s to start, ESC to quit");
   refresh();

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "entity.hpp"
 #include "level.hpp"
 
@@ -13,6 +15,7 @@ class Engine: public EventListener {
   
   void notify(Event ev) override;
   State getState();
+  std::string getVersion();
   World * getWorld();
   Entity * getPlayer();
 
@@ -23,6 +26,7 @@ class Engine: public EventListener {
  State state;
  
  bool running = false;
+ std::string version;
  
  World * world = nullptr;
  Entity * player = nullptr;

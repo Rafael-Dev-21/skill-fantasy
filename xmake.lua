@@ -15,3 +15,9 @@ target("skfantasy")
   else
     add_links("ncurses")
   end
+
+target("copy-on-build")
+  on_build(function(target)
+    os.cp("$(projectdir)/data", "$(buildir)/$(os)/$(arch)/$(mode)")
+    os.cp("$(projectdir)/version.txt", "$(buildir)/$(os)/$(arch)/$(mode)")
+  end)

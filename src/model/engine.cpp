@@ -4,6 +4,7 @@
 #else
 #include <thread>
 #endif
+#include <fstream>
 
 #include <cstdlib>
 #include <ctime>
@@ -16,6 +17,10 @@ Engine::Engine(EventSystem &evSystem) :
   state = ST_TITLE;
   
   evSystem.add(this);
+  
+  std::ifstream fin("version.txt");
+  std::getline(fin, version);
+  fin.close();
 }
 
 void Engine::run() {
@@ -77,6 +82,10 @@ void Engine::notify(Event ev) {
 
 State Engine::getState() {
   return state;
+}
+
+std::string Engine::getVersion() {
+  return version;
 }
 
 World * Engine::getWorld() {

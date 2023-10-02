@@ -34,7 +34,7 @@ jobs:
           VERSION_FILE: version.txt
       - name: Build Windows
         run: |
-          xmake f -m release -p mingw -a x86_64 -y
+          xmake f -m release -p mingw -a i386 -y
           xmake
       - name: Upload
         uses: actions/upload-artifact@v3
@@ -48,5 +48,5 @@ jobs:
           CHANNEL: windows
           ITCH_GAME: skill-fantasy
           ITCH_USER: rafael-dev-21
-          PACKAGE: build/mingw/x86_64/release
+          PACKAGE: build/mingw/i386/release
           VERSION_FILE: version.txt
