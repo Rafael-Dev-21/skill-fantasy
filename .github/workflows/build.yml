@@ -26,7 +26,7 @@ jobs:
           xmake
       - name: Build Windows
         run: |
-          xmake f -m release -p mingw -a i386 -y
+          xmake f -m release -p windows -a x86 -y
           xmake
       - name: Upload
         uses: actions/upload-artifact@v3
