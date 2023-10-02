@@ -2,6 +2,8 @@
 
 #include <string>
 
+struct LooseObject;
+
 struct FixedObject {
   std::string name;
   int sprite;
@@ -9,4 +11,7 @@ struct FixedObject {
   bool block = true;
 };
 
-struct LooseObject {};
+struct LooseObject {
+  std::string name;
+  int quantity;
+};

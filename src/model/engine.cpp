@@ -1,46 +1,104 @@
-#include "engine.hpp"
+#include <chrono>
+#ifdef __MINGW32__
+#include "mingw.thread.h"
+#else
+#include <thread>
+#endif
 
-#include <curses.h>
+#include <cstdlib>
+#include <ctime>
 
-EngineAction Engine::actionTable[] = {&titleAction, &genAction, &playAction};
+#include "model/engine.hpp"
 
-Engine::Engine(bool blackBG) : blackBG(blackBG) {
-  initscr();
-  noecho();
-  curs_set(0);
-
-  colors();
-
-  state = ENGINE_TITLE;
+Engine::Engine(EventSystem &evSystem) :
+  evSystem(evSystem)
+{
+  state = ST_TITLE;
+  
+  evSystem.add(this);
 }
-
-Engine::~Engine() { endwin(); }
 
 void Engine::run() {
-  while (state != ENGINE_EXIT) {
-    state = actionTable[state]();
+  running = true;
+  
+  while (running) {
+    Event ev;
+    ev.type = EV_TICK;
+    
+    evSystem.post(ev);
+    
+    std::this_thread::sleep_for(std::chrono::milliseconds(20));
   }
 }
 
-void Engine::colors() {
-  if (has_colors()) {
-    start_color();
-    if (blackBG) {
-      init_pair(1, COLOR_GREEN, COLOR_BLACK);
-      init_pair(2, 230, COLOR_BLACK);
-      init_pair(3, 12, COLOR_BLACK);
-      init_pair(4, 8, COLOR_BLACK);
-      init_pair(5, COLOR_MAGENTA, COLOR_BLACK);
-      init_pair(6, 22, COLOR_BLACK);
-      init_pair(7, 73, COLOR_BLACK);
-    } else {
-      init_pair(1, COLOR_YELLOW, COLOR_GREEN);
-      init_pair(2, COLOR_YELLOW, 230);
-      init_pair(3, COLOR_CYAN, 12);
-      init_pair(4, COLOR_BLACK, 8);
-      init_pair(5, COLOR_RED, COLOR_MAGENTA);
-      init_pair(6, COLOR_YELLOW, 22);
-      init_pair(7, COLOR_YELLOW, 73);
+void Engine::notify(Event ev) {
+  switch(ev.type) {
+    case EV_STATE:
+    state = ev.as.change.state;
+    
+    if (state == ST_GEN) {
+      std::thread load([this]() {
+        srand(time(nullptr));
+        world = new World();
+        player = new Entity(world->getSpawn());
+        
+        Event ev;
+        ev.type = EV_STATE;
+        ev.as.change.state = ST_PLAY;
+        
+        evSystem.post(ev);
+      });
+      
+      load.join();
     }
+    
+    if (state == ST_TITLE) {
+      delete player; player = nullptr;
+      delete world; world = nullptr;
+    }
+    
+    break;
+    case EV_MOVE: {
+      switch(ev.as.move.dir) {
+        case D_WEST: movePlayer(-1, 0); break;
+        case D_SOUTH: movePlayer(0, 1); break;
+        case D_NORTH: movePlayer(0, -1); break;
+        case D_EAST: movePlayer(1, 0); break;
+      }
+    }
+    break;
+    case EV_QUIT:
+    running = false;
+    break;
+    default:
+    break;
   }
+}
+
+State Engine::getState() {
+  return state;
+}
+
+World * Engine::getWorld() {
+  return world;
+}
+
+Entity * Engine::getPlayer() {
+  return player;
+}
+
+void Engine::movePlayer(int x, int y) {
+  if (!player || !world) return;
+  
+  IVector dir(x, y);
+  IPoint future = player->getPosition() + dir;
+  
+  if (!world->inBounds(future.x, future.y)) return;
+  
+  auto obj = world->tileAt(future.x, future.y).fixedObject;
+  
+  if (obj && obj->block) return;
+  
+  player->move(dir);
+  world->checkChunks(player->getPosition());
 }

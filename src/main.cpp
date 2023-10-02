@@ -1,15 +1,26 @@
-#include "engine.hpp"
+#include <chrono>
+#ifdef __MINGW32__
+#include "mingw.thread.h"
+#else
+#include <thread>
+#endif
 
-Level *level = nullptr;
-Entity *player = nullptr;
+#include "controller/curses.hpp"
+#include "model/engine.hpp"
+#include "view/curses.hpp"
+#include "util/events.hpp"
 
 int main(void) {
-  Engine game(false);
+  EventSystem evSystem;
+  Engine game(evSystem);
+  CursesController control(game, evSystem);
+  CursesView view(game, evSystem);
 
-  game.run();
-
-  delete level;
-  delete player;
+  std::thread loop([&game]() {
+    game.run();
+  });
+  
+  loop.join();
 
   return 0;
 }

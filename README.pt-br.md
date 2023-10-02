@@ -8,5 +8,6 @@ Um projeto de jogo de sobrevivência no terminal que venho desenvolvendo a um te
 use xmake.
 
 ```sh
-xmake build xmake run
+xmake build
+xmake run
 ```

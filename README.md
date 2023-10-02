@@ -8,5 +8,6 @@ A open source project of a survival / colony sim roguelike.
 use xmake.
 
 ```sh
-xmake build xmake run
+xmake build
+xmake run
 ```

@@ -1,8 +1,8 @@
-#include "noise.hpp"
+#include "util/noise.hpp"
 
 #include <cmath>
 
-#include "math.hpp"
+#include "util/math.hpp"
 
 float Noise::fbm(float x, float y, FBMParams params) {
   float result = params.amplitude;

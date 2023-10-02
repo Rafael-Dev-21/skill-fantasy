@@ -1,11 +1,9 @@
-#include "level.hpp"
-
-#include <curses.h>
+#include "model/level.hpp"
 
 #include <cmath>
 
-#include "math.hpp"
-#include "noise.hpp"
+#include "util/math.hpp"
+#include "util/noise.hpp"
 
 Tile::Tile(TileType type, Biome biome) : type(type), biome(biome) {
   switch (type) {
@@ -36,104 +34,96 @@ Tile::Tile(TileType type, Biome biome) : type(type), biome(biome) {
   }
 }
 
-Level::Level(int chunkSize, int chunkRadius)
-    : chunkSize(chunkSize), chunkRadius(chunkRadius) {
-  if (chunkSize < 2 || chunkSize % 2 != 0) {
-    chunkSize = 32;
-  }
+World::World(WorldParams params):
+  worldParams(params)
+{
 
-  if (chunkRadius < 1) {
-    chunkRadius = 2;
-  }
-
-  heightParams.amplitude = 8;
-  heightParams.frequency = 0.01;
-  heightParams.octaves = 10;
-
-  biomeParams.amplitude = 0.5;
-  biomeParams.frequency = 0.01;
-  biomeParams.octaves = 10;
+  fbmParams.amplitude = 0.5;
+  fbmParams.frequency = 0.01;
+  fbmParams.octaves = 10;
 
   genInitial();
 }
 
-Tile Level::tileAt(int x, int y) { return tiles[std::pair<int, int>(x, y)]; }
+Tile World::tileAt(int x, int y) { return tiles[std::pair<int, int>(x, y)]; }
 
-void Level::render(IVector cameraOrigin) {
-  for (int y = 0; y < LINES; y++) {
-    for (int x = 0; x < COLS; x++) {
-      int mapx = x + cameraOrigin.x;
-      int mapy = y + cameraOrigin.y;
+IPoint World::getSpawn() { return spawn; }
 
-      auto tile = tileAt(mapx, mapy);
-      
-      int graphic = ' ';
-      if (tile.fixedObject) {
-        graphic = tile.fixedObject->sprite | COLOR_PAIR(tile.fixedObject->colors);
-      } else {
-        graphic = tile.sprite | COLOR_PAIR(tile.colors);
+bool World::inBounds(int x, int y) {
+  return x >= 0 && y >= 0 && worldParams.width > x && worldParams.height > y;
+}
+
+bool World::isSpawnSet() { return spawnSet; }
+
+int World::getWidth() {
+  return worldParams.width;
+}
+
+int World::getHeight() {
+  return worldParams.height;
+}
+
+void World::checkChunks(IPoint point) {
+  if (inBounds(point.x, point.y)) {
+    int x = point.x / worldParams.chunkSize;
+    int y = point.y / worldParams.chunkSize;
+
+    for (int j = y - worldParams.chunkRadius; j < y + worldParams.chunkRadius; j++) {
+      for (int i = x - worldParams.chunkRadius; i < x + worldParams.chunkRadius; i++) {
+        if (inBounds(i * worldParams.chunkSize, j * worldParams.chunkSize)) {
+          genChunk(i, j);
+        }
       }
-      mvaddch(y, x, graphic);
     }
   }
 }
 
-IPoint Level::getSpawn() { return spawn; }
+void World::genInitial() {
+  int x = worldParams.width / (worldParams.chunkSize * 2);
+  int y = worldParams.height / (worldParams.chunkSize * 2);
+  
+  genChunk(x, y);
 
-bool Level::isSpawnSet() { return spawnSet; }
-
-void Level::checkChunks(IPoint point) {
-  int x = point.x / chunkSize;
-  int y = point.y / chunkSize;
-
-  for (int j = y - chunkRadius; j < y + chunkRadius; j++) {
-    for (int i = x - chunkRadius; i < x + chunkRadius; i++) {
-      genChunk(i, j);
-    }
-  }
-}
-
-void Level::genInitial() {
-  genChunk(0, 0);
-
-  int x = 1;
-  int y = 1;
+  int offx = 1;
+  int offy = 1;
 
   while (!spawnSet) {
-    for (int j = -y; j < y; j += y * 2 - 1) {
-      for (int i = -x; i < x; i += x * 2 - 1) {
-        genChunk(i, j);
+    for (int j = -offy; j < offy; j += offy * 2 - 1) {
+      for (int i = -offx; i < offx; i += offx * 2 - 1) {
+        if (inBounds(i * worldParams.chunkSize, j * worldParams.chunkSize)) {
+          genChunk(x + i, y + j);
+        }
       }
     }
-    x++;
-    y++;
+    offx++;
+    offy++;
   }
 
   checkChunks(spawn);
 }
 
-void Level::genChunk(int chunkX, int chunkY) {
+void World::genChunk(int chunkX, int chunkY) {
   if (chunkVisited[{chunkX, chunkY}]) return;
 
   chunkVisited[{chunkX, chunkY}] = true;
 
-  int startX = chunkX * chunkSize;
-  int startY = chunkY * chunkSize;
-  int endX = (chunkX + 1) * chunkSize;
-  int endY = (chunkY + 1) * chunkSize;
+  int startX = chunkX * worldParams.chunkSize;
+  int startY = chunkY * worldParams.chunkSize;
+  int endX = (chunkX + 1) * worldParams.chunkSize;
+  int endY = (chunkY + 1) * worldParams.chunkSize;
 
   for (int y = startY; y < endY; y++) {
     for (int x = startX; x < endX; x++) {
-      float e = fmax(fmin(round(noise.fbm(x, y, heightParams)), 16), 0);
-      float m = noise.fbm(x + 1000, y, biomeParams);
-      float t = noise.fbm(x, y + 1000, biomeParams);
+      float e = noise.fbm(x + noise.fbm(x, y, fbmParams), y + noise.fbm(x, y, fbmParams), fbmParams);
+      float m = noise.fbm(x + 1000, y, fbmParams);
+      float t = e*e + worldParams.poles + (worldParams.equator-worldParams.poles) * sinf(M_PI * ((float)y / worldParams.height));
 
       auto biome = getBiome(m, t);
-      auto type = getTile(e, biome);
+      auto type = getTile(e * worldParams.maxAltitude, biome);
       
       tiles[{x, y}] = Tile(type, biome);
 
-      if (type == TileType::STONE && e == 16) {
+      if (type == TileType::STONE && e >= 0.98) {
         auto fix = new FixedObject{};
         
         fix->name = "Stone Wall";
@@ -162,12 +152,18 @@ void Level::genChunk(int chunkX, int chunkY) {
   }
 }
 
-TileType Level::getTile(float e, Biome b) {
-  if (e < 6) {
+TileType World::getTile(float e, Biome b) {
+  int dHeight = worldParams.maxAltitude - worldParams.seaLevel;
+  
+  auto lv = [dHeight, this](float dt){
+    return worldParams.seaLevel + dHeight * dt;
+  };
+  
+  if (e < lv(0)) {
     return TileType::WATER;
-  } else if (e < 9) {
+  } else if (e < lv(3.0/11.0)) {
     return TileType::SAND;
-  } else if (e < 14) {
+  } else if (e < lv(9.0/11.0)) {
     if (b == Biome::DESERT) {
       return TileType::SAND;
     } else {
@@ -178,33 +174,31 @@ TileType Level::getTile(float e, Biome b) {
   }
 }
 
-Biome Level::getBiome(float m, float t) {
-  if (t > 0.5) {
-    if (m < 0.3) {
+Biome World::getBiome(float m, float e) {
+  if (e > 0.8) {
+    return Biome::TUNDRA;
+  }
+
+  if (e > 0.6) {
+    if (m < 0.33) {
       return Biome::DESERT;
     }
-
+    if (m < 0.66) {
+      return Biome::PLAINS;
+    }
+    
+    return Biome::FOREST;
+  }
+  
+  if (e > 0.3) {
+    if (m < 0.16) {
+      return Biome::DESERT;
+    }
     if (m < 0.5) {
       return Biome::PLAINS;
     }
-
     return Biome::FOREST;
   }
 
-  if (t > 0.3) {
-    if (m < 0.2) {
-      return Biome::DESERT;
-    }
-    return Biome::PLAINS;
-  }
-
-  if (m < 0.1) {
-    return Biome::DESERT;
-  }
-
-  if (m < 0.2) {
-    return Biome::PLAINS;
-  }
-
-  return Biome::TUNDRA;
+  return Biome::FOREST;
 }

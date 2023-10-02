@@ -1,4 +1,4 @@
-#include "math.hpp"
+#include "util/math.hpp"
 
 #include <cmath>
 
@@ -24,8 +24,8 @@ float Math::hash(int ix, int iy) {
   
   unsigned a = ix, b = iy;
   
-  a *= 3284157443; b ^= a << s | a >> w-s;
-  b *= 1911520717; a ^= b << s | b >> w-s;
+  a *= 3284157443; b ^= a << s | a >> (w-s);
+  b *= 1911520717; a ^= b << s | b >> (w-s);
   a *= 2048419325;
   
   return a * (1.0 / ~0u);

@@ -1,7 +1,8 @@
-name: CI Deploy
+name: CI
 
 on:
-  workflow_dispach:
+  push:
+    branches: [master]
 
 jobs:
   build:
@@ -25,15 +26,6 @@ jobs:
           xmake
           xmake f -m release -p linux -a aarch64
           xmake
-      - name: Deploy Linux to Itch.io
-        uses: manleydev/butler-publish-itchio-action@master
-        env:
-          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-          CHANNEL: linux
-          ITCH_GAME: skill-fantasy
-          ITCH_USER: rafael-dev-21
-          PACKAGE: build/linux/x86_64/release
-          VERSION_FILE: version.txt
       - name: Build Windows
         run: |
           xmake f -m release -p mingw -a x86_64 -y
@@ -45,12 +37,3 @@ jobs:
         with:
           path: |
             build
-      - name: Deploy Windows to Itch.io
-        uses: manleydev/butler-publish-itchio-action@master
-        env:
-          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-          CHANNEL: windows
-          ITCH_GAME: skill-fantasy
-          ITCH_USER: rafael-dev-21
-          PACKAGE: build/mingw/x86_64/release
-          VERSION_FILE: version.txt
