@@ -1,11 +1,11 @@
-name: CI
+name: CI Build
 
 on:
   push:
     branches: [master]
 
 jobs:
-  build:
+  linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -17,19 +17,35 @@ jobs:
           xmake-version: latest
           actions-cache-folder: '.xmake-cache'
           actions-cache-key: ubuntu-deploy
-      - name: Install Mingw
+      - name: Build
         run: |
-          sudo apt-get install mingw-w64
-      - name: Build Linux
-        run: |
-          xmake f -m release -p linux -a x86_64
-          xmake
-      - name: Build Windows
-        run: |
-          xmake f -m release -p windows -a x86 -y
+          xmake f -m debug -p linux -a x86_64
           xmake
       - name: Upload
         uses: actions/upload-artifact@v3
         with:
+          name: linux
           path: |
-            build
+            build/linux/x86_64/debug
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Setup Xmake
+        uses: xmake-io/github-action-setup-xmake@v1
+        with:
+          xmake-version: latest
+          actions-cache-folder: '.xmake-cache'
+          actions-cache-key: windows-deploy
+      - name: Build
+        run: |
+          xmake f -m debug -p windows -a x86 -y
+          xmake
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows
+          path: |
+            build/windows/x86/debug
