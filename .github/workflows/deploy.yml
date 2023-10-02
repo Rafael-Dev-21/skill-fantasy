@@ -23,8 +23,6 @@ jobs:
         run: |
           xmake f -m release -p linux -a x86_64
           xmake
-          xmake f -m release -p linux -a aarch64
-          xmake
       - name: Deploy Linux to Itch.io
         uses: manleydev/butler-publish-itchio-action@master
         env:
@@ -37,8 +35,6 @@ jobs:
       - name: Build Windows
         run: |
           xmake f -m release -p mingw -a x86_64 -y
-          xmake
-          xmake f -m release -p mingw -a i386 -y
           xmake
       - name: Upload
         uses: actions/upload-artifact@v3
