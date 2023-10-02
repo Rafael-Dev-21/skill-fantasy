@@ -1,7 +1,7 @@
 name: CI Deploy
 
 on:
-  workflow_dispach:
+  workflow_dispatch:
 
 jobs:
   build:
