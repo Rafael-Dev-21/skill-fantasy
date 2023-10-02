@@ -42,19 +42,15 @@ void Engine::notify(Event ev) {
     state = ev.as.change.state;
     
     if (state == ST_GEN) {
-      std::thread load([this]() {
-        srand(time(nullptr));
-        world = new World();
-        player = new Entity(world->getSpawn());
+      srand(time(nullptr));
+      world = new World();
+      player = new Entity(world->getSpawn());
         
-        Event ev;
-        ev.type = EV_STATE;
-        ev.as.change.state = ST_PLAY;
+      Event ev;
+      ev.type = EV_STATE;
+      ev.as.change.state = ST_PLAY;
         
-        evSystem.post(ev);
-      });
-      
-      load.join();
+      evSystem.post(ev);
     }
     
     if (state == ST_TITLE) {
