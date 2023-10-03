@@ -30,7 +30,7 @@ struct WorldParams {
   int height = 44000;
   int chunkSize = 32;
   int chunkRadius = 2;
-  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+  unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
   int maxAltitude = 32;
   int minAltitude = 5;
   int limitAltitude = 64;
