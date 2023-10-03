@@ -35,8 +35,8 @@ struct WorldParams {
   int minAltitude = 5;
   int limitAltitude = 64;
   int seaLevel = 10;
-  float poles = 0.8;
-  float equator = 0.2;
+  float poles = 0.8f;
+  float equator = 0.2f;
 };
 
 class World {
