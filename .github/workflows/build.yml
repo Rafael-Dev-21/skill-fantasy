@@ -41,7 +41,7 @@ jobs:
           actions-cache-key: windows-deploy
       - name: Build
         run: |
-          xmake f -m debug -p windows -a x86 -y
+          xmake f -m debug -p windows -a x64 -y
           xmake
       - name: Upload
         uses: actions/upload-artifact@v3

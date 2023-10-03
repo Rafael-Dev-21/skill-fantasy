@@ -43,7 +43,7 @@ jobs:
           actions-cache-key: windows-deploy
       - name: Build
         run: |
-          xmake f -m release -p windows -a x86 -y
+          xmake f -m release -p windows -a x64 -y
           xmake
       - name: Deploy to Itch.io
         uses: manleydev/butler-publish-itchio-action@master

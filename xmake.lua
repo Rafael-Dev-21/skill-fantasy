@@ -14,10 +14,6 @@ target("skfantasy")
   else
     add_links("ncurses")
   end
-  if is_mode("debug") then
-    set_symbols("debug")
-    set_warnings("all", "error")
-  end
   after_build(function(target)
     os.cp("$(projectdir)/data", "$(buildir)/$(plat)/$(arch)/$(mode)")
     os.cp("$(projectdir)/version.txt", "$(buildir)/$(plat)/$(arch)/$(mode)")
