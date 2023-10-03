@@ -5,10 +5,10 @@
 #include "geom.hpp"
 
 struct FBMParams {
-  float frequency = 1.0;
-  float amplitude = 1.0;
-  float lacunarity = 2.0;
-  float persistence = 0.5;
+  float frequency = 1.0f;
+  float amplitude = 1.0f;
+  float lacunarity = 2.0f;
+  float persistence = 0.5f;
   int octaves = 3;
 };
 

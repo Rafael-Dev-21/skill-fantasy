@@ -39,8 +39,8 @@ World::World(WorldParams params):
   noise(Simplex(params.seed))
 {
 
-  fbmParams.amplitude = 0.5;
-  fbmParams.frequency = 0.01;
+  fbmParams.amplitude = 0.5f;
+  fbmParams.frequency = 0.01f;
   fbmParams.octaves = 10;
 
   genInitial();
@@ -117,7 +117,7 @@ void World::genChunk(int chunkX, int chunkY) {
     for (int x = startX; x < endX; x++) {
       float e = noise.fbm(x + noise.fbm(x, y, fbmParams), y + noise.fbm(x, y, fbmParams), fbmParams);
       float m = noise.fbm(x + 1000, y, fbmParams);
-      float t = e*e + worldParams.poles + (worldParams.equator-worldParams.poles) * std::sin(3.14159 * ((float)y / worldParams.height));
+      float t = e*e + worldParams.poles + (worldParams.equator-worldParams.poles) * static_cast<float>(std::sin(3.14159f * ((float)y / worldParams.height)));
 
       auto biome = getBiome(m, t);
       auto type = getTile(e * worldParams.maxAltitude, biome);
@@ -162,9 +162,9 @@ TileType World::getTile(float e, Biome b) {
   
   if (e < lv(0)) {
     return TileType::WATER;
-  } else if (e < lv(3.0/11.0)) {
+  } else if (e < lv(3.0f/11.0f)) {
     return TileType::SAND;
-  } else if (e < lv(9.0/11.0)) {
+  } else if (e < lv(9.0f/11.0f)) {
     if (b == Biome::DESERT) {
       return TileType::SAND;
     } else {

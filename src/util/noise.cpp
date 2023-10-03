@@ -82,11 +82,11 @@ int Simplex::grads[12][3] = {{1, 1, 0}, {-1, 1, 0}, {1, -1, 0}, {-1, -1, 0},
 float Simplex::value(float x, float y) {
   float n0, n1, n2;
 
-  const float F2 = 0.5 * (std::sqrt(3.0) - 1.0);
+  const float F2 = 0.5f * static_cast<float>(std::sqrt(3.0) - 1.0);
   float s = (x + y) * F2;
   int i = floor(x + s);
   int j = floor(y + s);
-  const float G2 = (3.0 - std::sqrt(3.0)) / 6.0;
+  const float G2 = static_cast<float>(3.0 - std::sqrt(3.0)) / 6.0f;
   float t = (i + j) * G2;
   float X0 = i - t;
   float Y0 = j - t;
@@ -104,8 +104,8 @@ float Simplex::value(float x, float y) {
 
   float x1 = x0 - i1 + G2;
   float y1 = y0 - j1 + G2;
-  float x2 = x0 - 1.0 + 2.0 * G2;
-  float y2 = y0 - 1.0 + 2.0 * G2;
+  float x2 = x0 - 1.0f + 2.0f * G2;
+  float y2 = y0 - 1.0f + 2.0f * G2;
 
   int ii = i & 255;
   int jj = j & 255;
@@ -113,31 +113,31 @@ float Simplex::value(float x, float y) {
   int gi1 = perms[ii + i1 + perms[jj + j1]] % 12;
   int gi2 = perms[ii + 1 + perms[jj + 1]] % 12;
 
-  float t0 = 0.5 - x0 * x0 - y0 * y0;
+  float t0 = 0.5f - x0 * x0 - y0 * y0;
   if (t0 < 0)
-    n0 = 0.0;
+    n0 = 0.0f;
   else {
     t0 *= t0;
     n0 = t0 * t0 * dotGradient(grads[gi0], x0, y0);
   }
 
-  float t1 = 0.5 - x1 * x1 - y1 * y1;
+  float t1 = 0.5f - x1 * x1 - y1 * y1;
   if (t1 < 0)
-    n1 = 0.0;
+    n1 = 0.0f;
   else {
     t1 *= t1;
     n1 = t1 * t1 * dotGradient(grads[gi1], x1, y1);
   }
 
-  float t2 = 0.5 - x2 * x2 - y2 * y2;
+  float t2 = 0.5f - x2 * x2 - y2 * y2;
   if (t2 < 0)
-    n2 = 0.0;
+    n2 = 0.0f;
   else {
     t2 *= t2;
     n2 = t2 * t2 * dotGradient(grads[gi2], x2, y2);
   }
 
-  return 70.0 * (n0 + n1 + n2);
+  return 70.0f * (n0 + n1 + n2);
 }
 
 void Simplex::calcPermutations() {
