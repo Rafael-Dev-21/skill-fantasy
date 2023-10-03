@@ -1,6 +1,6 @@
 add_rules("mode.debug", "mode.release")
 
-if is_plat ("windows") or is_plat("mingw") then
+if is_plat ("windows") then
   add_requires("pdcurses")
 end
 
@@ -9,12 +9,14 @@ target("skfantasy")
   add_files("src/**.cpp")
   add_includedirs("include")
   set_languages("c++11")
-  if is_plat ("windows") or is_plat("mingw") then
+  if is_plat ("windows") then
     add_packages("pdcurses")
-    add_includedirs("mingw-std-threads")
-    add_ldflags("-static-libgcc", "-static-libstdc++")
   else
     add_links("ncurses")
+  end
+  if is_mode("debug") then
+    set_symbols("debug")
+    set_warnings("all", "error")
   end
   after_build(function(target)
     os.cp("$(projectdir)/data", "$(buildir)/$(plat)/$(arch)/$(mode)")
