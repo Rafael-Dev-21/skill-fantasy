@@ -1,6 +1,6 @@
 #pragma once
 
-#include "util/geom.hpp"
+#include "geom.hpp"
 
 class Entity {
  public:

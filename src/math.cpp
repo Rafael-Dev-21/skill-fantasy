@@ -1,4 +1,4 @@
-#include "util/math.hpp"
+#include "math.hpp"
 
 float Math::lerp(float a, float b, float t) {
   if (0.0 > t) return a;

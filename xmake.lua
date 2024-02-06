@@ -1,5 +1,7 @@
 add_rules("mode.debug", "mode.release")
 
+set_policy("build.ccache", false)
+
 if is_plat ("windows") then
   add_requires("pdcurses")
 end
@@ -12,7 +14,7 @@ target("skfantasy")
   if is_plat ("windows") then
     add_packages("pdcurses")
   else
-    add_links("ncurses")
+    add_links("ncursesw", "tinfo")
   end
   after_build(function(target)
     os.cp("$(projectdir)/data", "$(buildir)/$(plat)/$(arch)/$(mode)")

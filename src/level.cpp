@@ -1,37 +1,40 @@
-#include "model/level.hpp"
+#include "level.hpp"
 
 #include <cmath>
 
-#include "util/math.hpp"
-#include "util/noise.hpp"
+#include "math.hpp"
+#include "noise.hpp"
 
-Tile::Tile(TileType type, Biome biome) : type(type), biome(biome) {
-  switch (type) {
-    case TileType::GRASS:
-      sprite = ',';
-      switch (biome) {
-        case Biome::FOREST:
-          colors = 6;
-          break;
-        case Biome::TUNDRA:
-          colors = 7;
-          break;
-        default:
-          colors = 1;
-      }
-      break;
-    case TileType::SAND:
-      sprite = '~';
-      colors = 2;
-      break;
-    case TileType::WATER:
-      sprite = '~';
-      colors = 3;
-      break;
-    case TileType::STONE:
-      sprite = '.';
-      colors = 4;
-  }
+Tile::Tile() :
+	type(TileType::GRASS),
+	biome(Biome::PLAINS),
+	visible(false) {
+}
+
+Tile::~Tile() {}
+
+TileType Tile::getType() {
+	return type;
+}
+
+Biome Tile::getBiome() {
+	return biome;
+}
+
+bool Tile::isVisible() {
+	return visible;
+}
+
+void Tile::setType(TileType type) {
+	this->type = type;
+}
+
+void Tile::setBiome(Biome biome) {
+	this->biome = biome;
+}
+
+void Tile::setVisible(bool visible) {
+	this->visible = visible;
 }
 
 World::World(WorldParams params):
@@ -46,7 +49,14 @@ World::World(WorldParams params):
   genInitial();
 }
 
-Tile World::tileAt(int x, int y) { return tiles[std::pair<int, int>(x, y)]; }
+Tile const& World::tileAt(int x, int y) {
+	return chunkAt(x/Chunk::CHUNK_SIZE, y/Chunk::CHUNK_SIZE).getTile(x%Chunk::CHUNK_SIZE, y%Chunk::CHUNK_SIZE);
+}
+
+Chunk const& World::chunkAt(int x, int y) {
+	return chunks[{x, y}];
+}
+
 
 IPoint World::getSpawn() { return spawn; }
 
@@ -72,7 +82,9 @@ void World::checkChunks(IPoint point) {
     for (int j = y - worldParams.chunkRadius; j < y + worldParams.chunkRadius; j++) {
       for (int i = x - worldParams.chunkRadius; i < x + worldParams.chunkRadius; i++) {
         if (inBounds(i * worldParams.chunkSize, j * worldParams.chunkSize)) {
-          genChunk(i, j);
+          if (!chunks[{x, y}].isLoaded()) {
+		  chunks[{x, y}].generate(noise);
+	  }
         }
       }
     }
@@ -83,7 +95,7 @@ void World::genInitial() {
   int x = worldParams.width / (worldParams.chunkSize * 2);
   int y = worldParams.height / (worldParams.chunkSize * 2);
   
-  genChunk(x, y);
+  chunks[{x, y}].generate(noise);
 
   int offx = 1;
   int offy = 1;
@@ -92,7 +104,7 @@ void World::genInitial() {
     for (int j = -offy; j < offy; j += offy * 2 - 1) {
       for (int i = -offx; i < offx; i += offx * 2 - 1) {
         if (inBounds(i * worldParams.chunkSize, j * worldParams.chunkSize)) {
-          genChunk(x + i, y + j);
+          chunks[{x + i, y + j}].generate(noise);
         }
       }
     }
