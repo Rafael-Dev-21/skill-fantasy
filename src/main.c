@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
 #ifdef __linux__
-#include <ncurses/ncurses.h>
+#include <ncursesw/ncurses.h>
 #else
 #include <curses.h>
 #endif
