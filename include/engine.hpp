@@ -5,7 +5,7 @@
 #include "entity.hpp"
 #include "level.hpp"
 
-#include "util/events.hpp"
+#include "events.hpp"
 
 class Engine: public EventListener {
  public:

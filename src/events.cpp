@@ -1,6 +1,6 @@
 #include <algorithm>
 
-#include "util/events.hpp"
+#include "events.hpp"
 
 EventListener::EventListener() {}
 

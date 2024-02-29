@@ -2,33 +2,61 @@
 
 #include <map>
 #include <utility>
+#include <vector>
+#include <string>
 
 #include <chrono>
 
-#include "util/geom.hpp"
-#include "util/noise.hpp"
-#include "objects.hpp"
+#include "geom.hpp"
+#include "noise.hpp"
 
 enum class TileType { GRASS, WATER, SAND, STONE };
 
 enum class Biome { DESERT, PLAINS, FOREST, TUNDRA };
 
-struct Tile {
-  Tile(TileType type = TileType::GRASS, Biome biome = Biome::PLAINS);
+class Tile {
+public:
+	Tile();
+	~Tile();
 
-  TileType type;
-  Biome biome;
-  int sprite;
-  int colors;
+	TileType getType();
+	Biome getBiome();
+	bool isVisible();
   
-  FixedObject *fixedObject = nullptr;
-  LooseObject *looseObject = nullptr;
+	void setType(TileType type);
+	void setBiome(Biome biome);
+	void setVisible(bool visible);
+
+private:
+	TileType type;
+	Biome biome;
+	bool visible;
+};
+
+class Chunk {
+public:
+	Chunk();
+	~Chunk();
+
+	void update(float dt);
+	void generate(Noise const& noise);
+
+	Tile& getTile(int x, int y) const;
+	bool isLoaded();
+	bool isVisible();
+
+	static const int CHUNK_SIZE = 16;
+private:
+	int x;
+	int y;
+	bool loaded{false};
+	bool visible{false};
+	Tile * * tiles;
 };
 
 struct WorldParams {
   int width = 44000;
   int height = 44000;
-  int chunkSize = 32;
   int chunkRadius = 2;
   unsigned seed = static_cast<unsigned>(std::chrono::system_clock::now().time_since_epoch().count());
   int maxAltitude = 32;
@@ -43,7 +71,8 @@ class World {
  public:
   World(WorldParams params = {});
 
-  Tile tileAt(int x, int y);
+  Tile const& tileAt(int x, int y);
+  Chunk const& chunkAt(int x, int y);
 
   IPoint getSpawn();
 
@@ -59,12 +88,10 @@ class World {
 
  private:
   void genInitial();
-  void genChunk(int chunkX, int chunkY);
   TileType getTile(float e, Biome b);
   Biome getBiome(float m, float t);
 
-  std::map<std::pair<int, int>, Tile> tiles;
-  std::map<std::pair<int, int>, bool> chunkVisited;
+  std::unordered_map<std::pair<int, int>, Chunk> chunks;
   
   WorldParams worldParams;
 

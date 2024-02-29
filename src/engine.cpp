@@ -2,7 +2,7 @@
 #include <thread>
 #include <fstream>
 
-#include "model/engine.hpp"
+#include "engine.hpp"
 
 Engine::Engine(EventSystem &evSystem) :
   evSystem(evSystem)

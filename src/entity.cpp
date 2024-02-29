@@ -1,4 +1,4 @@
-#include "model/entity.hpp"
+#include "entity.hpp"
 
 Entity::Entity(IPoint pos):
   position(pos)

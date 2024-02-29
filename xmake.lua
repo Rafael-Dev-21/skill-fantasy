@@ -1,18 +1,20 @@
 add_rules("mode.debug", "mode.release")
 
-if is_plat ("windows") then
+set_policy("build.ccache", false)
+
+if is_plat ("windows") or is_plat("mingw") then
   add_requires("pdcurses")
 end
 
 target("skfantasy")
   set_kind("binary")
-  add_files("src/**.cpp")
+  add_files("src/**.c")
   add_includedirs("include")
-  set_languages("c++11")
-  if is_plat ("windows") then
+  set_languages("c11")
+  if is_plat ("windows") or is_plat("mingw") then
     add_packages("pdcurses")
   else
-    add_links("ncurses")
+    add_links("ncursesw", "tinfo", "m")
   end
   after_build(function(target)
     os.cp("$(projectdir)/data", "$(buildir)/$(plat)/$(arch)/$(mode)")
