@@ -3,6 +3,10 @@
 #include "noise.h"
 #include "mymath.h"
 
+#ifndef M_PI
+#define M_PI 3.1415926535897
+#endif
+
 FBMParams default_fbm = {
 	1.0,
 	1.0,
