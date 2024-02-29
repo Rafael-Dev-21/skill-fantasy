@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  linux:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -16,11 +16,14 @@ jobs:
           xmake-version: latest
           actions-cache-folder: '.xmake-cache'
           actions-cache-key: ubuntu-deploy
-      - name: Build
+      - name: Install Mingw
+        run: |
+          sudo apt-get install mingw-w64
+      - name: Build Linux
         run: |
           xmake f -m release -p linux -a x86_64
           xmake
-      - name: Deploy to Itch.io
+      - name: Deploy Linux to Itch.io
         uses: manleydev/butler-publish-itchio-action@master
         env:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
@@ -29,28 +32,21 @@ jobs:
           ITCH_USER: rafael-dev-21
           PACKAGE: build/linux/x86_64/release
           VERSION_FILE: version.txt
-  windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      - name: Setup Xmake
-        uses: xmake-io/github-action-setup-xmake@v1
-        with:
-          xmake-version: latest
-          actions-cache-folder: '.xmake-cache'
-          actions-cache-key: windows-deploy
-      - name: Build
+      - name: Build Windows
         run: |
-          xmake f -m release -p windows -a x64 -y
+          xmake f -m release -p mingw -a i386 -y
           xmake
-      - name: Deploy to Itch.io
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          path: |
+            build
+      - name: Deploy Windows to Itch.io
         uses: manleydev/butler-publish-itchio-action@master
         env:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
           CHANNEL: windows
           ITCH_GAME: skill-fantasy
           ITCH_USER: rafael-dev-21
-          PACKAGE: build/windows/x64/release
+          PACKAGE: build/mingw/i386/release
           VERSION_FILE: version.txt
