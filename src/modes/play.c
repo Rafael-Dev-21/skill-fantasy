@@ -1,0 +1,87 @@
+#ifdef __linux__
+#include <ncursesw/ncurses.h>
+#else
+#include <curses.h>
+#endif
+
+#include "modes.h"
+#include "creature.h"
+#include "draw.h"
+#include "move.h"
+#include "factories.h"
+
+#define BLOCK_LENGTH 10
+
+static void print_instructions()
+{
+	for (int i = 0; i < BLOCK_LENGTH; i++)
+		for (int j = 0; j < BLOCK_LENGTH; j++)
+			mvaddch(i, j, ' ');
+
+	mvprintw(0, 0, "(r)egen");
+	mvprintw(1, 0, "ESC back");
+	mvprintw(2, 0, "hjkl move");
+	mvprintw(3, 0, "(p)lace");
+	mvprintw(4, 0, "(b)reak");
+}
+
+static void print_creature_stats(Creature const * const creature, int x, int y)
+{
+	for (int i = 0; i < BLOCK_LENGTH; i++)
+		for (int j = 0; j < BLOCK_LENGTH; j++)
+			mvaddch(i+y, j+x, ' ');
+
+	mvprintw(y + 0, x + 1, "STR: %d", get_stat_value(creature, STAT_STR));
+	mvprintw(y + 1, x + 1, "MBL: %d", get_stat_value(creature, STAT_MBL));
+	mvprintw(y + 2, x + 1, "MND: %d", get_stat_value(creature, STAT_MND));
+	mvprintw(y + 3, x + 1, "FHT: %d", get_stat_value(creature, STAT_FHT));
+	mvprintw(y + 4, x + 1, "HRT: %d", get_stat_value(creature, STAT_HRT));
+
+}
+
+Mode *play_mode(ModeData *data)
+{
+	if (data->player == NULL || data->map == NULL) {
+		return &(Mode){&generate_mode};
+	}
+
+	Direction old_dir = data->player->facing;
+	Point cell = data->player->position;
+	
+	move_from(&cell, data->player->facing);
+
+	draw_map(data->map, data->player->position);
+	draw_creature(data->player, data->player->position);
+
+	print_instructions();
+	print_creature_stats(data->player, COLS-BLOCK_LENGTH-1, 0);
+
+	int ch = getch();
+	switch (ch) {
+	case 'l':
+	case 'j':
+	case 'k':
+	case 'h':
+		data->player->facing = dir_from_ch(ch, data->player->facing);
+		if (data->player->facing == old_dir) {
+			creature_move_by(data->player, data->map);
+		}
+		break;
+	case 'p':
+		place_wall(data->map, cell);
+		break;
+	case 'b':
+		break_wall(data->map, cell);
+		break;
+	case 'r':
+		return &(Mode){&generate_mode};
+	case 27:
+		free_map(data->map);
+		data->map = NULL;
+		free_creature(data->player);
+		data->player = NULL;
+		return &(Mode){&start_mode};
+	}
+
+	return &(Mode){play_mode};
+}

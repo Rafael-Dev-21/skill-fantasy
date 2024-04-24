@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
 #include "position.h"
-#include "world.h"
+#include "map.h"
 #include "noise.h"
 
 Map * create_map(int width, int height)
@@ -72,4 +72,3 @@ bool is_solid(Map * const map, Point cell)
 
 	return obj_types[map->tiles[cell.y][cell.x].object].solid;
 }
-

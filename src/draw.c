@@ -5,7 +5,8 @@
 #endif
 
 #include "position.h"
-#include "world.h"
+#include "map.h"
+#include "creature.h"
 #include "draw.h"
 
 void draw_map(Map * const map, Point center)
@@ -38,10 +39,37 @@ void draw_map(Map * const map, Point center)
 	}
 }
 
-void draw_player(Point pos, Point cursor)
+void draw_creature(Creature *creature, Point player)
 {
 	Point center = { COLS / 2, LINES / 2 };
-	Point cell = { cursor.x - pos.x + center.x, cursor.y - pos.y + center.y };
+	Point cursor = {0,0};
+
+	if (creature == NULL) {
+		return;
+	}
+	
+	Point pos = creature->position;
+
+	switch(creature->facing) {
+	case UP:
+		cursor.y = -1;
+		break;
+	case DOWN:
+		cursor.y = 1;
+		break;
+	case LEFT:
+		cursor.x = -1;
+		break;
+	case RIGHT:
+		cursor.x = 1;
+		break;
+	default:
+		cursor = (Point){0, 0};
+	}
+
+	Point modified_pos = { center.x + pos.x - player.x, center.y + pos.y - player.y }; 
+
+	Point cell = { cursor.x + modified_pos.x, cursor.y + modified_pos.y };
 	mvaddch(cell.y, cell.x, 'x');
-	mvaddch(center.y, center.x, '@' | COLOR_PAIR(6));
+	mvaddch(modified_pos.y, modified_pos.x, creature->glyph | COLOR_PAIR(creature->color));
 }

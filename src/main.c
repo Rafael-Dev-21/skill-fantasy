@@ -1,4 +1,6 @@
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #ifdef __linux__
 #include <ncursesw/ncurses.h>
@@ -7,12 +9,7 @@
 #endif
 
 #include "engine.h"
-#include "move.h"
-#include "world.h"
-#include "draw.h"
-
-#define MAP_WIDTH 1024
-#define MAP_HEIGHT 1024
+#include "modes.h"
 
 TileType tile_types[TILE_COUNT] = {
 	{ ' ', 1 },
@@ -29,50 +26,31 @@ ObjectType obj_types[OBJ_COUNT] = {
 
 int main(int argc, char *argv[])
 {
-	Point ppos = { 10, 10 }; // posição do jogador
-	Direction pdir = UP; // direção do jogador
+	ModeData data = {NULL, NULL, {0}};
 	
-	Map * map = create_map(MAP_WIDTH, MAP_HEIGHT); // mapa
+	FILE *file_version;
 
-	init_map(map);
+#if defined(_WIN32) || defined(__MINGW__)
+	fopen_s(&file_version, "version.txt", "r");
+#else
+	file_version = fopen("version.txt", "r");
+#endif
+
+	fgets(data.version, 256, file_version);
+	
+	fclose(file_version);
+
+	data.version[strlen(data.version)-1] = '\0';
+	
+	Mode *mode = &(Mode){&start_mode};
 
 	init_curses();
 
-	int ch = 0; // input
-	do {
-		clear();
-
-
-		Direction old_dir = pdir;
-
-		pdir = dir_from_ch(ch, pdir);
-
-		if (ch == 'h' 
-			|| ch == 'j'
-			|| ch == 'k'
-			|| ch == 'l') {
-			if (pdir == old_dir)
-				move_and_collide(map, &ppos, pdir);
-		}
-
-		Point cell = ppos;
-		move_from(&cell, pdir);
-
-		if (ch == 'p') {
-			place_wall(map, cell);
-		}
-
-		if (ch == 'b') {
-			break_wall(map, cell);
-		}
-
-		draw_map(map, ppos);
-		draw_player(ppos, cell);
-	} while((ch = getch()) != ESC);
+	while (mode != NULL) {
+		mode = mode->next(&data);
+	}
 
 	endwin();
-
-	free_map(map);
 
 	return EXIT_SUCCESS;
 }

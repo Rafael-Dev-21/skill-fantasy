@@ -1,7 +1,7 @@
 #include "move.h"
 
-void move_from(Point * pos, Direction dir)
-{
+void move_from(Point *pos, Direction dir)
+{	
 	if (dir == LEFT) pos->x -= 1;
 	if (dir == DOWN) pos->y += 1;
 	if (dir == UP) pos->y -= 1;

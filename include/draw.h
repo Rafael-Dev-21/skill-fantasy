@@ -3,6 +3,6 @@
 
 // draw
 void draw_map(Map * const, Point);
-void draw_player(Point pos, Point cursor);
+void draw_creature(Creature * const, Point);
 
 #endif

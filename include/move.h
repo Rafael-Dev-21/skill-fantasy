@@ -2,7 +2,7 @@
 #define MOVE_H
 
 #include "position.h"
-#include "world.h"
+#include "map.h"
 
 // move
 void move_from(Point *, Direction);

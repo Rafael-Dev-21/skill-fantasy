@@ -1,0 +1,56 @@
+[
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/move.c.o", "src/move.c"],
+  "file": "src/move.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/map.c.o", "src/map.c"],
+  "file": "src/map.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/noise.c.o", "src/noise.c"],
+  "file": "src/noise.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/draw.c.o", "src/draw.c"],
+  "file": "src/draw.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/creature.c.o", "src/creature.c"],
+  "file": "src/creature.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/engine.c.o", "src/engine.c"],
+  "file": "src/engine.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/math.c.o", "src/math.c"],
+  "file": "src/math.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/modes/generate.c.o", "src/modes/generate.c"],
+  "file": "src/modes/generate.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/modes/start.c.o", "src/modes/start.c"],
+  "file": "src/modes/start.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/modes/play.c.o", "src/modes/play.c"],
+  "file": "src/modes/play.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/main.c.o", "src/main.c"],
+  "file": "src/main.c"
+}]
