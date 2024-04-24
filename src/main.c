@@ -27,7 +27,7 @@ ObjectType obj_types[OBJ_COUNT] = {
 int main(int argc, char *argv[])
 {
 	ModeData data = {NULL, NULL, {0}};
-	
+
 	FILE *file_version;
 
 #if defined(_WIN32) || defined(__MINGW__)
@@ -37,11 +37,11 @@ int main(int argc, char *argv[])
 #endif
 
 	fgets(data.version, 256, file_version);
-	
+
 	fclose(file_version);
 
 	data.version[strlen(data.version)-1] = '\0';
-	
+
 	Mode *mode = &(Mode){&start_mode};
 
 	init_curses();

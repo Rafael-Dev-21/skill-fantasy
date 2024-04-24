@@ -5,7 +5,7 @@
 
 static void player_enter(Creature *creature, Map *map, Point cell);
 
-static Brain player_brain = {&player_enter};
+static Brain player_brain = {&player_enter, &creature_default_update};
 
 Creature *create_player(Map *map)
 {

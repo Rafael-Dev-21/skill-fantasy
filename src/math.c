@@ -2,8 +2,12 @@
 
 float lerp(float a, float b, float t)
 {
-	if (t < 0) return a;
-	if (t > 1) return b;
+	if (t < 0) {
+		return a;
+	}
+	if (t > 1) {
+		return b;
+	}
 	return a + (b - a) * t;
 }
 

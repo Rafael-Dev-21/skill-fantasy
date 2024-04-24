@@ -16,6 +16,9 @@ target("skfantasy")
   else
     add_links("ncursesw", "tinfo", "m")
   end
+  if is_plat("mingw") then
+    add_ldflags("-static-libgcc")
+  end
   after_build(function(target)
     os.cp("$(projectdir)/data", "$(buildir)/$(plat)/$(arch)/$(mode)")
     os.cp("$(projectdir)/version.txt", "$(buildir)/$(plat)/$(arch)/$(mode)")

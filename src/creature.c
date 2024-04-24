@@ -84,3 +84,9 @@ void free_creature(Creature *creature)
 	free(creature);
 	creature = NULL;
 }
+
+void creature_default_enter(Creature *creature, Map *map, Point cell)
+{}
+
+void creature_default_update(Creature *creature, Map *map)
+{}
