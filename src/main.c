@@ -2,14 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef __linux__
-#include <ncursesw/ncurses.h>
-#else
-#include <curses.h>
-#endif
-
-#include "engine.h"
-#include "modes.h"
+#include "skfantasy.h"
 
 TileType tile_types[TILE_COUNT] = {
 	{ ' ', 1 },
@@ -39,8 +32,6 @@ int main(int argc, char *argv[])
 	fgets(data.version, 256, file_version);
 
 	fclose(file_version);
-
-	data.version[strlen(data.version)-1] = '\0';
 
 	Mode *mode = &(Mode){&start_mode};
 

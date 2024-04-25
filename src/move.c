@@ -1,4 +1,4 @@
-#include "move.h"
+#include "skfantasy.h"
 
 void move_from(Point *pos, Direction dir)
 {	
@@ -8,13 +8,6 @@ void move_from(Point *pos, Direction dir)
 	if (dir == RIGHT) pos->x += 1;
 }
 
-void move_and_collide(Map * const map, Point *pos, Direction dir)
-{
-	Point next = *pos;
-	move_from(&next, dir);
-	if (!is_solid(map, next)) move_from(pos, dir);
-}
-
 Direction dir_from_ch(int ch, Direction fall)
 {
 	if (ch == 'h') return LEFT;
@@ -22,4 +15,29 @@ Direction dir_from_ch(int ch, Direction fall)
 	if (ch == 'k') return UP;
 	if (ch == 'l') return RIGHT;
 	return fall;
+}
+
+Point point_from_dir(Direction dir)
+{
+	Point result = {0, 0};
+
+	switch (dir) {
+	case UP:
+		result.y = -1;
+		break;
+	case DOWN:
+		result.y = 1;
+		break;
+	case LEFT:
+		result.x = -1;
+		break;
+	case RIGHT:
+		result.x = 1;
+		break;
+	default:
+		result.x = 0;
+		result.y = 0;
+	}
+	
+	return result;
 }

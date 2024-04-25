@@ -17,9 +17,10 @@ target("skfantasy")
     add_links("ncursesw", "tinfo", "m")
   end
   if is_plat("mingw") then
-    add_ldflags("-static-libgcc")
+    add_ldflags("-static-libgcc", "-static-libc++")
   end
   after_build(function(target)
     os.cp("$(projectdir)/data", "$(buildir)/$(plat)/$(arch)/$(mode)")
     os.cp("$(projectdir)/version.txt", "$(buildir)/$(plat)/$(arch)/$(mode)")
   end)
+

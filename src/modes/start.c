@@ -1,10 +1,4 @@
-#ifdef __linux__
-#include <ncursesw/ncurses.h>
-#else
-#include <curses.h>
-#endif
-
-#include "modes.h"
+#include "skfantasy.h"
 
 Mode *start_mode(ModeData *data)
 {
@@ -20,7 +14,7 @@ Mode *start_mode(ModeData *data)
 	switch (getch()) {
 	case 's':
 		return &(Mode){&generate_mode};
-	case 27:
+	case ESC:
 		return NULL;
 	default:
 		return &(Mode){&start_mode};

@@ -1,26 +1,23 @@
-#ifdef __linux__
-#include <ncursesw/ncurses.h>
-#else
-#include <curses.h>
-#endif
-
-#include "modes.h"
-#include "factories.h"
+#include "skfantasy.h"
 
 Mode *generate_mode(ModeData *data)
 {
 	clear();
 	mvprintw(10, 10, "Generating...");
 	refresh();
-	if (data->map != NULL) {
-		free_map(data->map);
+	if (data->world != NULL) {
+		free_world(data->world);
 	}
-	data->map = create_map(1024, 1024);
-	init_map(data->map);
+	data->world = create_world(1024, 1024);
+	init_world(data->world);
 	if (data->player != NULL) {
 		free_creature(data->player);
 	}
-	data->player = create_player(data->map);
+	data->player = create_player(data->world);
+
+	for (int i = 0; i < 256; i++) {
+		create_fungi(data->world);
+	}
 
 	mvprintw(11, 10, "[Press any key]");
 	refresh();

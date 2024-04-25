@@ -1,14 +1,4 @@
-#ifdef __linux__
-#include <ncursesw/ncurses.h>
-#else
-#include <curses.h>
-#endif
-
-#include "modes.h"
-#include "creature.h"
-#include "draw.h"
-#include "move.h"
-#include "factories.h"
+#include "skfantasy.h"
 
 #define BLOCK_LENGTH 10
 
@@ -41,7 +31,7 @@ static void print_creature_stats(Creature const * const creature, int x, int y)
 
 Mode *play_mode(ModeData *data)
 {
-	if (data->player == NULL || data->map == NULL) {
+	if (data->player == NULL || data->world == NULL) {
 		return &(Mode){&generate_mode};
 	}
 
@@ -50,8 +40,15 @@ Mode *play_mode(ModeData *data)
 	
 	move_from(&cell, data->player->facing);
 
-	draw_map(data->map, data->player->position);
-	draw_creature(data->player, data->player->position);
+	Creature *it = data->world->creatures;
+	while (it != NULL) {
+		Brain *brain = it->brain;
+		brain->update(it,data->world);
+		it = it->next;
+	}
+
+	draw_world(data->world, data->player->position);
+	//draw_creature(data->player, data->player->position);
 
 	print_instructions();
 	print_creature_stats(data->player, COLS-BLOCK_LENGTH-1, 0);
@@ -64,21 +61,21 @@ Mode *play_mode(ModeData *data)
 	case 'h':
 		data->player->facing = dir_from_ch(ch, data->player->facing);
 		if (data->player->facing == old_dir) {
-			creature_move_by(data->player, data->map);
+			creature_move_by(data->player, data->world);
 		}
 		break;
 	case 'p':
-		place_wall(data->map, cell);
+		place_wall(data->world, cell);
 		break;
 	case 'b':
-		break_wall(data->map, cell);
+		break_wall(data->world, cell);
 		break;
 	case 'r':
 		return &(Mode){&generate_mode};
-	case 27:
-		free_map(data->map);
-		data->map = NULL;
-		free_creature(data->player);
+	case ESC:
+		free_world(data->world);
+		data->world = NULL;
+		//free_creature(data->player);
 		data->player = NULL;
 		return &(Mode){&start_mode};
 	}

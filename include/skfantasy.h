@@ -10,6 +10,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#if defined(_WIN32) || defined(__MINGW__)
+#include <curses.h>
+#else
+#include <ncursesw/ncurses.h>
+#endif
+
 /***********
  * DEFINES *
  ***********/
@@ -62,6 +68,7 @@ typedef struct {
 typedef struct {
 	void (*enter)(Creature*, World*, Point);
 	void (*update)(Creature*, World*);
+	void *data;
 } Brain;
 
 struct Creature {
@@ -109,7 +116,7 @@ struct World {
 	int16_t width;
 	int16_t height;
 	Tile **tiles;
-	Creature *creature;
+	Creature *creatures;
 };
 
 typedef struct {
@@ -169,6 +176,8 @@ Creature *create_creature(Brain *brain);
 void creature_move_by(Creature *creature, World *world);
 void free_creature(Creature *creature);
 
+void creature_attack(Creature *a, Creature *b, World *world);
+
 /*********************
  * default behaviors *
  *********************/
@@ -187,14 +196,16 @@ Tile *tile_at(World *world, Point cell);
 Creature *creature_at(World *world, Point cell);
 void place_wall(World *world, Point cell);
 void break_wall(World *world, Point cell);
-bool is_solid(Tile tile);
+bool is_solid(Tile * tile);
 void add_creature_rand_empty(World *world, Creature *creature);
+void world_remove(World *world, Creature *creature);
 
 /*************
  * factories *
  *************/
 
 Creature *create_player(World *world);
+Creature *create_fungi(World *world);
 
 /***********
  * EXTERNS *

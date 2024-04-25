@@ -1,10 +1,4 @@
-#ifdef __linux__
-#include <ncursesw/ncurses.h>
-#else
-#include <curses.h>
-#endif
-
-#include "engine.h"
+#include "skfantasy.h"
 
 void init_curses(void)
 {

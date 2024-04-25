@@ -1,16 +1,31 @@
-#ifdef __linux__
-#include <ncursesw/ncurses.h>
-#else
-#include <curses.h>
-#endif
+#include "skfantasy.h"
 
-#include "position.h"
-#include "map.h"
-#include "creature.h"
-#include "draw.h"
 
-void draw_map(Map * const map, Point center)
+void draw_creature(Creature const * const creature, Point player)
 {
+	Point center = { COLS / 2, LINES / 2 };
+	Point cursor = {0,0};
+
+	if (creature == NULL) {
+		return;
+	}
+	
+	Point pos = creature->position;
+	cursor = point_from_dir(creature->facing);
+
+	Point modified_pos = { center.x + pos.x - player.x, center.y + pos.y - player.y }; 
+
+	Point cell = { cursor.x + modified_pos.x, cursor.y + modified_pos.y };
+	mvaddch(cell.y, cell.x, 'x');
+	mvaddch(modified_pos.y, modified_pos.x, creature->glyph | COLOR_PAIR(creature->color));
+}
+
+void draw_world(World const * const world, Point center)
+{
+	if (world == NULL) {
+		return;
+	}
+
 	int startx = center.x - COLS/2;
 	int starty = center.y - LINES/2;
 
@@ -19,13 +34,13 @@ void draw_map(Map * const map, Point center)
 			int mapx = startx + col;
 			int mapy = starty + row;
 			if (mapx < 0 || mapy < 0
-				|| mapx >= map->width || mapy >= map->height) {
+				|| mapx >= world->width || mapy >= world->height) {
 				mvaddch(row, col, ' ');
 				continue;
 			}
 
 			int sprite = ' ';
-			Tile tile = map->tiles[mapy][mapx];
+			Tile tile = world->tiles[mapy][mapx];
 			TileType tile_type = tile_types[tile.type];
 			ObjectType obj_type = obj_types[tile.object];
 
@@ -37,39 +52,12 @@ void draw_map(Map * const map, Point center)
 			mvaddch(row, col, sprite);
 		}
 	}
+
+	Creature *it = world->creatures;
+
+	while (it != NULL) {
+		draw_creature(it, center);
+		it = it->next;
+	}
 }
 
-void draw_creature(Creature *creature, Point player)
-{
-	Point center = { COLS / 2, LINES / 2 };
-	Point cursor = {0,0};
-
-	if (creature == NULL) {
-		return;
-	}
-	
-	Point pos = creature->position;
-
-	switch(creature->facing) {
-	case UP:
-		cursor.y = -1;
-		break;
-	case DOWN:
-		cursor.y = 1;
-		break;
-	case LEFT:
-		cursor.x = -1;
-		break;
-	case RIGHT:
-		cursor.x = 1;
-		break;
-	default:
-		cursor = (Point){0, 0};
-	}
-
-	Point modified_pos = { center.x + pos.x - player.x, center.y + pos.y - player.y }; 
-
-	Point cell = { cursor.x + modified_pos.x, cursor.y + modified_pos.y };
-	mvaddch(cell.y, cell.x, 'x');
-	mvaddch(modified_pos.y, modified_pos.x, creature->glyph | COLOR_PAIR(creature->color));
-}

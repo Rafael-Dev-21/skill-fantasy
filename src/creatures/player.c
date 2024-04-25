@@ -1,30 +1,31 @@
 #include <stdlib.h>
 
-#include "creature.h"
-#include "factories.h"
+#include "skfantasy.h"
 
-static void player_enter(Creature *creature, Map *map, Point cell);
+static void player_enter(Creature *creature, World *world, Point cell);
 
-static Brain player_brain = {&player_enter, &creature_default_update};
-
-Creature *create_player(Map *map)
+Creature *create_player(World *world)
 {
-	if (map == NULL) {
+	if (world == NULL) {
 		return NULL;
 	}
-	Creature *player = create_creature(&player_brain);
+	Brain *brain = malloc(sizeof(Brain));
+	if (brain == NULL) {
+		return NULL;
+	}
+
+	brain->enter = &player_enter;
+	brain->update = &creature_default_update;
+	brain->data = NULL;
+
+	Creature *player = create_creature(brain);
 	if (player == NULL) {
 		return NULL;
 	}
 	player->glyph = '@';
 	player->color = 4;
 
-	int x = 0, y = 0;
-
-	do {
-		x = rand() % map->width;
-		y = rand() % map->height;
-	} while (is_solid(map, (Point){x, y}));
+	add_creature_rand_empty(world, player);
 
 	for (int i = STAT_STR; i < STAT_HRT; i++) {
 		player->stats[i].base = ((rand() % 6) + (rand() % 6) + 2) / 2;
@@ -32,15 +33,26 @@ Creature *create_player(Map *map)
 
 	player->stats[STAT_HRT].base = 4 + ((rand() % 6) + (rand() % 6));
 
-	player->position = (Point){x, y};
 	player->facing = UP;
 
 	return player;
 }
 
-void player_enter(Creature *player, Map *map, Point cell)
+void player_enter(Creature *player, World *world, Point cell)
 {
-	if (!is_solid(map, cell)) {
+	if (player == NULL) {
+		return;
+	}
+	if (world == NULL) {
+		return;
+	}
+	
+	Tile *tile = tile_at(world, cell);
+	if (tile == NULL) {
+		return;
+	}
+
+	if (!is_solid(tile)) {
 		player->position.x = cell.x;
 		player->position.y = cell.y;
 	}
