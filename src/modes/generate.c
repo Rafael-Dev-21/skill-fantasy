@@ -10,9 +10,9 @@ Mode *generate_mode(ModeData *data)
 	}
 	data->world = create_world(1024, 1024);
 	init_world(data->world);
-	if (data->player != NULL) {
+	/*if (data->player != NULL) {
 		free_creature(data->player);
-	}
+	}*/
 	data->player = create_player(data->world);
 
 	for (int i = 0; i < 256; i++) {
