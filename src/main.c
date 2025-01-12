@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <lua.h>
+#include <lualib.h>
+#include <lauxlib.h>
+
 #include "skfantasy.h"
 
 TileType tile_types[TILE_COUNT] = {
@@ -33,14 +37,32 @@ int main(int argc, char *argv[])
 
 	fclose(file_version);
 
-	Mode *mode = &(Mode){&start_mode};
+	int mode = 0;
 
 	init_curses();
 
-	while (mode != NULL) {
-		mode = mode->next(&data);
+	lua_State *L;
+
+	L = luaL_newstate();
+	luaL_openlibs(L);
+
+	luaL_dofile(L, "data/main.lua");
+
+	while (mode != -1) {
+		switch (mode) {
+		case 0:
+			mode = start_mode(&data);
+			break;
+		case 1:
+			mode = generate_mode(&data);
+			break;
+		case 2:
+			mode = play_mode(&data);
+			break;
+		}
 	}
 
+	lua_close(L);
 	endwin();
 
 	return EXIT_SUCCESS;

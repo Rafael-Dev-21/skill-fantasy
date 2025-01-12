@@ -1,6 +1,6 @@
 #include "skfantasy.h"
 
-Mode *start_mode(ModeData *data)
+int start_mode(ModeData *data)
 {
 	clear();
 
@@ -13,10 +13,10 @@ Mode *start_mode(ModeData *data)
 
 	switch (getch()) {
 	case 's':
-		return &(Mode){&generate_mode};
+		return 1;
 	case ESC:
-		return NULL;
+		return -1;
 	default:
-		return &(Mode){&start_mode};
+		return 0;
 	}
 }

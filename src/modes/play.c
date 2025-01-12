@@ -29,10 +29,10 @@ static void print_creature_stats(Creature const * const creature, int x, int y)
 
 }
 
-Mode *play_mode(ModeData *data)
+int play_mode(ModeData *data)
 {
 	if (data->player == NULL || data->world == NULL) {
-		return &(Mode){&generate_mode};
+		return 1;
 	}
 
 	Direction old_dir = data->player->facing;
@@ -48,7 +48,6 @@ Mode *play_mode(ModeData *data)
 	}
 
 	draw_world(data->world, data->player->position);
-	//draw_creature(data->player, data->player->position);
 
 	print_instructions();
 	print_creature_stats(data->player, COLS-BLOCK_LENGTH-1, 0);
@@ -71,14 +70,13 @@ Mode *play_mode(ModeData *data)
 		break_wall(data->world, cell);
 		break;
 	case 'r':
-		return &(Mode){&generate_mode};
+		return 1;
 	case ESC:
 		free_world(data->world);
 		data->world = NULL;
-		//free_creature(data->player);
 		data->player = NULL;
-		return &(Mode){&start_mode};
+		return 0;
 	}
 
-	return &(Mode){play_mode};
+	return 2;
 }

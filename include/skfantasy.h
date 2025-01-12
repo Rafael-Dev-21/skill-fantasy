@@ -125,12 +125,6 @@ typedef struct {
 	char version[256];
 } ModeData;
 
-typedef struct Mode *(ModeFunc)(ModeData*);
-
-typedef struct Mode {
-	ModeFunc *next;
-} Mode;
-
 /**********
  * engine *
  **********/
@@ -156,9 +150,9 @@ Point point_from_dir(Direction dir);
  * modes *
  *********/
 
-Mode *start_mode(ModeData *data);
-Mode *generate_mode(ModeData *data);
-Mode *play_mode(ModeData *data);
+int start_mode(ModeData *data);
+int generate_mode(ModeData *data);
+int play_mode(ModeData *data);
 
 /*********
  * stats *

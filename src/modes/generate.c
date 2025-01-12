@@ -1,6 +1,6 @@
 #include "skfantasy.h"
 
-Mode *generate_mode(ModeData *data)
+int generate_mode(ModeData *data)
 {
 	clear();
 	mvprintw(10, 10, "Generating...");
@@ -10,9 +10,6 @@ Mode *generate_mode(ModeData *data)
 	}
 	data->world = create_world(1024, 1024);
 	init_world(data->world);
-	/*if (data->player != NULL) {
-		free_creature(data->player);
-	}*/
 	data->player = create_player(data->world);
 
 	for (int i = 0; i < 256; i++) {
@@ -23,5 +20,5 @@ Mode *generate_mode(ModeData *data)
 	refresh();
 
 	getch();
-	return &(Mode){&play_mode};
+	return 2;
 }
