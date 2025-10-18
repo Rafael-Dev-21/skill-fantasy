@@ -40,7 +40,7 @@ void draw_world(World const * const world, Point center)
 			}
 
 			int sprite = ' ';
-			Tile tile = world->tiles[mapy][mapx];
+			Tile tile = world->tiles[mapy * world->width + mapx];
 			TileType tile_type = tile_types[tile.type];
 			ObjectType obj_type = obj_types[tile.object];
 

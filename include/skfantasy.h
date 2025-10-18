@@ -115,7 +115,7 @@ typedef struct {
 struct World {
 	int16_t width;
 	int16_t height;
-	Tile **tiles;
+	Tile *tiles;
 	Creature *creatures;
 };
 

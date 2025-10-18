@@ -12,15 +12,13 @@ World * create_world(int width, int height)
 
 	result->width = width;
 	result->height = height;
-	result->tiles = (Tile * *)calloc(result->height, sizeof(Tile *));
+
+  size_t total_tiles = (size_t)(width * height);
+	result->tiles = (Tile *)calloc(total_tiles, sizeof(Tile));
 	if (result->tiles == NULL) {
 		free(result);
 		return NULL;
 	}
-	for (int i = 0; i < result->height; i++) {
-		result->tiles[i] = (Tile *)calloc(result->width, sizeof(Tile));
-	}
-
 	result->creatures = NULL;
 
 	return result;
@@ -30,9 +28,6 @@ void free_world(World * world)
 {
 	if (world == NULL) {
 		return;
-	}
-	for (int i = 0; i < world->height; i++) {
-		free(world->tiles[i]);
 	}
 	free(world->tiles);
 
@@ -75,19 +70,10 @@ Tile *tile_at(World * world, Point cell)
 	if (world == NULL) {
 		return NULL;
 	}
-	if (cell.x < 0) {
+	if (cell.x < 0 || cell.y < 0 || cell.x >= world->width || cell.y >= world->height) {
 		return NULL;
 	}
-	if (cell.y < 0) {
-		return NULL;
-	}
-	if (cell.x >= world->width) {
-		return NULL;
-	}
-	if (cell.y >= world->height) {
-		return NULL;
-	}
-	return &world->tiles[cell.y][cell.x];
+	return &world->tiles[cell.y * world->width + cell.x];
 }
 
 Creature *creature_at(World *world, Point cell)

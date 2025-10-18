@@ -8,8 +8,7 @@ else
   add_packages("ncurses")
 end
 
-add_requires("flecs")
-add_packages("flecs")
+add_includedirs("include")
 
 target("skfantasy")
   set_kind("binary")
@@ -19,7 +18,7 @@ target("skfantasy")
     add_ldflags("-static-libgcc", "-static-libc++")
   end
   after_build(function(target)
-    os.cp("$(projectdir)/data", "$(builddir)/$(plat)/$(arch)/$(mode)")
+    --os.cp("$(projectdir)/data", "$(builddir)/$(plat)/$(arch)/$(mode)")
     os.cp("$(projectdir)/version.txt", "$(builddir)/$(plat)/$(arch)/$(mode)")
   end)
 
