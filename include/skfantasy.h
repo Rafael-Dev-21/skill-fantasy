@@ -68,17 +68,17 @@ typedef struct {
 typedef struct {
 	void (*enter)(Creature*, World*, Point);
 	void (*update)(Creature*, World*);
-	void *data;
 } Brain;
 
 struct Creature {
 	Stat stats[STATS_COUNT];
-	Brain *brain;
+	void *data;
 	Creature *next;
 	Point position;
 	Direction facing;
 	int32_t glyph;
 	int32_t color;
+  uint8_t brain;
 };
 
 typedef enum {
@@ -166,7 +166,7 @@ void apply_modifier(Creature * creature, StatId id, int8_t modifier);
  * creature *
  ************/
 
-Creature *create_creature(Brain *brain);
+Creature *create_creature(size_t size);
 void creature_move_by(Creature *creature, World *world);
 void free_creature(Creature *creature);
 
@@ -198,6 +198,9 @@ void world_remove(World *world, Creature *creature);
  * factories *
  *************/
 
+void init_fungi_module(void);
+void init_player_module(void);
+
 Creature *create_player(World *world);
 Creature *create_fungi(World *world);
 
@@ -207,5 +210,8 @@ Creature *create_fungi(World *world);
 
 extern TileType tile_types[TILE_COUNT];
 extern ObjectType obj_types[OBJ_COUNT];
+extern Brain brains[];
+extern size_t brain_cap;
+extern size_t brain_cnt;
 
 #endif

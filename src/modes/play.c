@@ -2,7 +2,7 @@
 
 #define BLOCK_LENGTH 10
 
-static void print_instructions()
+static void print_instructions(void)
 {
 	for (int i = 0; i < BLOCK_LENGTH; i++)
 		for (int j = 0; j < BLOCK_LENGTH; j++)
@@ -42,8 +42,7 @@ int play_mode(ModeData *data)
 
 	Creature *it = data->world->creatures;
 	while (it != NULL) {
-		Brain *brain = it->brain;
-		brain->update(it,data->world);
+		brains[it->brain].update(it,data->world);
 		it = it->next;
 	}
 

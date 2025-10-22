@@ -4,26 +4,29 @@
 
 static void player_enter(Creature *creature, World *world, Point cell);
 
+static size_t my_brain;
+
+void init_player_module(void)
+{
+  my_brain = brain_cnt++;
+  brains[my_brain].update = &creature_default_update;
+  brains[my_brain].enter = &player_enter;
+}
+
 Creature *create_player(World *world)
 {
 	if (world == NULL) {
 		return NULL;
 	}
-	Brain *brain = malloc(sizeof(Brain));
-	if (brain == NULL) {
-		return NULL;
-	}
 
-	brain->enter = &player_enter;
-	brain->update = &creature_default_update;
-	brain->data = NULL;
-
-	Creature *player = create_creature(brain);
+	Creature *player = create_creature(sizeof(Creature));
 	if (player == NULL) {
 		return NULL;
 	}
 	player->glyph = '@';
 	player->color = 4;
+  player->brain = my_brain;
+  player->data = NULL;
 
 	add_creature_rand_empty(world, player);
 

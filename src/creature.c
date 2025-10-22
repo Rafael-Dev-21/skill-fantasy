@@ -52,14 +52,15 @@ void apply_modifier(Creature * creature, StatId stat, int8_t modifier)
 	creature->stats[stat].modifier += modifier;
 }
 
-Creature *create_creature(Brain *brain)
+Creature *create_creature(size_t size)
 {
-	Creature *result = (Creature*)malloc(sizeof(Creature));
+  if (size < sizeof(Creature)) {
+    return NULL;
+  }
+	Creature *result = (Creature*)malloc(size);
 	if (result == NULL) {
 		return NULL;
 	}
-
-	result->brain = brain;
 	result->next = NULL;
 	return result;
 }
@@ -74,13 +75,13 @@ void creature_move_by(Creature *creature, World *world)
 	}
 	Point cell = creature->position;
 	move_from(&cell, creature->facing);
-	Brain *brain = creature->brain;
+	/*Brain *brain = creature->brain;
 	if (brain == NULL) {
 		return;
-	}
+	}*/
 	Creature *other = creature_at(world, cell);
 	if (other == NULL) {
-		brain->enter(creature, world, cell);
+		brains[creature->brain].enter(creature, world, cell);
 	} else {
 		creature_attack(creature, other, world);
 	}
@@ -90,12 +91,9 @@ void free_creature(Creature *creature)
 {
 	if (creature == NULL) {
 		return;
-	}
-	if (creature->brain != NULL) {
-		free(creature->brain->data);
-	}
-	free(creature->brain);
-	creature->brain = NULL;
+  }
+	free(creature->data);
+	creature->data = NULL;
 	free(creature);
 	creature = NULL;
 }
@@ -118,7 +116,14 @@ void creature_attack(Creature *a, Creature *b, World *world)
 }
 
 void creature_default_enter(Creature *creature, World *world, Point cell)
-{}
+{
+  (void)creature;
+  (void)world;
+  (void)cell;
+}
 
 void creature_default_update(Creature *creature, World *world)
-{}
+{
+  (void)creature;
+  (void)world;
+}

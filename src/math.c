@@ -38,8 +38,8 @@ size_t hash_pos(int x, int y)
 
 	size_t a = x, b = y;
 
-	a *= 3284157443; b ^= a << s | a >> w-s;
-	b *= 1911520717; a ^= b << s | b >> w-s;
+	a *= 3284157443; b ^= a << s | a >> (w-s);
+	b *= 1911520717; a ^= b << s | b >> (w-s);
 	a *= 2048419325;
 
 	return a;

@@ -14,6 +14,7 @@ target("skfantasy")
   set_kind("binary")
   add_files("src/**.c")
   set_languages("c99")
+  set_warnings("allextra", "all", "pedantic", "error")
   if is_plat("mingw") then
     add_ldflags("-static-libgcc", "-static-libc++")
   end

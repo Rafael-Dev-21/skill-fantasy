@@ -14,32 +14,33 @@ struct FungiData {
 	int8_t spread_count;
 };
 
+static size_t my_brain;
+
+void init_fungi_module(void)
+{
+  my_brain = brain_cnt++;
+  brains[my_brain].update = &fungi_update;
+  brains[my_brain].enter = &creature_default_enter;
+}
+
 Creature *create_fungi(World *world)
 {
 	if (world == NULL) {
 		return NULL;
 	}
-
-	Brain *brain = malloc(sizeof(Brain));
-	if (brain == NULL) {
-		return NULL;
-	}
-	brain->enter = &creature_default_enter;
-	brain->update = &fungi_update;
 	struct FungiData *data = malloc(sizeof(struct FungiData));
 	if (data == NULL) {
-		free(brain);
 		return NULL;
 	}
 	data->spread_count = 0;
-	brain->data = data;
 	
-	Creature *fungi = create_creature(brain);
+	Creature *fungi = create_creature(sizeof(Creature));
 	if (fungi == NULL) {
-		free(brain->data);
-		free(brain);
+		free(data);
 		return NULL;
 	}
+  fungi->data = data;
+  fungi->brain = my_brain;
 	
 	for (int i = STAT_STR; i < STAT_HRT; i++) {
 		fungi->stats[i].base = MIN_STAT + rand() % MAX_STAT;
@@ -66,8 +67,7 @@ static void fungi_update(Creature* fungi, World* world)
 		return;
 	}
 
-	Brain *brain = fungi->brain;
-	struct FungiData *data = brain->data;
+	struct FungiData *data = fungi->data;
 	if (data->spread_count < SPREAD_MAX_COUNT && (rand()%100) < SPREAD_CHANCE) {
 		fungi_spread(fungi, world);
 	}
@@ -99,8 +99,7 @@ static void fungi_spread(Creature* fungi, World* world)
 	child->position.x = x;
 	child->position.y = y;
 	
-	Brain *brain = fungi->brain;
-	struct FungiData *data = brain->data;
+	struct FungiData *data = fungi->data;
 
 	data->spread_count++;
 }

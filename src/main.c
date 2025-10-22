@@ -20,18 +20,30 @@ ObjectType obj_types[OBJ_COUNT] = {
 	{ '#', 8, true },
 };
 
-int main(int argc, char *argv[])
+#define BRAIN_CAP 8
+
+size_t brain_cap = BRAIN_CAP;
+Brain brains[BRAIN_CAP] = {0};
+size_t brain_cnt = 0;
+
+int main(void)
 {
 	ModeData data = {NULL, NULL, {0}};
 
 	FILE *file_version;
 	file_version = fopen("version.txt", "r");
+  if (!file_version) {
+    fprintf(stderr, "Error! version.txt not found on current directory");
+    exit(EXIT_FAILURE);
+  }
 	fgets(data.version, 256, file_version);
 	fclose(file_version);
 
 	int mode = 0;
 
 	init_curses();
+  init_player_module();
+  init_fungi_module();
 	while (mode != -1) {
 		switch (mode) {
 		case 0:
