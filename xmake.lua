@@ -1,14 +1,17 @@
 add_rules("mode.debug", "mode.release")
 
-if is_plat ("windows") or is_plat("mingw") then
-  add_requires("pdcurses")
-  add_packages("pdcurses")
-else
+if is_plat ("linux", "bsd", "macosx") then
   add_requires("ncurses")
   add_packages("ncurses")
+else
+  add_requires("pdcurses")
+  add_packages("pdcurses")
 end
 
 add_includedirs("include")
+
+add_requires("flecs")
+add_packages("flecs")
 
 target("skfantasy")
   set_kind("binary")

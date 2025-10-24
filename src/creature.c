@@ -92,8 +92,6 @@ void free_creature(Creature *creature)
 	if (creature == NULL) {
 		return;
   }
-	free(creature->data);
-	creature->data = NULL;
 	free(creature);
 	creature = NULL;
 }

@@ -26,7 +26,6 @@ Creature *create_player(World *world)
 	player->glyph = '@';
 	player->color = 4;
   player->brain = my_brain;
-  player->data = NULL;
 
 	add_creature_rand_empty(world, player);
 

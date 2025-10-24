@@ -65,14 +65,8 @@ typedef struct {
 	int8_t modifier;
 } Stat;
 
-typedef struct {
-	void (*enter)(Creature*, World*, Point);
-	void (*update)(Creature*, World*);
-} Brain;
-
 struct Creature {
 	Stat stats[STATS_COUNT];
-	void *data;
 	Creature *next;
 	Point position;
 	Direction facing;
@@ -118,6 +112,11 @@ struct World {
 	Tile *tiles;
 	Creature *creatures;
 };
+
+typedef struct {
+	void (*enter)(Creature*, World*, Point);
+	void (*update)(Creature*, World*);
+} Brain;
 
 typedef struct {
 	Creature *player;

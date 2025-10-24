@@ -10,9 +10,13 @@
 static void fungi_update(Creature*, World*);
 static void fungi_spread(Creature*, World*);
 
-struct FungiData {
+struct Fungi {
+  Creature base;
 	int8_t spread_count;
 };
+
+#define AS_CREATURE(fungi) ((Creature *)(fungi))
+#define AS_FUNGI(creature) ((struct Fungi*)(creature))
 
 static size_t my_brain;
 
@@ -28,32 +32,25 @@ Creature *create_fungi(World *world)
 	if (world == NULL) {
 		return NULL;
 	}
-	struct FungiData *data = malloc(sizeof(struct FungiData));
-	if (data == NULL) {
-		return NULL;
-	}
-	data->spread_count = 0;
-	
-	Creature *fungi = create_creature(sizeof(Creature));
+	struct Fungi *fungi = AS_FUNGI(create_creature(sizeof(struct Fungi)));
 	if (fungi == NULL) {
-		free(data);
 		return NULL;
 	}
-  fungi->data = data;
-  fungi->brain = my_brain;
+  fungi->spread_count = 0;
+  AS_CREATURE(fungi)->brain = my_brain;
 	
 	for (int i = STAT_STR; i < STAT_HRT; i++) {
-		fungi->stats[i].base = MIN_STAT + rand() % MAX_STAT;
+		AS_CREATURE(fungi)->stats[i].base = MIN_STAT + rand() % MAX_STAT;
 	}
-	fungi->stats[STAT_HRT].base = MIN_BASE_HRT + rand()%8;
+	AS_CREATURE(fungi)->stats[STAT_HRT].base = MIN_BASE_HRT + rand()%8;
 	
-	fungi->facing = rand()%4;
-	fungi->glyph = 'f';
-	fungi->color = 3;
+	AS_CREATURE(fungi)->facing = rand()%4;
+	AS_CREATURE(fungi)->glyph = 'f';
+	AS_CREATURE(fungi)->color = 3;
 	
-	add_creature_rand_empty(world, fungi);
+	add_creature_rand_empty(world, AS_CREATURE(fungi));
 	
-	return fungi;
+	return AS_CREATURE(fungi);
 }
 
 static void fungi_update(Creature* fungi, World* world)
@@ -67,8 +64,7 @@ static void fungi_update(Creature* fungi, World* world)
 		return;
 	}
 
-	struct FungiData *data = fungi->data;
-	if (data->spread_count < SPREAD_MAX_COUNT && (rand()%100) < SPREAD_CHANCE) {
+	if (((struct Fungi *)fungi)->spread_count < SPREAD_MAX_COUNT && (rand()%100) < SPREAD_CHANCE) {
 		fungi_spread(fungi, world);
 	}
 }
@@ -99,8 +95,6 @@ static void fungi_spread(Creature* fungi, World* world)
 	child->position.x = x;
 	child->position.y = y;
 	
-	struct FungiData *data = fungi->data;
-
-	data->spread_count++;
+	((struct Fungi *)fungi)->spread_count++;
 }
 
