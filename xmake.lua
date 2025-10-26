@@ -1,6 +1,6 @@
 add_rules("mode.debug", "mode.release")
 
-set_languages("c99")
+set_languages("gnu23")
 set_warnings("allextra", "all", "pedantic", "error")
 
 add_includedirs("include", "src")
