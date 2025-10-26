@@ -190,6 +190,7 @@ Creature *creature_at(World *world, Point cell);
 void place_wall(World *world, Point cell);
 void break_wall(World *world, Point cell);
 bool is_solid(Tile * tile);
+void add_creature(World *world, Creature *creature);
 void add_creature_rand_empty(World *world, Creature *creature);
 void world_remove(World *world, Creature *creature);
 

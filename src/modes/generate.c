@@ -11,9 +11,10 @@ int generate_mode(ModeData *data)
 	data->world = create_world(1024, 1024);
 	init_world(data->world);
 	data->player = create_player(data->world);
+	add_creature_rand_empty(data->world, data->player);
 
 	for (int i = 0; i < 256; i++) {
-		create_fungi(data->world);
+		add_creature_rand_empty(data->world, create_fungi(data->world));
 	}
 
 	mvprintw(11, 10, "[Press any key]");

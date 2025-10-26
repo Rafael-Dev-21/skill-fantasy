@@ -57,11 +57,10 @@ Creature *create_creature(size_t size)
   if (size < sizeof(Creature)) {
     return NULL;
   }
-	Creature *result = (Creature*)malloc(size);
+	Creature *result = (Creature*)calloc(1, size);
 	if (result == NULL) {
 		return NULL;
 	}
-	result->next = NULL;
 	return result;
 }
 

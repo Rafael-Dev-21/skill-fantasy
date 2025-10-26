@@ -48,8 +48,6 @@ Creature *create_fungi(World *world)
 	AS_CREATURE(fungi)->glyph = 'f';
 	AS_CREATURE(fungi)->color = 3;
 	
-	add_creature_rand_empty(world, AS_CREATURE(fungi));
-	
 	return AS_CREATURE(fungi);
 }
 
@@ -94,7 +92,9 @@ static void fungi_spread(Creature* fungi, World* world)
 	}
 	child->position.x = x;
 	child->position.y = y;
+	add_creature(world, child);
 	
-	((struct Fungi *)fungi)->spread_count++;
+	++AS_FUNGI(fungi)->spread_count;
+	AS_FUNGI(child)->spread_count = AS_FUNGI(fungi)->spread_count;
 }
 

@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
 #include "skfantasy.h"
-#include "noise.h"
+#include "noise/noise.h"
 
 World * create_world(int width, int height)
 {
@@ -118,6 +118,13 @@ bool is_solid(Tile * tile)
 	return obj_types[tile->object].solid;
 }
 
+
+void add_creature(World *world, Creature *creature)
+{
+	creature->next = world->creatures;
+	world->creatures = creature;
+}
+
 void add_creature_rand_empty(World *world, Creature *creature)
 {
 	if (world == NULL) {
@@ -135,9 +142,7 @@ void add_creature_rand_empty(World *world, Creature *creature)
 	} while (is_solid(tile_at(world, cell)) || creature_at(world, cell));
 
 	creature->position = cell;
-
-	creature->next = world->creatures;
-	world->creatures = creature;
+	add_creature(world, creature);
 }
 
 void world_remove(World *world, Creature *creature)

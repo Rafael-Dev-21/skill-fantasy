@@ -27,8 +27,6 @@ Creature *create_player(World *world)
 	player->color = 4;
   player->brain = my_brain;
 
-	add_creature_rand_empty(world, player);
-
 	for (int i = STAT_STR; i < STAT_HRT; i++) {
 		player->stats[i].base = ((rand() % 6) + (rand() % 6) + 2) / 2;
 	}
