@@ -1,150 +1,129 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <vector>
+#include <unordered_map>
+#include <functional>
+
 #include <raylib.h>
-#include <raymath.h>
 
-#include <cmath>
-
-struct Cell {
-  uint32_t fg;
-  uint32_t bg;
-  char ch;
+struct Point {
+  int x;
+  int y;
 };
 
-struct Input {
-  uint8_t key;
-  uint8_t mods;
+struct State {
+  std::unordered_map<std::string, Point> players;
+  std::unordered_map<std::string, Point> fruits;
+  int width;
+  int height;
 };
 
-enum {
-  W=80,
-  H=25,
-  M=128
+struct KeyCmd {
+  std::string playerId;
+  int keyPressed;
 };
 
-static Cell cells[H][W];
+class Game {
+public:
+  Game() {
 
-void gfx_setCell(int x, int y, char ch, uint32_t fg, uint32_t bg);
+  }
 
-Vector2 IsoMapToScreen(Vector2 map, float scaleX, float scaleY)
+  void movePlayer(KeyCmd cmd) {
+    std::cout << "Moving " << cmd.playerId << " with (" << cmd.keyPressed << ")" << std::endl;
+    auto keyPressed = cmd.keyPressed;
+    auto playerId = cmd.playerId;
+    auto& player = state.players[playerId];
+
+    if (keyPressed == KEY_H && player.x > 0) {
+      player.x--;
+    } else if (keyPressed == KEY_L && player.x < state.width-1) {
+      player.x++;
+    } else if (keyPressed == KEY_K && player.y > 0) {
+      player.y--;
+    } else if (keyPressed == KEY_J && player.y < state.height-1) {
+      player.y++;
+    }
+  }
+
+  State getState() { return state; }
+private:
+  State state{
+    { { "player1", { 12, 12 } } },
+    {
+      { "fruit1", { 5, 3 } },
+      { "fruit2", { 19, 21 } }
+    },
+    25,
+    25
+  };
+};
+
+class KeyboardListener {
+public:
+  KeyboardListener() {}
+
+  void subscribe(std::function<void(KeyCmd)> listener) {
+    listeners.push_back(listener);
+  }
+  void notifyAll(KeyCmd cmd) {
+    for (auto& l : listeners) {
+      l(cmd);
+    }
+  }
+  void checkKeys() {
+    auto keyPressed = GetKeyPressed();
+    KeyCmd cmd{"player1", keyPressed};
+    if (keyPressed) {
+      notifyAll(cmd);
+    }
+  }
+
+private:
+  std::vector<std::function<void(KeyCmd)>> listeners;
+};
+
+auto renderScreen(const State& s, int w, int h) -> void;
+
+auto main() -> int
 {
-    return Vector2{
-        (map.x - map.y)*(scaleX/2),
-        (map.x + map.y)*(scaleY/2)
-    };
+  Game game;
+  KeyboardListener keyboardListener;
+  keyboardListener.subscribe([&game](auto cmd){game.movePlayer(cmd);});
+  InitWindow(800, 600, "Skill Fantasy v0.4.0 - Dandy World Upt");
+  SetTargetFPS(30);
+  SetWindowState(FLAG_WINDOW_RESIZABLE);
+  while (!WindowShouldClose()) {
+    keyboardListener.checkKeys();
+    renderScreen(game.getState(), GetScreenWidth(), GetScreenHeight());
+  }
+  CloseWindow();
+
+  return 0;
 }
 
-Vector2 IsoScreenToMap(Vector2 screen, float scaleX, float scaleY)
+auto renderScreen(const State& s, int w, int h) -> void
 {
-    return Vector2{
-        (screen.x/(scaleX/2) + screen.y/(scaleY/2))/2,
-        (screen.y/(scaleY/2) - screen.x/(scaleX/2))/2
-    }
-}
+  Point tileSize{w/s.width, h/s.height};
+  int fontSize{(int)(tileSize.y*0.9)};
+  Point textOffset{(tileSize.x-fontSize)/4, (tileSize.y-fontSize)/4};
 
-int main()
-{
-    const int screenWidth = 1280;
-    const int screenHeight = 720;
-    const float tileWidth = 32.0f;
-    const float tileHeight = 16.0f;
-    //const Vector2 tileDims{tileWidth, tileHeight};
-
-    const float scale = static_cast<float>(screenHeight)/240.0f;
-
-    const float viewWidthInTiles = (static_cast<float>(screenWidth)/scale)/tileWidth*4;
-    const float viewHeightInTiles = (static_cast<float>(screenHeight)/scale)/tileHeight*4;
-
-    int cTiles = static_cast<int>(std::ceil(viewWidthInTiles)) + 3;
-    cTiles |= 1;
-    int rTiles = static_cast<int>(std::ceil(viewHeightInTiles)) + 3;
-    rTiles |= 1;
-
-    InitWindow(screenWidth, screenHeight, "Skill Fantasy v0.4.0");
-    SetTargetFPS(60);
-
-    Texture player = LoadTexture("./data/commoner.png");
-    if (player.id == 0) {
-        Image img = GenImageColor(32, 32, RED);
-        player = LoadTextureFromImage(img);
-        UnloadImage(img);
-
-        printf("Aviso: não foi possivel carregar ./data/commoner.png - usando fallback.\n");
-    }
-    SetTextureFilter(player, TEXTURE_FILTER_POINT);
-    Texture grass = LoadTexture("./data/iso-grass.png");
-    if (grass.id == 0) {
-        Image img = GenImageColor(32, 16, LIME);
-        grass = LoadTextureFromImage(img);
-        UnloadImage(img);
-
-        printf("Aviso: não foi possivel carregar ./data/iso-grass.png - usando fallback.\n");
-    }
-    SetTextureFilter(grass, TEXTURE_FILTER_POINT);
-
-    Vector2 playerPos{100, 100};
-    const float playerspeed = 8.0f;
-
-    Camera2D cam{};
-    cam.zoom = scale;
-    cam.offset = Vector2{screenWidth*0.5f, screenHeight*0.5f};
-
-    while (!WindowShouldClose()) {
-        const float dt = GetFrameTime();
-        const float playervel = playerspeed * dt;
-        Vector2 dir{0,0};
-        if (IsKeyDown(KEY_H)) {
-            dir.x-=1;
-        }
-        if (IsKeyDown(KEY_L)) {
-            dir.x+=1;
-        }
-        if (IsKeyDown(KEY_K)) {
-            dir.y-=1;
-        }
-        if (IsKeyDown(KEY_J)) {
-            dir.y+=1;
-        }
-        //dir = IsoScreenToMap(dir, 1, 1);
-        playerPos += dir * playervel;
-        cam.target = IsoMapToScreen(playerPos, tileWidth, tileHeight);
-
-        //const float halfViewW = (screenWidth / (2.0f * cam.zoom));
-        const float halfViewH = (screenHeight / (0.5f * cam.zoom));
-        const float viewLeft = cam.target.x;
-        const float viewTop  = cam.target.y - halfViewH;
-
-        //const Vector2 startScreen{viewLeft, viewTop};
-        const Vector2 startScreenFloored{
-            viewLeft*2 - std::floor(viewLeft/tileWidth)*tileWidth - tileWidth,
-            viewTop*2 - std::floor(viewTop/tileHeight)*tileHeight - tileHeight
-        };
-        const auto startMap = IsoScreenToMap(startScreenFloored, tileWidth, tileHeight);
-
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
-            BeginMode2D(cam);
-                for (int tj = 0; tj < rTiles; tj++) {
-                    for (int ti = 0; ti < cTiles; ti++) {
-                        Vector2 tilePos{
-                            static_cast<float>(ti),
-                            static_cast<float>(tj)
-                        };
-                        Vector2 screenPos = IsoMapToScreen(tilePos, tileWidth, tileHeight);
-                        tilePos = tilePos + startMap;
-                        screenPos = screenPos + startScreenFloored;
-                        //const int tileX = static_cast<int>(std::floor(tilePos.x));
-                        //const int tileY = static_cast<int>(std::floor(tilePos.y));
-
-                        //const int parity = (tileX&1)^(tileY&1);
-                        //if (parity) continue;
-                        
-                        DrawTextureV(grass, screenPos, WHITE);
-                    }
-                }
-                DrawTextureV(player, Vector2SubtractValue(IsoMapToScreen(playerPos, tileWidth, tileHeight), 16), WHITE);
-            EndMode2D();
-        EndDrawing();
-    }
-    CloseWindow();
-
-    return 0;
+  BeginDrawing();
+  ClearBackground(RAYWHITE);
+  for (auto& player : s.players) {
+    DrawText(
+        "@",
+        textOffset.x+player.second.x*tileSize.x,
+        textOffset.y+player.second.y*tileSize.y,
+        fontSize, BLACK);
+  }
+  for (auto& fruit : s.fruits) {
+    DrawText(
+        "*",
+        textOffset.x+fruit.second.x*tileSize.x,
+        textOffset.y+fruit.second.y*tileSize.y,
+        fontSize, GREEN);
+  }
+  EndDrawing();
 }
