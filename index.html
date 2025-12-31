@@ -10,11 +10,13 @@
         font-family: monospace;
       }
       td, th {
-        width: 1.75rem;
-        height: 1.75rem;
+        width: 0.7rem;
+        height: 0.7rem;
+        font-size: 0.4rem;
+        font-family: "Courier New", Courier, monospace;
         text-align: center;
         vertical-align: middle;
-        border: 1px solid black;
+        /*border: 1px solid black;*/
       }
       .player {
         background-color: red;
@@ -24,26 +26,49 @@
         background-color: green;
         color: yellow;
       }
+      .wall {
+        background-color: darkgray;
+        color: gray;
+      }
       .ruler {
         background-color: lightgray;
+      }
+
+      .zmb {
+        background-color: lime;
+        color: cyan;
+      }
+      .pig {
+        background-color: pink;
+        color: white;
+      }
+
+      #world {
+        float: left;
+      }
+
+      #controls {
+        float: right;
       }
     </style>
   </head>
   <body>
     <table id="world"></table>
-    <div>
+    <div id="controls">
       <h3>Controls</h3>
-      <button id="move-up">Move Up</button>
-      <button id="move-down">Move Down</button>
       <button id="move-left">Move Left</button>
+      <button id="move-down">Move Down</button>
+      <button id="move-up">Move Up</button>
       <button id="move-right">Move Right</button>
+      <br />
+      <button id="switch-mode">Switch to unplace mode</button>
     </div>
     <script type="text/javascript">
       const WORLD_WIDTH = 64
       const WORLD_HEIGHT = 64
       const TILE_GRASS = 0
-      const VIEW_WIDTH = 10
-      const VIEW_HEIGHT = 10
+      const VIEW_WIDTH = 25
+      const VIEW_HEIGHT = 25
       const HALF_VIEW_WIDTH = Math.round(VIEW_WIDTH/2)
       const HALF_VIEW_HEIGHT = Math.round(VIEW_HEIGHT/2)
 
@@ -54,26 +79,138 @@
         }
       }
 
+      POINT.eq = (a, b) => a.x == b.x && a.y == b.y;
+
       class PLAYER {
         constructor(x, y, health) {
           this.position = new POINT(x, y)
           this.health = health
+          this.mode = "place";
         }
 
         Move(dx, dy) {
           this.position.x = Math.min(WORLD_WIDTH-1, Math.max(0, this.position.x + dx))
           this.position.y = Math.min(WORLD_HEIGHT-1, Math.max(0, this.position.y + dy))
         }
+
+        switchMode() {
+          this.mode = this.mode == "place"
+            ? "unplace"
+            : "place";
+          document.getElementById("switch-mode").innerText = `Switch to ${this.mode} mode`;
+        }
       }
+
+      let seed = 0x1234567;
+
+      function rng32() {
+        seed ^= seed << 13;
+        seed ^= seed >> 17;
+        seed ^= seed << 5;
+        return seed;
+      }
+
+      rng32(); rng32();
 
       class WORLD {
         constructor() {
           this.tiles = new Array(WORLD_WIDTH * WORLD_HEIGHT).fill(TILE_GRASS)
+          this.objs = [];
           this.player = new PLAYER(32, 32, 30)
+          this.mobs = [...new Array(rng32()&15)].map(_ => ({
+            x: rng32()&WORLD_WIDTH-1,
+            y: rng32()&WORLD_HEIGHT-1,
+            state: 'wander',
+            chooser: (rng32()%2==0 ? 'zmb' : 'pig'),
+          })).map(m => ({...m, sprite: m.chooser[0].toUpperCase()}));
+        }
+
+        tick() {
+          this.mobs.forEach((m, idx, ms) => {
+            const ctx = {m, idx, ms, w: this, p: this.player};
+            choosers[m.chooser](ctx);
+            states[m.state](ctx);
+          });
+        }
+
+        mobAt(x, y) {
+          return this.mobs.filter(m => POINT.eq(m, {x, y}))[0] || false;
+        }
+
+        objAt(x, y) {
+          return this.objs.filter(o => POINT.eq(o, {x, y}))[0] || false;
+        }
+
+        place(pos) {
+          if (!this.objAt(pos.x, pos.y) && !this.mobAt(pos.x, pos.y)) {
+            this.objs = [...this.objs, pos];
+          }
+          world.tick();
+          DrawWorld();
+        }
+
+        unplace(pos) {
+          if (this.objAt(pos.x, pos.y)) {
+            this.objs = this.objs.filter(o => !POINT.eq(o, pos));
+          }
+          world.tick();
+          DrawWorld();
         }
       }
 
       const world = new WORLD()
+
+      const states = {
+        wander({m, idx, ms, w, p}) {
+          switch (rng32()&3) {
+          case 0: if (m.x!=0&&!w.objAt(m.x-1, m.y)) m.x--;
+            break;
+          case 1: if (m.x!=WORLD_WIDTH-1&&!w.objAt(m.x+1, m.y)) m.x++;
+            break;
+          case 2: if (m.y!=0&&!w.objAt(m.x, m.y-1)) m.y--;
+            break;
+          case 3: if (m.y!=WORLD_HEIGHT-1&&w.objAt(m.x, m.y+1)) m.y++;
+            break;
+          }
+        },
+        follow({m, idx, ms, w, p}) {
+          const distx = p.position.x-m.x, disty = p.position.y-m.y;
+          if (m.x!=0&&distx<0&&!w.objAt(m.x-1, m.y)) m.x--;
+          else if (m.x!=WORLD_WIDTH-1&&distx>0&&!w.objAt(m.x+1, m.y)) m.x++;
+          else if (m.y!=0&&disty<0&&!w.objAt(m.x, m.y-1)) m.y--;
+          else if (m.y!=WORLD_HEIGHT-1&&disty>0&&!w.objAt(m.x, m.y+1)) m.y++;
+        },
+        flee({m, idx, ms, w, p}) {
+          const distx = p.position.x-m.x, disty = p.position.y-m.y;
+          if (m.x!=WORLD_WIDTH-1&&distx<0&&!w.objAt(m.x+1, m.y)) m.x++;
+          else if (m.x!=0&&distx>0&&!w.objAt(m.x-1, m.y)) m.x--;
+          else if (m.y!=WORLD_HEIGHT-1&&disty<0&&!objAt(m.x, m.y+1)) m.y++;
+          else if (m.y!=0&&disty>0&&!objAt(m.x, m.y-1)) m.y--;
+        }
+      };
+
+      const choosers = {
+        zmb({m, idx, ms, w, p}) {
+          const distx = m.x - p.position.y;
+          const disty = m.y - p.position.y;
+          const dist = Math.abs(distx) + Math.abs(disty);
+          if (dist < 6) {
+            m.state = 'follow';
+          } else {
+            m.state = 'wander';
+          }
+        },
+        pig({m, idx, ms, w, p}) {
+          const distx = m.x - p.position.x;
+          const disty = m.y - p.position.y;
+          const dist = Math.abs(distx) + Math.abs(disty);
+          if (dist < 6) {
+            m.state = 'flee';
+          } else {
+            m.state = 'wander';
+          }
+        }
+      };
 
       function DrawWorld() {
         const table = document.getElementById("world")
@@ -102,9 +239,18 @@
         for (let x = start_x; x < end_x; x++) {
           const cell = document.createElement("td")
 
+          cell.onclick = () => { world[world.player.mode]({x, y}) };
+
           if (world.player.position.x == x && world.player.position.y == y) {
             cell.className = "player"
             cell.innerText = "@/"
+          } else if (world.mobAt(x, y)) {
+            const mob = world.mobAt(x, y);
+            cell.className = mob.chooser;
+            cell.innerText = mob.sprite;
+          } else if (world.objAt(x, y)) {
+            cell.className = "wall";
+            cell.innerText = "##";
           } else if (world.tiles[y * WORLD_WIDTH + x] == TILE_GRASS) {
             cell.className = "grass"
             cell.innerText = ",,"
@@ -129,8 +275,11 @@
       case 'l':
         world.player.Move(1, 0)
         break
+      case ' ':
+        world.player.switchMode();
     }
 
+    world.tick();
     DrawWorld()
   }
 
@@ -142,6 +291,7 @@
   document.getElementById("move-down").addEventListener("click", () => ProcessKey('j'))
 document.getElementById("move-up").addEventListener("click", () => ProcessKey('k'))
 document.getElementById("move-right").addEventListener("click", () => ProcessKey('l'))
+document.getElementById("switch-mode").addEventListener("click", () => ProcessKey(' '))
 </script>
 
   </body>
