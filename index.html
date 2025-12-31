@@ -139,7 +139,7 @@
         let h10 = hsh32(ix+1, iy)&255;
         let h01 = hsh32(ix, iy+1)&255;
         let h11 = hsh32(ix+1, iy+1)&255;
-        return lerp(lerp(h00, h10, u), lerp(h10, h11, u), v);
+        return lerp(lerp(h00, h10, u), lerp(h01, h11, u), v);
       }
 
       function val8o(x, y) {
@@ -240,7 +240,7 @@
 
       const choosers = {
         zmb({m, idx, ms, w, p}) {
-          const distx = m.x - p.position.y;
+          const distx = m.x - p.position.x;
           const disty = m.y - p.position.y;
           const dist = Math.abs(distx) + Math.abs(disty);
           if (dist < 6) {
@@ -303,7 +303,7 @@
           } else if (world.tiles[y * WORLD_WIDTH + x] == TILE_GRASS) {
             cell.className = "grass"
             cell.innerText = ",,"
-            const i = (val8o(x/8.0-0.5, y/8.0-0.5)*hsh32(x, y)&127)+128;
+            const i = (val8o(x/8.0-0.5, y/8.0-0.5)&127)+128;
             cell.style = `background-color: rgb(${i*0.5}, ${i*0.9}, ${i*0.6});`;
           }
           row.appendChild(cell)
