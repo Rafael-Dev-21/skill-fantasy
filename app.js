@@ -11,14 +11,42 @@ class POINT {
 
 POINT.eq = (a, b) => a.x == b.x && a.y == b.y;
 
+const Health = (max) => ({
+  max,
+  current: max,
+  get hp() {
+    return this.current;
+  },
+  set hp(val) {
+    this.current = clamp(val, 0, this.max);
+  },
+  modify(amt) {
+    this.hp += amt;
+  },
+  get status() {
+    if (this.hp <= 0) return "dead";
+    else return "alive";
+  },
+  get isAlive() {
+    return this.hp > 0;
+  },
+  get maxHp() {
+    return this.max;
+  },
+  get frac() {
+    return this.hp / this.maxHp;
+  }
+});
+
 class PLAYER {
   constructor(x, y, health) {
     this.position = new POINT(x, y);
-    this.health = health;
+    this.health = Health(health);
     this.mode = "place";
   }
 
   Move(dx, dy) {
+    if (!this.health.isAlive) return;
     this.position.x = clamp(this.position.x + dx, 0, WORLD_WIDTH-1);
     this.position.y = clamp(this.position.y + dy, 0, WORLD_HEIGHT-1);
   }
@@ -148,13 +176,14 @@ class WORLD {
   constructor() {
     this.tiles = new Array(WORLD_WIDTH * WORLD_HEIGHT).fill(TILE_GRASS);
     this.objs = [];
-    this.player = new PLAYER(32, 32, 30);
+    this.player = new PLAYER(32, 32, 31);
     this.mobs = [...new Array(rng32()&15)].map(_ => ({
         x: rng32()&WORLD_WIDTH-1,
         y: rng32()&WORLD_HEIGHT-1,
         state: 'wander',
         chooser: (rng32()%2==0 ? 'zmb' : 'pig'),
-      })).map(m => ({...m, sprite: m.chooser[0].toUpperCase()}));
+        health: Health(11),
+      })).map(m => ({...m, sprite: m.chooser[0].toUpperCase(), damage_player: ((m.chooser=='zmb')?true:undefined)}));
   }
 
   tick() {
@@ -177,16 +206,14 @@ class WORLD {
     if (!this.objAt(pos.x, pos.y) && !this.mobAt(pos.x, pos.y)) {
       this.objs = [...this.objs, pos];
     }
-    world.tick();
-    DrawWorld();
+    Game.step();
   }
 
   unplace(pos) {
     if (this.objAt(pos.x, pos.y)) {
       this.objs = this.objs.filter(o => !POINT.eq(o, pos));
     }
-    world.tick();
-    DrawWorld();
+    Game.step();
   }
 }
 
@@ -218,6 +245,9 @@ const states = {
     else if (m.x!=0&&distx>0&&!w.objAt(m.x-1, m.y)) m.x--;
     else if (m.y!=WORLD_HEIGHT-1&&disty<0&&!w.objAt(m.x, m.y+1)) m.y++;
     else if (m.y!=0&&disty>0&&!w.objAt(m.x, m.y-1)) m.y--;
+  },
+  attack({p}) {
+    p.health.modify(-2);
   }
 };
 
@@ -226,7 +256,9 @@ const choosers = {
     const distx = m.x - p.position.x;
     const disty = m.y - p.position.y;
     const dist = Math.abs(distx) + Math.abs(disty);
-    if (dist < 6) {
+    if (dist < 2) {
+      m.state = 'attack';
+    } else if (dist < 6) {
       m.state = 'follow';
     } else {
       m.state = 'wander';
@@ -244,89 +276,163 @@ const choosers = {
   }
 };
 
-function DrawWorld() {
-  const table = $("world");
-  table.innerHTML = "";
-
-  const start_x = clamp(world.player.position.x - HALF_VIEW_WIDTH, 0, WORLD_WIDTH-VIEW_WIDTH);
-  const start_y = clamp(world.player.position.y - HALF_VIEW_HEIGHT, 0, WORLD_HEIGHT-VIEW_HEIGHT);
-  const end_x = clamp(world.player.position.x + HALF_VIEW_WIDTH + 1, VIEW_WIDTH+1, WORLD_WIDTH);
-  const end_y = clamp(world.player.position.y + HALF_VIEW_HEIGHT + 1, VIEW_HEIGHT+1, WORLD_HEIGHT);
-  const topRulerRow = document.createElement("tr");
-  topRulerRow.appendChild(document.createElement("td"));
-  for (let x = start_x; x < end_x; x++) {
-    const cell = document.createElement("th");
-    cell.className = "ruler";
-    cell.innerText = x;
-    topRulerRow.appendChild(cell);
+const defineCellLook = (c, w) => {
+  c.style.removeProperty('background-color');
+  if (w.player.position.x == c.x && w.player.position.y == c.y) {
+    c.className = "player";
+    c.innerText = "@/";
+  } else if (w.mobAt(c.x, c.y)) {
+    const mob = w.mobAt(c.x, c.y);
+    c.className = mob.chooser;
+    c.innerText = mob.sprite;
+  } else if (w.objAt(c.x, c.y)) {
+    c.className = "wall";
+    c.innerText = "##";
+  } else if (w.tiles[c.y * WORLD_WIDTH + c.x] == TILE_GRASS) {
+    c.className = "grass";
+    c.innerText = ",,";
+    const nx = c.x / 8.0 - 0.5;
+    const ny = c.y / 8.0 - 0.5;
+    const sampler = val8o(nx, ny)/8.0 - 0.5;
+    const sample = (val3d8o(nx, ny, sampler)&127)+128;
+    const i = sample;
+    c.style.backgroundColor = `rgb(${i*0.5}, ${i*0.9}, ${i*0.6})`;
   }
-  table.appendChild(topRulerRow);
+}
 
-  for (let y = start_y; y < end_y; y++) {
-    const row = document.createElement("tr");
-    const leftRulerCell = document.createElement("th");
-    leftRulerCell.className = "ruler";
-    leftRulerCell.innerText = y;
-    row.appendChild(leftRulerCell);
-    for (let x = start_x; x < end_x; x++) {
-      const cell = document.createElement("td");
-
-      cell.onclick = () => { world[world.player.mode]({x, y}) };
-
-      if (world.player.position.x == x && world.player.position.y == y) {
-        cell.className = "player";
-        cell.innerText = "@/";
-      } else if (world.mobAt(x, y)) {
-        const mob = world.mobAt(x, y);
-        cell.className = mob.chooser;
-        cell.innerText = mob.sprite;
-      } else if (world.objAt(x, y)) {
-        cell.className = "wall";
-        cell.innerText = "##";
-      } else if (world.tiles[y * WORLD_WIDTH + x] == TILE_GRASS) {
-        cell.className = "grass";
-        cell.innerText = ",,";
-        const nx = x / 8.0 - 0.5;
-        const ny = y / 8.0 - 0.5;
-        const sampler = val8o(nx, ny)/8.0 - 0.5;
-        const sample = (val3d8o(nx, ny, sampler)&127)+128;
-        const i = sample;
-        cell.style = `background-color: rgb(${i*0.5}, ${i*0.9}, ${i*0.6});`;
+const TableView = ({w, h, world}) => {
+  let r = {
+    w,
+    h,
+    hw: Math.floor(w/2),
+    hh: Math.floor(h/2),
+    cells: [],
+    left_ruler: [],
+    top_ruler: [],
+    rct({x, y, w, h}) {
+      return {
+        start_x: clamp(x-this.hw, 0, w-this.w),
+        start_y: clamp(y-this.hh, 0, h-this.h),
+        end_x: clamp(x+this.hw+1, this.w+1, w),
+        end_y: clamp(y+this.hh+1, this.h+1, h),
+      };
+    },
+    idx(i, j) {
+      return j * this.w + i;
+    },
+    init(world) {
+      this.$table = $('world');
+      let top_ruler = document.createElement('tr');
+      this.$table.appendChild(top_ruler);
+      top_ruler.appendChild(document.createElement('td'));
+      for (let i = 0; i < this.w; i++) {
+        let ruler_cell = document.createElement('th');
+        top_ruler.appendChild(ruler_cell);
+        ruler_cell.i = i;
+        ruler_cell.className = 'ruler';
+        ruler_cell.upd = (rct) => {
+          ruler_cell.innerText = '' + (i + rct.start_x);
+        };
+        this.top_ruler[i] = ruler_cell;
       }
-      row.appendChild(cell);
+      for (let j = 0; j < this.h; j++) {
+        let row = document.createElement('tr');
+        this.$table.appendChild(row);
+        let ruler_cell = document.createElement('th');
+        row.appendChild(ruler_cell);
+        ruler_cell.j = j;
+        ruler_cell.className = 'ruler';
+        ruler_cell.upd = (rct) => {
+          ruler_cell.innerText = '' + (j + rct.start_y);
+        };
+        this.left_ruler[j] = ruler_cell;
+        for (let i = 0; i < this.w; i++) {
+          let cell = document.createElement('td');
+          row.appendChild(cell);
+          cell.i = i;
+          cell.j = j;
+          cell.upd = (rct) => {
+            cell.x = cell.i + rct.start_x;
+            cell.y = cell.j + rct.start_y;
+            defineCellLook(cell, world);
+          }
+          cell.onclick = () => {
+            if (world.player.health.isAlive) {
+              world[world.player.mode]({
+                x: cell.x,
+                y: cell.y
+              });
+            }
+          };
+          this.cells[this.idx(i,j)]=cell;
+        }
+      }
+      this.update({...world.player.position, w: WORLD_WIDTH, h: WORLD_HEIGHT});
+    },
+    update(grid) {
+      let rct = this.rct(grid);
+      this.top_ruler.forEach(r => r.upd(rct));
+      this.left_ruler.forEach(r => r.upd(rct));
+      this.cells.forEach(c => c.upd(rct));
+      let player_bar = '[';
+      let len = +$('player-health-bar').dataset.len;
+      let frac = world.player.health.frac;
+      let real = len * frac;
+      for (let i = 0; i < len; i++)
+        player_bar += (i < real) ? '@' : '.';
+      player_bar += ']';
+      $setContent('player-health-bar', player_bar);
+      $setContent('player-health-max', world.player.health.maxHp);
+      $setContent('player-health-hp', world.player.health.hp);
+      $setEnabled('respawn', !world.player.health.isAlive);
     }
-    table.appendChild(row);
-  }
+  };
+  r.init(world);
+  return r;
 }
 
-function ProcessKey(key) {
-  switch (key) {
-  case 'h':
-    world.player.Move(-1, 0);
-    break;
-  case 'j':
-    world.player.Move(0, 1);
-    break;
-  case 'k':
-    world.player.Move(0, -1);
-    break;
-  case 'l':
-    world.player.Move(1, 0);
-    break;
-  case ' ':
-    world.player.switchMode();
-    break;
+const view = TableView({w: 25, h: 25, world});
+
+const Game = {
+  world,
+  view,
+
+  step() {
+    this.world.tick();
+    this.view.update({
+      ...this.world.player.position,
+      w: WORLD_WIDTH,
+      h: WORLD_HEIGHT,
+    });
+  },
+
+  handleKey(key) {
+    switch (key) {
+    case 'h': this.world.player.Move(-1, 0); break;
+    case 'j': this.world.player.Move(0, 1); break;
+    case 'k': this.world.player.Move(0, -1); break;
+    case 'l': this.world.player.Move(1, 0); break;
+    case ' ': world.player.switchMode(); break;
+    }
+    this.step();
   }
-  world.tick();
-  DrawWorld();
-}
+};
 
-DrawWorld();
+view.update({
+  ...world.player.position,
+  w: WORLD_WIDTH,
+  h: WORLD_HEIGHT,
+})
 
-document.addEventListener("keydown", event => ProcessKey(event.key));
+document.addEventListener("keydown", event => Game.handleKey(event.key));
 
-$click("move-left", () => ProcessKey('h'));
-$click("move-down", () => ProcessKey('j'));
-$click("move-up", () => ProcessKey('k'));
-$click("move-right", () => ProcessKey('l'));
-$click("switch-mode", () => ProcessKey(' '));
+$click("move-left", () => Game.handleKey('h'));
+$click("move-down", () => Game.handleKey('j'));
+$click("move-up", () => Game.handleKey('k'));
+$click("move-right", () => Game.handleKey('l'));
+$click("switch-mode", () => Game.handleKey(' '));
+
+$click('respawn', () => {
+  Game.world.player = new PLAYER(32, 32, 31);
+  Game.step();
+});

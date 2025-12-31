@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-table {
+table, .mono {
   border-collapse: collapse;
   font-family: "Courier New", Courier, monospace;
 }
