@@ -1,0 +1,48 @@
+*, *::before, *::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+table {
+  border-collapse: collapse;
+  font-family: "Courier New", Courier, monospace;
+}
+td, th {
+  width: 0.7rem;
+  height: 0.7rem;
+  font-size: 0.4rem;
+  text-align: center;
+  vertical-align: middle;
+}
+.player {
+  background-color: red;
+  color: yellow;
+}
+.grass {
+  background-color: green;
+  color: yellow;
+}
+.wall {
+  background-color: darkgray;
+  color: gray;
+}
+.ruler {
+  background-color: lightgray;
+}
+
+.zmb {
+  background-color: lime;
+  color: cyan;
+}
+.pig {
+  background-color: pink;
+  color: white;
+}
+
+#world {
+  float: left;
+}
+#controls {
+  float: right;
+}
