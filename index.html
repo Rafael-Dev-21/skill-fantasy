@@ -94,10 +94,11 @@
         }
 
         switchMode() {
+          let old = this.mode;
           this.mode = this.mode == "place"
             ? "unplace"
             : "place";
-          document.getElementById("switch-mode").innerText = `Switch to ${this.mode} mode`;
+          document.getElementById("switch-mode").innerText = `Switch to ${old} mode`;
         }
       }
 
@@ -153,6 +154,66 @@
           div += a;
           xa *= 2;
           ya *= 2;
+          a *= 0.58;
+        }
+        fin = fin * 0.5 + 0.5;
+        return Math.floor(fin / div);
+      }
+
+      function hsh3d32(x, y, z) {
+        let result = 0x1234567;
+        result = result * 631 + x;
+        result = result * 631 + y;
+        result = result * 631 + z;
+        result ^= result << 13;
+        result ^= result >> 17;
+        result ^= result << 5;
+        return result;
+      }
+
+      function val3d8(x, y, z) {
+        let ix = Math.floor(x);
+        let iy = Math.floor(y);
+        let iz = Math.floor(z);
+        let fx = x - ix;
+        let fy = y - iy;
+        let fz = z - iz;
+        let u = fade(fx);
+        let v = fade(fy);
+        let r = fade(fz);
+        let h000 = hsh3d32(ix, iy, iz)&255;
+        let h100 = hsh3d32(ix+1, iy, iz)&255;
+        let h010 = hsh3d32(ix, iy+1, iz)&255;
+        let h110 = hsh3d32(ix+1, iy+1, iz)&255;
+        let h001 = hsh3d32(ix, iy, iz+1)&255;
+        let h101 = hsh3d32(ix+1, iy, iz+1)&255;
+        let h011 = hsh3d32(ix, iy+1, iz+1)&255;
+        let h111 = hsh3d32(ix+1, iy+1, iz+1)&255;
+        return lerp(
+          lerp(
+            lerp(h000, h100, u),
+            lerp(h010, h110, u),
+            v),
+          lerp(
+            lerp(h001, h101, u),
+            lerp(h011, h111, u),
+            v),
+          r);
+      }
+
+      function val3d8o(x, y, z) {
+        let xa = x;
+        let ya = y;
+        let za = z;
+        let a = 1.0;
+        let div = 0;
+        let fin = 0;
+        for (let o = 0; o < 3; o++) {
+          fin += (val3d8(xa, ya, za)*2-255) * a;
+          div += a;
+          xa *= 2;
+          ya *= 2;
+          za *= 2;
           a *= 0.58;
         }
         fin = fin * 0.5 + 0.5;
@@ -218,7 +279,7 @@
             break;
           case 2: if (m.y!=0&&!w.objAt(m.x, m.y-1)) m.y--;
             break;
-          case 3: if (m.y!=WORLD_HEIGHT-1&&w.objAt(m.x, m.y+1)) m.y++;
+          case 3: if (m.y!=WORLD_HEIGHT-1&&!w.objAt(m.x, m.y+1)) m.y++;
             break;
           }
         },
@@ -303,7 +364,11 @@
           } else if (world.tiles[y * WORLD_WIDTH + x] == TILE_GRASS) {
             cell.className = "grass"
             cell.innerText = ",,"
-            const i = (val8o(x/8.0-0.5, y/8.0-0.5)&127)+128;
+            const nx = x / 8.0 - 0.5;
+            const ny = y / 8.0 - 0.5;
+            const sampler = val8o(nx, ny)/8.0 - 0.5;
+            const sample = (val3d8o(nx, ny, sampler)&127)+128;
+            const i = sample;
             cell.style = `background-color: rgb(${i*0.5}, ${i*0.9}, ${i*0.6});`;
           }
           row.appendChild(cell)
