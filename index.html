@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Fantasy</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        font-family: monospace;
+      }
+      td, th {
+        width: 1.75rem;
+        height: 1.75rem;
+        text-align: center;
+        vertical-align: middle;
+        border: 1px solid black;
+      }
+      .player {
+        background-color: red;
+        color: yellow;
+      }
+      .grass {
+        background-color: green;
+        color: yellow;
+      }
+      .ruler {
+        background-color: lightgray;
+      }
+    </style>
+  </head>
+  <body>
+    <table id="world"></table>
+    <div>
+      <h3>Controls</h3>
+      <button id="move-up">Move Up</button>
+      <button id="move-down">Move Down</button>
+      <button id="move-left">Move Left</button>
+      <button id="move-right">Move Right</button>
+    </div>
+    <script type="text/javascript">
+      const WORLD_WIDTH = 64
+      const WORLD_HEIGHT = 64
+      const TILE_GRASS = 0
+      const VIEW_WIDTH = 10
+      const VIEW_HEIGHT = 10
+      const HALF_VIEW_WIDTH = Math.round(VIEW_WIDTH/2)
+      const HALF_VIEW_HEIGHT = Math.round(VIEW_HEIGHT/2)
+
+      class POINT {
+        constructor(x, y) {
+          this.x = x
+          this.y = y
+        }
+      }
+
+      class PLAYER {
+        constructor(x, y, health) {
+          this.position = new POINT(x, y)
+          this.health = health
+        }
+
+        Move(dx, dy) {
+          this.position.x = Math.min(WORLD_WIDTH-1, Math.max(0, this.position.x + dx))
+          this.position.y = Math.min(WORLD_HEIGHT-1, Math.max(0, this.position.y + dy))
+        }
+      }
+
+      class WORLD {
+        constructor() {
+          this.tiles = new Array(WORLD_WIDTH * WORLD_HEIGHT).fill(TILE_GRASS)
+          this.player = new PLAYER(32, 32, 30)
+        }
+      }
+
+      const world = new WORLD()
+
+      function DrawWorld() {
+        const table = document.getElementById("world")
+        table.innerHTML = ""
+
+        const start_x = Math.max(0, Math.min(WORLD_WIDTH - VIEW_WIDTH - 1, world.player.position.x - HALF_VIEW_WIDTH))
+        const start_y = Math.max(0, Math.min(WORLD_HEIGHT - VIEW_HEIGHT - 1, world.player.position.y - HALF_VIEW_HEIGHT))
+        const end_x = Math.max(VIEW_WIDTH + 1, Math.min(WORLD_WIDTH, world.player.position.x + HALF_VIEW_WIDTH + 1))
+        const end_y = Math.max(VIEW_HEIGHT + 1, Math.min(WORLD_HEIGHT, world.player.position.y + HALF_VIEW_HEIGHT + 1))
+        const topRulerRow = document.createElement("tr")
+        topRulerRow.appendChild(document.createElement("td"))
+        for (let x = start_x; x < end_x; x++) {
+          const cell = document.createElement("th")
+          cell.className = "ruler"
+          cell.innerText = x
+          topRulerRow.appendChild(cell)
+        }
+        table.appendChild(topRulerRow)
+
+        for (let y = start_y; y < end_y; y++) {
+          const row = document.createElement("tr")
+          const leftRulerCell = document.createElement("th")
+          leftRulerCell.className = "ruler"
+          leftRulerCell.innerText = y
+          row.appendChild(leftRulerCell)
+        for (let x = start_x; x < end_x; x++) {
+          const cell = document.createElement("td")
+
+          if (world.player.position.x == x && world.player.position.y == y) {
+            cell.className = "player"
+            cell.innerText = "@/"
+          } else if (world.tiles[y * WORLD_WIDTH + x] == TILE_GRASS) {
+            cell.className = "grass"
+            cell.innerText = ",,"
+          }
+          row.appendChild(cell)
+        }
+        table.appendChild(row)
+      }
+    }
+
+    function ProcessKey(key) {
+    switch (key) {
+      case 'h':
+        world.player.Move(-1, 0)
+        break
+      case 'j':
+        world.player.Move(0, 1)
+        break
+      case 'k':
+        world.player.Move(0, -1)
+        break
+      case 'l':
+        world.player.Move(1, 0)
+        break
+    }
+
+    DrawWorld()
+  }
+
+  DrawWorld()
+
+  document.addEventListener("keydown", event => ProcessKey(event.key))
+
+  document.getElementById("move-left").addEventListener("click", () => ProcessKey('h'))
+  document.getElementById("move-down").addEventListener("click", () => ProcessKey('j'))
+document.getElementById("move-up").addEventListener("click", () => ProcessKey('k'))
+document.getElementById("move-right").addEventListener("click", () => ProcessKey('l'))
+</script>
+
+  </body>
+</html>
