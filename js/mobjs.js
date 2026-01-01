@@ -70,7 +70,7 @@ const choosers = {
   },
   fng({m}) {
     let r = rng32();
-    let c = r & 65535;
+    let c = r & 1023;
     if (!c) {
       m.state = 'spread';
     } else {

@@ -61,6 +61,8 @@ view.update({
   h: WORLD_HEIGHT,
 });
 
+setInterval(() => Game.step(), 1000/5);
+
 world.player.hp -= 1;
 world.player.hp += 1;
 
