@@ -80,12 +80,15 @@ const TableView = ({w, h, world}) => {
             defineCellLook(this, this.w);
           };
           cell.onclick = function() {
-            if (this.w.player.isAlive) {
-              this.w[this.w.player.mode]({
+            if (!this.w.player.isAlive) return;
+            if (!this.w[this.w.player.mode]({
                 x: this.x,
                 y: this.y
-              });
-            }
+              })) return;
+            this.upd({
+              start_x: this.x - this.i,
+              start_y: this.y - this.j,
+            });
           };
           this.cells[this.idx(i,j)]=cell;
         }

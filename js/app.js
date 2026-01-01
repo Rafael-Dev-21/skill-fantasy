@@ -33,9 +33,26 @@ eventBus.on('player.moved', ({newPos}) => {
 eventBus.on('player.healthChanged', ({fracHp, maxHp, newHp, who}) => {
   const barLen = +$('player-health-bar').dataset.len;
   $setContent('player-health-bar', '[' + '@'.repeat(barLen * fracHp).padEnd(barLen, '.') + ']');
+  let color = `rgb(${255*(1-fracHp)}, ${255*fracHp}, 0)`;
+  $('player-health-bar').style.color = color;
+  $('player-health-hp').style.color = color;
   $setContent('player-health-max', maxHp);
   $setContent('player-health-hp', newHp);
-  $setEnabled('respawn', !who.isAlive);
+  $setEnabled('respawn', newHp <= 0);
+});
+
+eventBus.on('world.tick', ({player, w, h}) => {
+  view.update({
+    x: player.x,
+    y: player.y,
+    w,
+    h
+  });
+});
+
+eventBus.on('player.modeChanged', ({oldMode, newMode}) => {
+  $setContent('switch-button-mode-name', oldMode);
+  $setContent('info-mode-name', newMode);
 });
 
 view.update({
@@ -56,6 +73,8 @@ $click("move-right", () => Game.handleKey('l'));
 $click("switch-mode", () => Game.handleKey(' '));
 
 $click('respawn', () => {
-  Game.world.player = PLAYER(32, 32, 31);
+  Game.world.player.hp = Game.world.player.maxHp;
+  Game.world.player.x = 32;
+  Game.world.player.y = 32;
   Game.step();
 });

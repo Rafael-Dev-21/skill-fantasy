@@ -22,6 +22,12 @@ class WORLD {
       choosers[m.chooser](ctx);
       states[m.state](ctx);
     });
+    eventBus.emit("world.tick", {
+      mobs: this.mobs,
+      player: this.player,
+      w: WORLD_WIDTH,
+      h: WORLD_HEIGHT,
+    });
   }
 
   mobAt(x, y) {
@@ -35,14 +41,18 @@ class WORLD {
   place(pos) {
     if (!this.objAt(pos.x, pos.y) && !this.mobAt(pos.x, pos.y)) {
       this.objs = [...this.objs, pos];
+      this.tick();
+      return true;
     }
-    Game.step();
+    return false;
   }
 
   unplace(pos) {
     if (this.objAt(pos.x, pos.y)) {
       this.objs = this.objs.filter(o => !Point.eq(o, pos));
+      this.tick();
+      return true;
     }
-    Game.step();
+    return false;
   }
 }
