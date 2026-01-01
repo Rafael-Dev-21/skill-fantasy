@@ -4,7 +4,22 @@ const Health = (max, base={}) => {
   Object.defineProperty(base, 'hp', {
     get: () => currentHp,
     set: (val) => {
+      const oldHp = currentHp;
       currentHp = clamp(val, 0, base.maxHp);
+      const newHp = currentHp;
+      if (oldHp != newHp) {
+        if (newHp == 0) {
+          eventBus.emit('health.died', {
+            who: base
+          });
+        }
+        eventBus.emit('health.changed', {
+          who: base,
+          oldHp,
+          newHp,
+          maxHp
+        });
+      }
     },
   });
   Object.defineProperty(base, 'maxHp', {

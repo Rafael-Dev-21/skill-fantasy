@@ -97,17 +97,6 @@ const TableView = ({w, h, world}) => {
       this.top_ruler.forEach(r => r.upd(rct));
       this.left_ruler.forEach(r => r.upd(rct));
       this.cells.forEach(c => c.upd(rct));
-      let player_bar = '[';
-      let len = +$('player-health-bar').dataset.len;
-      let frac = world.player.fracHp;
-      let real = len * frac;
-      for (let i = 0; i < len; i++)
-        player_bar += (i < real) ? '@' : '.';
-      player_bar += ']';
-      $setContent('player-health-bar', player_bar);
-      $setContent('player-health-max', world.player.maxHp);
-      $setContent('player-health-hp', world.player.hp);
-      $setEnabled('respawn', !world.player.isAlive);
     }
   };
   r.init(world);

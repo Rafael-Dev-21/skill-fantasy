@@ -8,11 +8,6 @@ const Game = {
 
   step() {
     this.world.tick();
-    this.view.update({
-      ...this.world.player,
-      w: WORLD_WIDTH,
-      h: WORLD_HEIGHT,
-    });
   },
 
   handleKey(key) {
@@ -27,11 +22,30 @@ const Game = {
   }
 };
 
+eventBus.on('player.moved', ({newPos}) => {
+  view.update({
+    ...newPos,
+    w: WORLD_WIDTH,
+    h: WORLD_HEIGHT
+  });
+});
+
+eventBus.on('player.healthChanged', ({fracHp, maxHp, newHp, who}) => {
+  const barLen = +$('player-health-bar').dataset.len;
+  $setContent('player-health-bar', '[' + '@'.repeat(barLen * fracHp).padEnd(barLen, '.') + ']');
+  $setContent('player-health-max', maxHp);
+  $setContent('player-health-hp', newHp);
+  $setEnabled('respawn', !who.isAlive);
+});
+
 view.update({
   ...world.player,
   w: WORLD_WIDTH,
   h: WORLD_HEIGHT,
 });
+
+world.player.hp -= 1;
+world.player.hp += 1;
 
 document.addEventListener("keydown", event => Game.handleKey(event.key));
 
