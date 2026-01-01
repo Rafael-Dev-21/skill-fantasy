@@ -132,3 +132,17 @@ eventBus.on('game.loaded', game => {
 });
 
 saver.loadGame();
+
+$click('copy-save', function() {
+  const saveStr = localStorage.getItem('save');
+  if (!saveStr) return;
+  writeToClipboard(saveStr);
+});
+
+async function writeToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (error) {
+    console.log(error);
+  }
+}
