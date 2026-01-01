@@ -50,3 +50,18 @@ function $click(a, b) {
     b();
   });
 }
+
+const eventBus = (()=>{
+  let events = {};
+
+  return {
+    on(a, b) {
+      events[a] = events[a] || [];
+      events[a].push(b);
+    },
+    emit(a, b) {
+      if (!events[a]) return;
+      events[a].forEach(c => c(b));
+    }
+  };
+})();

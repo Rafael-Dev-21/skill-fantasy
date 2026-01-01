@@ -2,62 +2,77 @@ const WORLD_WIDTH = 64;
 const WORLD_HEIGHT = 64;
 const TILE_GRASS = 0;
 
-class POINT {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-}
+const POINT = (x, y, sup={}) => {
+  sup = Object.assign(sup, {
+    x, y
+  });
+  return sup;
+};
 
 POINT.eq = (a, b) => a.x == b.x && a.y == b.y;
 
-const Health = (max) => ({
-  max,
-  current: max,
-  get hp() {
-    return this.current;
+POINT.dist = (a, b) => ({
+  get x() {
+    return b.x - a.x;
   },
-  set hp(val) {
-    this.current = clamp(val, 0, this.max);
+  get y() {
+    return b.y - a.y;
   },
-  modify(amt) {
-    this.hp += amt;
-  },
-  get status() {
-    if (this.hp <= 0) return "dead";
-    else return "alive";
-  },
-  get isAlive() {
-    return this.hp > 0;
-  },
-  get maxHp() {
-    return this.max;
-  },
-  get frac() {
-    return this.hp / this.maxHp;
+  get dist() {
+    return Math.abs(this.x) + Math.abs(this.y);
   }
 });
 
-class PLAYER {
-  constructor(x, y, health) {
-    this.position = new POINT(x, y);
-    this.health = Health(health);
-    this.mode = "place";
-  }
+const Health = (max, sup={}) => {
+  let maxHp = max;
+  let currentHp = max;
+  Object.defineProperty(sup, 'hp', {
+    get: () => currentHp,
+    set: (val) => {
+      currentHp = clamp(val, 0, sup.maxHp);
+    },
+  });
+  Object.defineProperty(sup, 'maxHp', {
+    get: () => maxHp,
+  });
+  Object.defineProperty(sup, 'aliveStatus', {
+    get: () => (sup.hp<=0) ? 'dead' : 'alive',
+  });
+  Object.defineProperty(sup, 'isAlive', {
+    get: () => sup.hp > 0,
+  });
+  Object.defineProperty(sup, 'fracHp', {
+    get: () => sup.hp / sup.maxHp,
+  });
+  Object.assign(sup, {
+    modifyHp: (amt) => {
+      sup.hp += amt
+    },
+  });
+  return sup;
+}
 
-  Move(dx, dy) {
-    if (!this.health.isAlive) return;
-    this.position.x = clamp(this.position.x + dx, 0, WORLD_WIDTH-1);
-    this.position.y = clamp(this.position.y + dy, 0, WORLD_HEIGHT-1);
-  }
+const PLAYER = (x, y, health, sup={}) => {
+  sup = POINT(x, y, sup);
+  sup = Health(health, sup);
+  Object.assign(sup, {
+    mode: 'place',
 
-  switchMode() {
-    let old = this.mode;
-    this.mode = this.mode == "place"
-      ? "unplace"
-      : "place";
-    document.getElementById("switch-mode").innerText = `Switch to ${old} mode`;
-  }
+    Move(dx, dy) {
+      if (!this.isAlive) return false;
+      this.x = clamp(this.x+dx, 0, WORLD_WIDTH-1);
+      this.y = clamp(this.y+dy, 0, WORLD_HEIGHT-1);
+      return true;
+    },
+    switchMode() {
+      let old = this.mode;
+      this.mode = (old==='place')
+        ? 'unplace'
+        : 'place';
+      $setContent('switch-mode', `Switch to ${old} mode`);
+    }
+  });
+  return sup;
 }
 
 let seed = 0x1234567;
@@ -176,7 +191,7 @@ class WORLD {
   constructor() {
     this.tiles = new Array(WORLD_WIDTH * WORLD_HEIGHT).fill(TILE_GRASS);
     this.objs = [];
-    this.player = new PLAYER(32, 32, 31);
+    this.player = PLAYER(32, 32, 31);
     this.mobs = [...new Array(rng32()&15)].map(_ => ({
         x: rng32()&WORLD_WIDTH-1,
         y: rng32()&WORLD_HEIGHT-1,
@@ -233,28 +248,28 @@ const states = {
     }
   },
   follow({m, idx, ms, w, p}) {
-    const distx = p.position.x-m.x, disty = p.position.y-m.y;
+    const distx = p.x-m.x, disty = p.y-m.y;
     if (m.x!=0&&distx<0&&!w.objAt(m.x-1, m.y)) m.x--;
     else if (m.x!=WORLD_WIDTH-1&&distx>0&&!w.objAt(m.x+1, m.y)) m.x++;
     else if (m.y!=0&&disty<0&&!w.objAt(m.x, m.y-1)) m.y--;
     else if (m.y!=WORLD_HEIGHT-1&&disty>0&&!w.objAt(m.x, m.y+1)) m.y++;
   },
   flee({m, idx, ms, w, p}) {
-    const distx = p.position.x-m.x, disty = p.position.y-m.y;
+    const distx = p.x-m.x, disty = p.y-m.y;
     if (m.x!=WORLD_WIDTH-1&&distx<0&&!w.objAt(m.x+1, m.y)) m.x++;
     else if (m.x!=0&&distx>0&&!w.objAt(m.x-1, m.y)) m.x--;
     else if (m.y!=WORLD_HEIGHT-1&&disty<0&&!w.objAt(m.x, m.y+1)) m.y++;
     else if (m.y!=0&&disty>0&&!w.objAt(m.x, m.y-1)) m.y--;
   },
   attack({p}) {
-    p.health.modify(-2);
+    p.modifyHp(-2);
   }
 };
 
 const choosers = {
   zmb({m, idx, ms, w, p}) {
-    const distx = m.x - p.position.x;
-    const disty = m.y - p.position.y;
+    const distx = m.x - p.x;
+    const disty = m.y - p.y;
     const dist = Math.abs(distx) + Math.abs(disty);
     if (dist < 2) {
       m.state = 'attack';
@@ -265,8 +280,8 @@ const choosers = {
     }
   },
   pig({m, idx, ms, w, p}) {
-    const distx = m.x - p.position.x;
-    const disty = m.y - p.position.y;
+    const distx = m.x - p.x;
+    const disty = m.y - p.y;
     const dist = Math.abs(distx) + Math.abs(disty);
     if (dist < 6) {
       m.state = 'flee';
@@ -278,7 +293,7 @@ const choosers = {
 
 const defineCellLook = (c, w) => {
   c.style.removeProperty('background-color');
-  if (w.player.position.x == c.x && w.player.position.y == c.y) {
+  if (w.player.x == c.x && w.player.y == c.y) {
     c.className = "player";
     c.innerText = "@/";
   } else if (w.mobAt(c.x, c.y)) {
@@ -357,7 +372,7 @@ const TableView = ({w, h, world}) => {
             defineCellLook(cell, world);
           }
           cell.onclick = () => {
-            if (world.player.health.isAlive) {
+            if (world.player.isAlive) {
               world[world.player.mode]({
                 x: cell.x,
                 y: cell.y
@@ -367,7 +382,7 @@ const TableView = ({w, h, world}) => {
           this.cells[this.idx(i,j)]=cell;
         }
       }
-      this.update({...world.player.position, w: WORLD_WIDTH, h: WORLD_HEIGHT});
+      this.update({...world.player, w: WORLD_WIDTH, h: WORLD_HEIGHT});
     },
     update(grid) {
       let rct = this.rct(grid);
@@ -376,15 +391,15 @@ const TableView = ({w, h, world}) => {
       this.cells.forEach(c => c.upd(rct));
       let player_bar = '[';
       let len = +$('player-health-bar').dataset.len;
-      let frac = world.player.health.frac;
+      let frac = world.player.fracHp;
       let real = len * frac;
       for (let i = 0; i < len; i++)
         player_bar += (i < real) ? '@' : '.';
       player_bar += ']';
       $setContent('player-health-bar', player_bar);
-      $setContent('player-health-max', world.player.health.maxHp);
-      $setContent('player-health-hp', world.player.health.hp);
-      $setEnabled('respawn', !world.player.health.isAlive);
+      $setContent('player-health-max', world.player.maxHp);
+      $setContent('player-health-hp', world.player.hp);
+      $setEnabled('respawn', !world.player.isAlive);
     }
   };
   r.init(world);
@@ -400,7 +415,7 @@ const Game = {
   step() {
     this.world.tick();
     this.view.update({
-      ...this.world.player.position,
+      ...this.world.player,
       w: WORLD_WIDTH,
       h: WORLD_HEIGHT,
     });
@@ -419,7 +434,7 @@ const Game = {
 };
 
 view.update({
-  ...world.player.position,
+  ...world.player,
   w: WORLD_WIDTH,
   h: WORLD_HEIGHT,
 })
@@ -433,6 +448,6 @@ $click("move-right", () => Game.handleKey('l'));
 $click("switch-mode", () => Game.handleKey(' '));
 
 $click('respawn', () => {
-  Game.world.player = new PLAYER(32, 32, 31);
+  Game.world.player = PLAYER(32, 32, 31);
   Game.step();
 });
