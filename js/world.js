@@ -11,7 +11,7 @@ class WORLD {
         x: rng32()&WORLD_WIDTH-1,
         y: rng32()&WORLD_HEIGHT-1,
         state: 'wander',
-        chooser: (rng32()%2==0 ? 'zmb' : 'pig'),
+        chooser: (rng32()%3==0? 'fng' : (rng32()%2==0 ? 'zmb' : 'pig')),
         health: Health(11),
       })).map(m => ({...m, sprite: m.chooser[0].toUpperCase(), damage_player: ((m.chooser=='zmb')?true:undefined)}));
   }

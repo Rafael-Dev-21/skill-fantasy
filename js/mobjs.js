@@ -27,6 +27,21 @@ const states = {
   },
   attack({p}) {
     p.modifyHp(-2);
+  },
+  idle(_) {
+    // do nothing and mop here
+  },
+  spread({m, w, p}) {
+    let rnx = rng32()&15 - 7 + m.x;
+    let rny = rng32()&15 - 7 + m.y;
+    let r = Point(rnx, rny);
+    if (Point.eq(r, p)) return;
+    if (w.mobAt(rnx, rny)) return;
+    if (w.objAt(rnx, rny)) return;
+    let clone = Object.assign({}, m);
+    clone.x = rnx;
+    clone.y = rny;
+    w.mobs.push(clone);
   }
 };
 
@@ -51,6 +66,15 @@ const choosers = {
       m.state = 'flee';
     } else {
       m.state = 'wander';
+    }
+  },
+  fng({m}) {
+    let r = rng32();
+    let c = r & 65535;
+    if (!c) {
+      m.state = 'spread';
+    } else {
+      m.state = 'idle';
     }
   }
 };
