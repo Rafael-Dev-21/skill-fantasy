@@ -80,3 +80,55 @@ $click('respawn', () => {
   Game.world.player.y = 32;
   Game.step();
 });
+
+const Saver = (game, bus, localStorage) => {
+  function saveGame() {
+    let saveFile = {};
+    saveFile.player = {
+      x: game.world.player.x,
+      y: game.world.player.y,
+      hp: game.world.player.hp,
+    };
+    saveFile.mobs = game.world.mobs;
+    saveFile.objs = game.world.objs;
+
+    let saveCode = JSON.stringify(saveFile);
+    localStorage.setItem('save', saveCode);
+  }
+
+  function loadGame() {
+    const saveCode = localStorage.getItem('save');
+    if (!saveCode) return;
+    const saveFile = JSON.parse(saveCode);
+    game.world.player.x = saveFile.player.x;
+    game.world.player.y = saveFile.player.y;
+    game.world.player.hp = saveFile.player.hp;
+    game.world.objs = saveFile.objs;
+    game.world.mobs = saveFile.mobs.map(m => {
+      const h = m.health;
+      m.health = Health(h.maxHp);
+      m.health.hp = h.hp;
+      return m;
+    });
+    bus.emit("game.loaded", game);
+  }
+
+  return {
+    saveGame,
+    loadGame
+  };
+};
+
+const saver = Saver(Game, eventBus, localStorage);
+
+eventBus.on('world.tick', () => saver.saveGame());
+eventBus.on('game.loaded', game => {
+  game.view.update({
+    x: game.world.player.x,
+    y: game.world.player.y,
+    w: WORLD_WIDTH,
+    h: WORLD_HEIGHT,
+  });
+});
+
+saver.loadGame();
