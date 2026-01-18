@@ -2,10 +2,10 @@
 
 ## Marketing
 
-Title: Skill Fantasy
-Gerne: RPG, sandbox, survival
-Target Audience: Fans of pokemon and zelda
-Pitch: Explore a fantasy world to collect monsters, spells and machine parts.
++ Title: Skill Fantasy
++ Genre: RPG, sandbox, survival
++ Target Audience: Fans of pokémon and zelda.
++ Pitch: Explore a fantasy world to collect monsters, spells and machine parts.
 
 ## Game Details
 
@@ -13,9 +13,9 @@ Pitch: Explore a fantasy world to collect monsters, spells and machine parts.
 
 A fantasy world where machine parts and building materials lie over the world. You can also tame monsters and learn spells.
 
-### Rest
+### Schedule
 
-Delivery Date: Roughly 21 of may, 2026.
+Delivery Date: First Demo Roughly 21 of may, 2026.
 
 ## Gameplay
 

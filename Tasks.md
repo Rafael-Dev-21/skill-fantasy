@@ -17,14 +17,15 @@
 
 ## Todo
 
+
 ## Doing
 
-+ [.] Software Renderer
++ [ ] Software Renderer
   + [ ] Quad Drawing
   + [ ] Buffer Blitting
   + [ ] Sprites
   + [ ] Tilemaps
-+ [.] Inverse Kinematics
++ [ ] Inverse Kinematics
   + [ ] Chain resolution
   + [ ] Chain FABRIK resolution
 

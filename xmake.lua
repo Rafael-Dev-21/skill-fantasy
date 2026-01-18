@@ -2,7 +2,13 @@ add_rules("mode.debug", "mode.release")
 
 target("skfantasy")
   set_kind("binary")
-  add_files("src/game.c", "src/lut.c", "src/memory.c")
+  add_files(
+    "src/game.c",
+    "src/memory.c",
+    "src/chain.c",
+    "src/model.c",
+    "src/render.c",
+    "src/surface.c")
   set_languages("c99")
  if is_plat("mingw") or is_plat("windows") then
     add_ldflags("-mwindows")
