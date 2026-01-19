@@ -1,8 +1,13 @@
 .xmake/
 build/
+*/build/
+/build
 *~
 #*#
 
+*.so
+*.a
+*.out
 
 
 # Added by cargo
@@ -21,3 +26,4 @@ build/
 
 # Ignore Gradle build output directory
 build
+android/build
