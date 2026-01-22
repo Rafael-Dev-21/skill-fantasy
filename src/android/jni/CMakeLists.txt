@@ -11,6 +11,7 @@ add_library(skfantasy SHARED
     memory.c
     android-main.c
     model.c
+    obj_pose.c
 )
 
 # Compiler flags

@@ -4,11 +4,6 @@
 #include "model.h"
 #include "render.h"
 
-static void
-Model_addVert(Model * restrict m, const v3 v);
-static void
-Model_addFace(Model * restrict m, const size_t f);
-
 void
 Model_init(Model * restrict m)
 {
@@ -16,47 +11,7 @@ Model_init(Model * restrict m)
   m->face = NULL;
   m->vcount = 0;
   m->fcount = 0;
-  m->vcap = 0;
-  m->fcap = 0;
 }
-
-void
-Model_load(Model * restrict m, const char * restrict filename)
-{
-  static char buffer[1024] = {0};
-  v3 v;
-  size_t f;
-  FILE *fp;
-  char *tok;
-
-  fp = fopen(filename, "r");
-  if (!fp) return;
-
-  while (fgets(buffer, 1023, fp)) {
-    if (buffer[0]=='v' && buffer[1]==' ') {
-      tok = strtok(buffer, " ");
-      tok = strtok(NULL, " \n");
-      v.x = atof(tok);
-      tok = strtok(NULL, " \n");
-      v.y = atof(tok);
-      tok = strtok(NULL, " \n");
-      v.z = atof(tok);
-      Model_addVert(m, v);
-    }
-    else if (buffer[0]=='f' && buffer[1]==' ') {
-      tok = strtok(buffer, " ");
-      for (int i = 0; i < 3; i++) {
-        tok = strtok(NULL, "/");
-        f = atoi(tok);
-        strtok(NULL, " \n");
-        Model_addFace(m, f-1);
-      }
-    }
-  }
-
-  fclose(fp);
-}
-
 void
 Model_renderWireFrame(const Model * restrict m,
     v2 (*projFn)(const v3),
@@ -99,10 +54,6 @@ Model_renderFlatRC(const Model * restrict m,
 
     if (signed_triangle_area(a, b, c)<1) continue;
 
-    /*
-    uint32_t rnd = 0xFF;
-    for (int j=1; j<=3; j++) rnd = (rnd<<8) | (((i * 4294967279u) ^ (j * 4294967291u)) & 255u);
-    */
     uint32_t rnd = 0xFF000000 | (i * 2654435761u);
 
     fillTriangle(
@@ -113,24 +64,49 @@ Model_renderFlatRC(const Model * restrict m,
   }
 }
 
-static void
-Model_addVert(Model * restrict m, const v3 v)
+void Model_renderFlatTex(const Model * restrict m,
+    v2 (*projFn)(const v3),
+    const Surface * restrict s)
 {
-  if (m->vcount + 1 > m->vcap) {
-    int oldCap = m->vcap;
-    m->vcap = GROW_CAPACITY(oldCap);
-    m->vert = GROW_ARRAY(v3, m->vert, oldCap, m->vcap);
-  }
-  m->vert[m->vcount++] = v;
-}
+  for (int i = 0; i < m->fcount/3; i++) {
+    size_t *f = &m->face[i*3];
+    v3 A = m->vert[f[0]];
+    v2 a = projFn(A);
+    v3 B = m->vert[f[1]];
+    v2 b = projFn(B);
+    v3 C = m->vert[f[2]];
+    v2 c = projFn(C);
 
-static void
-Model_addFace(Model * restrict m, const size_t f)
-{
-  if (m->fcount + 1 > m->fcap) {
-    int oldCap = m->fcap;
-    m->fcap = GROW_CAPACITY(oldCap);
-    m->face = GROW_ARRAY(size_t, m->face, oldCap, m->fcap);
+    if (signed_triangle_area(a, b, c)<1) continue;
+
+    v2 TA = m->texc[f[0]];
+    TA.y = 1-TA.y;
+    v2 TB = m->texc[f[1]];
+    TB.y = 1-TB.y;
+    v2 TC = m->texc[f[2]];
+    TC.y = 1-TC.y;
+
+    v2 ta = TA;
+    ta.x *= s->width;
+    ta.y *= s->height;
+
+    v2 tb = TB;
+    tb.x *= s->width;
+    tb.y *= s->height;
+
+    v2 tc = TC;
+    tc.x *= s->width;
+    tc.y *= s->height;
+
+    uint32_t rnd = 0xFF000000 | (i * 2654435761u);
+
+    blitTriangle(
+        (int)a.x, (int)a.y,
+        (int)b.x, (int)b.y,
+        (int)c.x, (int)c.y,
+        (int)ta.x, (int)ta.y,
+        (int)tb.x, (int)tb.y,
+        (int)tc.x, (int)tc.y,
+        s);
   }
-  m->face[m->fcount++] = f;
 }

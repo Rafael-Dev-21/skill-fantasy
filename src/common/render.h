@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 #include "util.h"
+#include "surface.h"
 
 #define DISPLAY_WIDTH  640
 #define DISPLAY_HEIGHT 480
@@ -32,6 +33,7 @@ void strokeCircle(int cx, int cy, int cr, uint32_t color);
 void strokeLine(int x1, int y1, int x2, int y2, uint32_t color);
 void fillTriangle(int ax, int ay, int bx, int by, int cx, int cy, uint32_t color);
 void strokeTriangle(int ax, int ay, int bx, int by, int cx, int cy, uint32_t color);
+void blitTriangle(int ax, int ay, int bx, int by, int cx, int cy, int tax, int tay, int tbx, int tby, int tcx, int tcy, const Surface * restrict s);
 
 extern uint32_t display[DISPLAY_WIDTH*DISPLAY_HEIGHT];
 

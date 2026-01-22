@@ -8,7 +8,8 @@ target("skfantasy")
     "../common/chain.c",
     "../common/model.c",
     "../common/render.c",
-    "../common/surface.c")
+    "../common/surface.c",
+    "../common/obj_pose.c")
   add_includedirs("../common")
   set_languages("c99")
  if is_plat("mingw") or is_plat("windows") then

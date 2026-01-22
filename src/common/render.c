@@ -137,3 +137,47 @@ void strokeTriangle(int ax, int ay, int bx, int by, int cx, int cy, uint32_t col
   strokeLine(bx, by, cx, cy, color);
   strokeLine(cx, cy, ax, ay, color);
 }
+static inline float signed_triangle_area(int ax, int ay, int bx, int by, int cx, int cy)
+{
+  return .5f*((by-ay)*(bx+ax) + (cy-by)*(cx+bx) + (ay-cy)*(ax+cx));
+}
+void blitTriangle(int ax, int ay, int bx, int by, int cx, int cy, int tax, int tay, int tbx, int tby, int tcx, int tcy, const Surface * restrict s)
+{
+  if (ay>by) { swapi(&ax, &bx); swapi(&ay, &by); }
+  if (ay>cy) { swapi(&ax, &cx); swapi(&ay, &cy); }
+  if (by>cy) { swapi(&bx, &cx); swapi(&by, &cy); }
+  float total_area = signed_triangle_area(ax,ay,bx,by,cx,cy);
+  int total_height = cy-ay;
+  if (ay!=by) {
+    int segment_height = by-ay;
+    for (int y=ay; y<=by; y++) {
+      int x0 = ax + ((cx-ax)*(y-ay)) / total_height;
+      int x1 = ax + ((bx-ax)*(y-ay)) / segment_height;
+      for (int x=imin(x0,x1); x<=imax(x0,x1); x++) {
+        float alpha = signed_triangle_area(x, y, bx, by, cx, cy) / total_area;
+        float beta = signed_triangle_area(x, y, cx, cy, ax, ay) / total_area;
+        float gamma = signed_triangle_area(x, y, ax, ay, bx, by) / total_area;
+        int tx = (int)(tax * alpha + tbx * beta + tcx * gamma);
+        int ty = (int)(tay * alpha + tby * beta + tcy * gamma);
+        uint32_t color = Surface_get_pixel(s, tx, ty);
+        setPixel(x, y, color);
+      }
+    }
+  }
+  if (by!=cy) {
+    int segment_height = cy-by;
+    for (int y=by; y<=cy; y++) {
+      int x0 = ax + ((cx-ax)*(y-ay)) / total_height;
+      int x1 = bx + ((cx-bx)*(y-by)) / segment_height;
+      for (int x=imin(x0,x1); x<=imax(x0,x1); x++) {
+        float alpha = signed_triangle_area(x, y, bx, by, cx, cy) / total_area;
+        float beta = signed_triangle_area(x, y, cx, cy, ax, ay) / total_area;
+        float gamma = signed_triangle_area(x, y, ax, ay, bx, by) / total_area;
+        int tx = (int)(tax * alpha + tbx * beta + tcx * gamma);
+        int ty = (int)(tay * alpha + tby * beta + tcy * gamma);
+        uint32_t color = Surface_get_pixel(s, tx, ty);
+        setPixel(x, y, color);
+      }
+    }
+  }
+}

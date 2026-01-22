@@ -2,7 +2,7 @@
 
 for i in render.c chain.c game.c memory.c surface.c \
   render.h chain.h game.h memory.h surface.h \
-  model.c model.h \
+  model.c model.h obj_pose.c \
   util.h vec.h
 do
   rm "jni/${i}"

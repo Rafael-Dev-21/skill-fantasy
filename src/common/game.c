@@ -21,6 +21,9 @@ static Surface dst;
 static Surface plr;
 static Surface grd;
 
+#define GRDW 128
+#define GRDH 128
+
 const static uint32_t plrSpr[] = {
   0, 0, RED, 0, 0,
   0, 0, RED, 0, 0,
@@ -29,7 +32,7 @@ const static uint32_t plrSpr[] = {
   0, RED, 0, RED, 0
 };
 
-static uint32_t grdTl[7*7];
+static uint32_t grdTl[GRDW*GRDH];
 
 static uint32_t getGroundColor(int x, int y)
 {
@@ -39,21 +42,40 @@ static uint32_t getGroundColor(int x, int y)
   return 0xFF004400 | (brightness << 8);
 }
 
-Model pose;
+static uint8_t flated(int x, int y, int w, int h)
+{
+  int res = (y * w + x) * 255 / (w * h);
+  return (uint8_t) res;
+}
+
+static uint32_t get_pose_color(int x, int y, int w, int h)
+{
+  return 0xFF000000 | (x ^ y ^ (flated(x, y, w, h) | (flated(x+1, y, w, h) << 8) | (flated(x-1, y, w, h) << 16)));
+}
+
+#define POSE_TEX_W 256
+#define POSE_TEX_H 256
+
+static uint32_t pose_tex_buf[POSE_TEX_W*POSE_TEX_H];
+
+extern const Model pose;
+static Surface pose_tex;
 
 Game Game_init(void)
 {
   v2 origin = { DISPLAY_WIDTH /2.0, DISPLAY_HEIGHT /2.0 };
   display_dirty = 1;
   Chain_init(&worm, origin, 48, 21, M_PI/8);
-  Model_init(&pose);
-  Model_load(&pose, "data/diablo3_pose.obj");
-  for (int i = 0; i < 7; i++)
-    for (int j = 0; j < 7; j++)
-      grdTl[i * 7 + j] = getGroundColor(j, i);
+  for (int i = 0; i < GRDH; i++)
+    for (int j = 0; j < GRDW; j++)
+      grdTl[i * GRDW + j] = getGroundColor(j, i);
+  for (int i = 0; i < POSE_TEX_H; i++)
+    for (int j = 0; j < POSE_TEX_W; j++)
+      pose_tex_buf[i * POSE_TEX_W + j] = get_pose_color(j, i, POSE_TEX_W, POSE_TEX_H);
   Surface_init(&dst, DISPLAY_WIDTH, DISPLAY_HEIGHT, display, DISPLAY_WIDTH);
   Surface_init(&plr, 5, 5, plrSpr, 5);
-  Surface_init(&grd, 7, 7, grdTl, 7);
+  Surface_init(&grd, GRDW, GRDH, grdTl, GRDW);
+  Surface_init(&pose_tex, POSE_TEX_W, POSE_TEX_H, pose_tex_buf, POSE_TEX_W);
   clearDisplay(BLACK);
   Game g = {
     FPS,
@@ -102,10 +124,10 @@ void Game_update(void)
 
   if (display_dirty) {
     display_dirty = 0;
-    for (int y = 0; y <= (DISPLAY_HEIGHT/7+1); y++)
-      for (int x = 0; x <= (DISPLAY_WIDTH/7+1); x++)
-        Surface_blit(&dst, x*7, y*7, &grd, 0, 0, 7, 7);
-    Model_renderFlatRC(&pose, ortho);
+    for (int y = 0; y <= (DISPLAY_HEIGHT/GRDH+1); y++)
+      for (int x = 0; x <= (DISPLAY_WIDTH/GRDW+1); x++)
+        Surface_blit(&dst, x*GRDW, y*GRDH, &grd, 0, 0, GRDW, GRDH);
+    Model_renderFlatTex(&pose, ortho, &pose_tex);
     Chain_display(&worm);
     Surface_blit(&dst, (int)worm.joints[0].x, (int)worm.joints[0].y, &plr, 0, 0, 5, 5);
   }
