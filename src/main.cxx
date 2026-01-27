@@ -1,0 +1,391 @@
+extern "C" {
+#ifndef _WIN32
+#include "ncurses.h"
+#else
+#include "curses.h"
+#endif
+}
+#undef addch
+#undef getch
+#undef clear
+#include "ui.hxx"
+#include "HandleVector.hxx"
+#include "Inventory.hxx"
+#include <vector>
+#include <array>
+#include <thread>
+#include <chrono>
+#include <functional>
+
+using ObjectHandle = Handle;
+
+template<typename T>
+static inline constexpr T clamp(T val, T mn, T mx) { return (val < mn) ? mn : ((val > mx) ? mx : val); }
+
+class XorShift {
+public:
+  XorShift(uint64_t state) :
+    state(state)
+  {}
+
+  uint32_t next()
+  {
+    state ^= state << 13;
+    state ^= state >> 17;
+    state ^= state << 5;
+    return state;
+  }
+  uint32_t prev()
+  {
+    state = Ilshift(state, 5);
+    state = Irshift(state, 17);
+    state = Ilshift(state, 13);
+    return state;
+  }
+
+private:
+  uint32_t Ilshift(uint32_t x, uint32_t shift)
+  {
+    uint32_t res = x;
+    for (int i=0; i<32/shift; i++)
+      res = x ^ (res << shift);
+    return res;
+  }
+  uint32_t Irshift(uint32_t x, uint32_t shift)
+  {
+    uint32_t res = x;
+    for (int i=0; i<32/shift; i++)
+      res = x ^ (res >> shift);
+    return res;
+  }
+  uint64_t state;
+};
+
+class Game {
+public:
+  struct Object {
+    ObjectHandle handle;
+    enum class Kind {
+      Player,
+      Tree,
+      Cursor,
+      Mark,
+      Wood
+    } kind;
+    int x;
+    int y;
+    int tile_id;
+    bool solid;
+    bool visible;
+    int8_t health, attack, wood;
+
+    void move(Game& g, int dx, int dy, int w, int h)
+    {
+      int nx = clamp(x+dx, 0, w-1);
+      int ny = clamp(y+dy, 0, h-1);
+      Object& o = g.objAt(nx, ny);
+      if (g.objects.has(o.handle) && o != *this && o.solid) {
+        if (o.health != -1) {
+          o.health = clamp(o.health-attack, 0, 127);
+        }
+        if (o.health == 0) {
+          kill(g, o.handle);
+        }
+        return;
+      }
+      g.map[y][x] = {};
+      g.map[ny][nx] = handle;
+      x = nx;
+      y = ny;
+    }
+    void kill(Game& g, const ObjectHandle& h)
+    {
+      if (!g.objects.has(h) || h == handle) return;
+      Object& o = g.objects.get(h);
+      int coin2 = g.rng.next() % 4 + 2;
+      int coin1 = g.rng.next() % 2 + 1;
+      int amt = coin2 + (o.wood >> coin1);
+      wood = clamp(wood + amt, 0, 107);
+      g.map[o.y][o.x] = {};
+      g.objects.remove(h);
+    }
+
+    inline bool operator==(const Object& o) const { return handle == o.handle; }
+    inline bool operator!=(const Object& o) const { return handle != o.handle; }
+  };
+
+  struct Tile {
+    int glyph;
+    int attr;
+    int pair;
+    int fg, bg;
+  };
+
+  HandleVector<Object, ObjectHandle> objects;
+  std::vector<Tile> tiles;
+  XorShift rng{42};
+  std::array<std::array<ObjectHandle, 30>, 30> map;
+  enum class Mode {
+    Normal,
+    Visual,
+    InvMenu
+  } mode = Mode::Normal;
+  ObjectHandle cursor{};
+  ObjectHandle mark{};
+
+  Game()
+  {
+    auto now = std::chrono::system_clock::now();
+    auto now_ns = std::chrono::time_point_cast<std::chrono::nanoseconds>(now);
+    rng = XorShift{ static_cast<uint64_t>(now_ns.time_since_epoch().count()) };
+    tiles = {
+      { '@', A_BOLD, 1, COLOR_WHITE, COLOR_BLACK },
+      { 't', 0, 2, COLOR_GREEN, COLOR_BLACK },
+      { 'W', A_BOLD, 3, COLOR_YELLOW, COLOR_BLACK }
+    };
+
+    if (has_colors()) {
+      start_color();
+      for (auto& t : tiles)
+        init_pair(t.pair, t.fg, t.bg);
+    }
+
+    for (auto& line : map)
+      for (auto& obj : line)
+        obj = {};
+  }
+
+  inline auto& get(const ObjectHandle& h) { return objects.get(h); }
+
+  void drawObj(CursesWindow& w, const ObjectHandle& h)
+  {
+    if (!objects.has(h)) return;
+    auto& v = objects.get(h);
+    auto t = tiles[v.tile_id];
+    int attr = t.attr;
+    if (has_colors()) attr |= COLOR_PAIR(t.pair);
+    {
+      int minx = clamp(get(cursor).x, 0, get(mark).x);
+      int miny = clamp(get(cursor).y, 0, get(mark).y);
+      int maxx = clamp(get(cursor).x, get(mark).x, 30);
+      int maxy = clamp(get(cursor).y, get(mark).y, 30);
+      if ((objects.has(cursor) && objects.has(mark) && v.x >= minx && v.x <= maxx && v.y >= miny && v.y  <= maxy)
+          || (objects.has(cursor) && v.x == get(cursor).x && v.y == get(cursor).y))
+        attr |= A_REVERSE;
+    }
+    CursesAttrGuard guard(w, attr);
+    w.move(v.x*2, v.y);
+    w.addch(t.glyph);
+  }
+
+  void drawEmpty(CursesWindow& w) {
+    for (int y = 0; y < map.size(); y++) {
+      auto& line = map[y];
+      for (int x = 0; x < line.size(); x++) {
+        if (occupied(x, y))
+          continue;
+        int attr = A_BOLD;
+        int minx = clamp(get(cursor).x, 0, get(mark).x);
+        int miny = clamp(get(cursor).y, 0, get(mark).y);
+        int maxx = clamp(get(cursor).x, get(mark).x, 30);
+        int maxy = clamp(get(cursor).y, get(mark).y, 30);
+        if ((objects.has(cursor) && objects.has(mark) && x >= minx && x <= maxx && y >= miny && y  <= maxy)
+            || (objects.has(cursor) && x == get(cursor).x && y == get(cursor).y))
+          attr |= A_REVERSE;
+
+        CursesAttrGuard guard(w, attr);
+        w.move(x*2, y);
+        w.addch('.');
+      }
+    }
+  }
+
+  void drawStats(CursesWindow& w, const ObjectHandle& h)
+  {
+    if (!objects.has(h)) return;
+    auto& v = objects.get(h);
+
+    w.clear();
+    w.move(1, 1);
+    w.put("H = %d W = %d", v.health, v.wood);
+    w.refresh();
+  }
+
+  void drawAll(CursesWindow& w)
+  {
+    w.clear();
+    drawEmpty(w);
+    for (const auto& obj : objects)
+      if (objects.has(obj.handle) && obj.visible)
+        drawObj(w, obj.handle);
+    w.refresh();
+  }
+
+  ObjectHandle addPlayer(int x, int y)
+  {
+    Object player{{}, Object::Kind::Player, x, y, 0, true, true, 31, 2, 0};
+    auto h = objects.add(player);
+    map[y][x] = h;
+    return h;
+  }
+
+  void spawnTree(int w, int h)
+  {
+    int x, y;
+    do {
+      x = rng.next() % w;
+      y = rng.next() % h;
+    } while(occupied(x, y));
+    Object tree{{}, Object::Kind::Tree, x, y, 1, true, true, 5, 0, 13};
+    map[y][x] = objects.add(tree);
+  }
+
+  bool occupied(int x, int y)
+  {
+    return objects.has(map[y][x]);
+  }
+
+  Object& objAt(int x, int y)
+  {
+    return get(map[y][x]);
+  }
+
+  void populateTrees(int w, int h)
+  {
+    constexpr int TREE_NUM = 15*15*4/3;
+    for (int i=0; i<TREE_NUM; i++)
+      spawnTree(w, h);
+  }
+
+  void placeCursor(int x, int y)
+  {
+    if (objects.has(cursor))
+      objects.remove(cursor);
+    Object cs{{}, Object::Kind::Cursor, x, y, 0, false, false, -1, 0, 0};
+    cursor = objects.add(cs);
+  }
+
+  void placeMark(int x, int y)
+  {
+    if (objects.has(mark))
+      objects.remove(mark);
+    Object mk{{}, Object::Kind::Mark, x, y, 0, false, false, -1, 0, 0};
+    mark = objects.add(mk);
+  }
+
+  void clearMark()
+  {
+    objects.remove(mark);
+    mark = {};
+  }
+
+  void clearCursorAndMark()
+  {
+    objects.remove(mark);
+    mark = {};
+    objects.remove(cursor);
+    cursor = {};
+  }
+
+  void mapFnOverArea(std::function<void(ObjectHandle, int, int)> fn)
+  {
+    if (!objects.has(cursor))
+      return;
+    fn(map[get(cursor).y][get(cursor).x], get(cursor).x, get(cursor).y);
+    if (!objects.has(mark))
+      return;
+    int minx = clamp(get(cursor).x, 0, get(mark).x);
+    int miny = clamp(get(cursor).y, 0, get(mark).y);
+    int maxx = clamp(get(cursor).x, get(mark).x, 30);
+    int maxy = clamp(get(cursor).y, get(mark).y, 30);
+
+    for (int y = miny; y <= maxy; y++) {
+      for (int x = minx; x <= maxx; x++) {
+        fn(map[y][x], x, y);
+      }
+    }
+  }
+
+  bool placeWall(int x, int y)
+  {
+    if (occupied(x, y)) return false;
+    Object wall{{}, Object::Kind::Wood, x, y, 2, true, true, 5, 0, 5};
+    map[y][x] = objects.add(wall);
+    return true;
+  }
+};
+
+struct Point {
+  int x, y;
+};
+
+int main()
+{
+  using namespace std::chrono_literals;
+  CursesWindow root;
+  constexpr int stat_height = 5;
+  constexpr int stat_width = 15;
+  CursesWindow stat_area(0, 0, stat_width*2, stat_height);
+  constexpr int play_width = 30;
+  constexpr int play_height = 30;
+  CursesWindow play_area(0, stat_height, play_width*2, play_height);
+  nodelay(play_area.handle_ptr(), true);
+
+  Game game;
+  int input;
+  auto player = game.addPlayer(10, 10);
+  game.populateTrees(play_width, play_height);
+  game.drawStats(stat_area, player);
+  game.drawAll(play_area);
+  root.refresh();
+
+  while ((input = play_area.getch()) != 'q') {
+    game.drawStats(stat_area, player);
+    Point dir{0, 0};
+    switch (input) {
+    case 'h':
+      dir.x = -1;
+      break;
+    case 'j':
+      dir.y = 1;
+      break;
+    case 'k':
+      dir.y = -1;
+      break;
+    case 'l':
+      dir.x = 1;
+      break;
+    }
+    if (game.mode == Game::Mode::Normal) {
+      game.get(player).move(game, dir.x, dir.y, play_width, play_height);
+      if (input == 'v') {
+        game.placeCursor(game.get(player).x, game.get(player).y);
+        game.mode = Game::Mode::Visual;
+      }
+    }
+    else if (game.mode == Game::Mode::Visual) {
+      game.placeCursor(game.get(game.cursor).x + dir.x, game.get(game.cursor).y + dir.y);
+      if (input == 'm')
+        game.placeMark(game.get(game.cursor).x, game.get(game.cursor).y);
+      else if (input == 'M')
+        game.clearMark();
+      else if (input == 'b' || input == 'p') {
+        game.mapFnOverArea([&game, &player, input](ObjectHandle handle, int x, int y) {
+          game.get(player).kill(game, handle);
+          if (input == 'p' && game.get(player).wood > 5) {
+            if (game.placeWall(x, y))
+              game.get(player).wood -= 5;
+          }
+        });
+      }
+      else if (input == 27) {
+        game.clearCursorAndMark();
+        game.mode = Game::Mode::Normal;
+      }
+    }
+
+    game.drawAll(play_area);
+    root.refresh();
+    std::this_thread::sleep_for(15ms);
+  }
+}
