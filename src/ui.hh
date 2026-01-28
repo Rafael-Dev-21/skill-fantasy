@@ -15,6 +15,7 @@ class CursesWindow {
 public:
   CursesWindow();
   CursesWindow(int x, int y, int w, int h);
+  CursesWindow(const Pt& pos, const Pt& dims);
   ~CursesWindow();
   void move_cursor(int x, int y);
   void move_cursor(const Pt& p);
@@ -27,10 +28,16 @@ public:
   void box(int x, int y);
 
   Pt dims();
+  Pt pos();
+  void move_window(int x, int y);
+  void move_window(const Pt& p);
+  void resize(int w, int h);
+  void resize(const Pt& p);
 
   inline winptr handle_ptr() const { return handle_; }
 
   CursesWindow make_child(int x, int y, int w, int h);
+  CursesWindow make_child(const Pt& p, const Pt& d);
   CursesWindow get_parent();
 
 private:

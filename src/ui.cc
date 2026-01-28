@@ -20,6 +20,10 @@ CursesWindow::CursesWindow(int x, int y, int w, int h) :
   }
 }
 
+CursesWindow::CursesWindow(const Pt& pos, const Pt& dims) :
+  CursesWindow(pos.x, pos.y, dims.x, dims.y)
+{}
+
 CursesWindow::~CursesWindow()
 {
   if (sub)
@@ -84,12 +88,40 @@ Pt CursesWindow::dims()
   getmaxyx(handle_, dm.y, dm.x);
   return dm;
 }
+Pt CursesWindow::pos()
+{
+  Pt ps;
+  getbegyx(handle_, ps.y, ps.x);
+  return ps;
+}
+
+void CursesWindow::move_window(int x, int y)
+{
+  mvwin(handle_, x, y);
+}
+void CursesWindow::move_window(const Pt& p)
+{
+  mvwin(handle_, p.x, p.y);
+}
+void CursesWindow::resize(int w, int h)
+{
+  wresize(handle_, w, h);
+}
+void CursesWindow::resize(const Pt& p)
+{
+  wresize(handle_, p.x, p.y);
+}
 
 CursesWindow CursesWindow::make_child(int x, int y, int w, int h)
 {
   CursesWindow child(x, y, w, h);
   child.parent_ = this;
   return child;
+}
+
+CursesWindow CursesWindow::make_child(const Pt& p, const Pt& d)
+{
+  return make_child(p.x, p.y, d.x, d.y);
 }
 
 CursesWindow CursesWindow::get_parent()
