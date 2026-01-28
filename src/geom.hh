@@ -42,9 +42,9 @@ public:
   Grid2(int w, int h) :
     width_(w), height_(h)
   {
-    assert(("width should be greater than zero.", w > 0));
-    assert(("height should be greater than zero.", h > 0));
-    items_.resize(w, h);
+    assert(("width should be greater than zero." && w > 0));
+    assert(("height should be greater than zero." && h > 0));
+    items_.resize(w * h);
   }
 
   T& get(int x, int y)
@@ -87,10 +87,10 @@ public:
 private:
   void INVARIANT(int x, int y)
   {
-    assert(("x should not be less than zero.", x >= 0));
-    assert(("y should not be less than zero.", y >= 0));
-    assert(("x should be less than width.", x < width_));
-    assert(("y should be less than height.", y < height_));
+    assert(("x should not be less than zero." && x >= 0));
+    assert(("y should not be less than zero." && y >= 0));
+    assert(("x should be less than width." && x < width_));
+    assert(("y should be less than height." && y < height_));
   }
 
   std::vector<T> items_;

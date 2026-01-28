@@ -9,18 +9,21 @@ int main()
 {
   using namespace std::chrono_literals;
   CursesWindow root;
-  constexpr int stat_height = 5;
-  constexpr int stat_width = 15;
-  CursesWindow stat_area(0, 0, stat_width*2, stat_height);
-  constexpr int play_width = 30;
-  constexpr int play_height = 30;
-  CursesWindow play_area(0, stat_height, play_width*2, play_height);
+  Pt root_dims = root.dims();
+  Pt stat_pos{};
+  Pt stat_dims{root_dims.x, 5};
+  CursesWindow stat_area(stat_pos, stat_dims);
+  Pt play_pos{0, stat_dims.y};
+  Pt play_dims{root_dims.x, root_dims.y-stat_dims.y};
+  CursesWindow play_area(play_pos, play_dims);
   play_area.set_nodelay(true);
 
-  Game game;
+  Pt game_dims = play_dims;
+  game_dims.x /= 2;
+  Game game{game_dims};
   int input;
   auto player = game.addPlayer(10, 10);
-  game.populateTrees(play_width, play_height);
+  game.populateTrees(game_dims.x, game_dims.y);
   game.drawStats(stat_area, player);
   game.drawAll(play_area);
   root.flush();
@@ -43,7 +46,7 @@ int main()
       break;
     }
     if (game.mode == Game::Mode::Normal) {
-      game.get(player).move(game, dir.x, dir.y, play_width, play_height);
+      game.get(player).move(game, dir.x, dir.y, game_dims.x, game_dims.y);
       if (input == 'v') {
         game.placeCursor(game.get(player).x, game.get(player).y);
         game.mode = Game::Mode::Visual;

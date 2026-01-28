@@ -1,7 +1,7 @@
 project('skillfantasy', 'cpp',
   default_options: ['cpp_std=c++23'])
 
-srcs = [ 'src/ui.cxx', 'src/XorShift.cxx', 'src/main.cxx' ]
+srcs = [ 'src/ui.cc', 'src/xorshift.cc', 'src/main.cc', 'src/trie.cc' ]
 
 if host_machine.system() == 'windows'
   add_project_arguments('-DPDC_WIDE', '-DCHTYPE_32=Y', language: ['c', 'cpp'])

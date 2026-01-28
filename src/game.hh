@@ -2,6 +2,7 @@
 
 #include "handlevector.hh"
 #include "xorshift.hh"
+#include "geom.hh"
 #include "ui.hh"
 
 #include <algorithm>
@@ -41,8 +42,10 @@ public:
         }
         return;
       }
-      g.map[y][x] = {};
-      g.map[ny][nx] = handle;
+      g.map.get(x, y) = {};
+      g.map.get(nx, ny) = handle;
+      //g.map[y][x] = {};
+      //g.map[ny][nx] = handle;
       x = nx;
       y = ny;
     }
@@ -54,7 +57,8 @@ public:
       int coin1 = g.rng.next() % 2 + 1;
       int amt = coin2 + (o.wood >> coin1);
       wood = std::clamp(wood + amt, 0, 107);
-      g.map[o.y][o.x] = {};
+      g.map.get(o.x, o.y) = {};
+      //g.map[o.y][o.x] = {};
       g.objects.remove(h);
     }
 
@@ -72,7 +76,7 @@ public:
   HandleVector<Object, ObjectHandle> objects;
   std::vector<Tile> tiles;
   XorShift rng{42};
-  std::array<std::array<ObjectHandle, 30>, 30> map;
+  Grid2<ObjectHandle> map;
   enum class Mode {
     Normal,
     Visual,
@@ -81,7 +85,8 @@ public:
   ObjectHandle cursor{};
   ObjectHandle mark{};
 
-  Game()
+  Game(const Pt& dims) :
+    map(dims.x, dims.y)
   {
     auto now = std::chrono::system_clock::now();
     auto now_ns = std::chrono::time_point_cast<std::chrono::nanoseconds>(now);
@@ -98,9 +103,9 @@ public:
         init_pair(t.pair, t.fg, t.bg);
     }
 
-    for (auto& line : map)
-      for (auto& obj : line)
-        obj = {};
+    for (int j=0; j < map.height(); j++)
+      for (int i=0; i < map.width(); i++)
+        map.get(i, j) = {};
   }
 
   inline auto& get(const ObjectHandle& h) { return objects.get(h); }
@@ -127,16 +132,15 @@ public:
   }
 
   void drawEmpty(CursesWindow& w) {
-    for (int y = 0; y < map.size(); y++) {
-      auto& line = map[y];
-      for (int x = 0; x < line.size(); x++) {
+    for (int y = 0; y < map.height(); y++) {
+      for (int x = 0; x < map.width(); x++) {
         if (occupied(x, y))
           continue;
         int attr = A_BOLD;
         int minx = std::clamp(get(cursor).x, 0, get(mark).x);
         int miny = std::clamp(get(cursor).y, 0, get(mark).y);
-        int maxx = std::clamp(get(cursor).x, get(mark).x, 30);
-        int maxy = std::clamp(get(cursor).y, get(mark).y, 30);
+        int maxx = std::clamp(get(cursor).x, get(mark).x, map.width());
+        int maxy = std::clamp(get(cursor).y, get(mark).y, map.height());
         if ((objects.has(cursor) && objects.has(mark) && x >= minx && x <= maxx && y >= miny && y  <= maxy)
             || (objects.has(cursor) && x == get(cursor).x && y == get(cursor).y))
           attr |= A_REVERSE;
@@ -190,12 +194,12 @@ public:
 
   bool occupied(int x, int y)
   {
-    return objects.has(map[y][x]);
+    return objects.has(map.get(x, y));
   }
 
   Object& objAt(int x, int y)
   {
-    return get(map[y][x]);
+    return get(map.get(x, y));
   }
 
   void populateTrees(int w, int h)
@@ -239,17 +243,17 @@ public:
   {
     if (!objects.has(cursor))
       return;
-    fn(map[get(cursor).y][get(cursor).x], get(cursor).x, get(cursor).y);
+    fn(map.get(get(cursor).x, get(cursor).y), get(cursor).x, get(cursor).y);
     if (!objects.has(mark))
       return;
     int minx = std::clamp(get(cursor).x, 0, get(mark).x);
     int miny = std::clamp(get(cursor).y, 0, get(mark).y);
-    int maxx = std::clamp(get(cursor).x, get(mark).x, 30);
-    int maxy = std::clamp(get(cursor).y, get(mark).y, 30);
+    int maxx = std::clamp(get(cursor).x, get(mark).x, map.width());
+    int maxy = std::clamp(get(cursor).y, get(mark).y, map.height());
 
     for (int y = miny; y <= maxy; y++) {
       for (int x = minx; x <= maxx; x++) {
-        fn(map[y][x], x, y);
+        fn(map.get(x, y), x, y);
       }
     }
   }
@@ -258,7 +262,7 @@ public:
   {
     if (occupied(x, y)) return false;
     Object wall{{}, Object::Kind::Wood, x, y, 2, true, true, 5, 0, 5};
-    map[y][x] = objects.add(wall);
+    map.get(x, y) = objects.add(wall);
     return true;
   }
 };
