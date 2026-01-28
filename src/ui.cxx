@@ -40,6 +40,11 @@ void CursesWindow::move_cursor(int x, int y)
   wmove(handle_, y, x);
 }
 
+void CursesWindow::move_cursor(const Pt& p)
+{
+  move_cursor(p.x, p.y);
+}
+
 void CursesWindow::putch(int ch)
 {
   waddch(handle_, ch);
@@ -78,6 +83,13 @@ void CursesWindow::set_nodelay(bool val)
 void CursesWindow::box(int x, int y)
 {
   ::box(handle_, y, x);
+}
+
+Pt CursesWindow::dims()
+{
+  Pt dm;
+  getmaxyx(handle_, dm.y, dm.x);
+  return dm;
 }
 
 CursesWindow CursesWindow::make_child(int x, int y, int w, int h)

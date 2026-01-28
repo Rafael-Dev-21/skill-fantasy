@@ -1,5 +1,7 @@
 #pragma once
 
+#include "geom.hxx"
+
 class CursesWindow {
   typedef WINDOW *winptr;
 public:
@@ -7,6 +9,7 @@ public:
   CursesWindow(int x, int y, int w, int h);
   ~CursesWindow();
   void move_cursor(int x, int y);
+  void move_cursor(const Pt& p);
   void putch(int ch);
   int readch();
   void flush();
@@ -14,6 +17,8 @@ public:
   void putstr(const char *fmt...);
   void set_nodelay(bool val);
   void box(int x, int y);
+
+  Pt dims();
 
   inline winptr handle_ptr() const { return handle_; }
 
