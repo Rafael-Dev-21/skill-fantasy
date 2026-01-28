@@ -12,6 +12,7 @@ extern "C" {
 #include "HandleVector.hxx"
 #include "Inventory.hxx"
 #include "XorShift.hxx"
+#include "geom.hxx"
 #include <vector>
 #include <array>
 #include <thread>
