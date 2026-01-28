@@ -18,12 +18,11 @@ void Entity::move(IVector dir)
 }
 void Entity::render(IVector cameraOrigin)
 {
-	IPoint p = position + (-cameraOrigin);
-	if (p.x > 0 && p.y > 0 && COLS > p.x && LINES > p.x)
+	IPoint p = position + cameraOrigin;
+	if (p.x >= 0 && p.y >= 0 && COLS-1 >= p.x && LINES-1 >= p.y)
 		mvaddch(p.y, p.x, sprite | COLOR_PAIR(colors));
 }
 
 IPoint Entity::getPosition()
 {
-	return position;
-}
+	return position;}

@@ -8,9 +8,10 @@ static void renderAll()
 	auto center = IPoint(COLS / 2, LINES / 2);
 
 	auto origin = player->getPosition() - center;
+  auto cam = -origin;
 
-	level->render(origin);
-	player->render(origin);
+	level->render(origin + IVector(COLS, LINES));
+	player->render(cam);
 	}
 }
 
