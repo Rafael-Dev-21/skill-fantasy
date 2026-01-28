@@ -5,9 +5,6 @@ extern "C" {
 #include <curses.h>
 #endif
 }
-#undef addch
-#undef getch
-#undef clear
 #include "ui.hxx"
 #include <cstdarg>
 
@@ -38,37 +35,63 @@ CursesWindow::~CursesWindow()
     endwin();
 }
 
-void CursesWindow::move(int x, int y)
+void CursesWindow::move_cursor(int x, int y)
 {
   wmove(handle_, y, x);
 }
 
-void CursesWindow::addch(int ch)
+void CursesWindow::putch(int ch)
 {
   waddch(handle_, ch);
 }
 
-int CursesWindow::getch()
+int CursesWindow::readch()
 {
   return wgetch(handle_);
 }
 
-void CursesWindow::refresh()
+void CursesWindow::flush()
 {
   wrefresh(handle_);
+  if (parent_)
+    parent_->flush();
 }
 
-void CursesWindow::clear()
+void CursesWindow::reset()
 {
   werase(handle_);
 }
 
-void CursesWindow::put(const char *fmt...)
+void CursesWindow::putstr(const char *fmt, ...)
 {
   va_list args;
   va_start(args, fmt);
   vw_printw(handle_, fmt, args);
   va_end(args);
+}
+
+void CursesWindow::set_nodelay(bool val)
+{
+  nodelay(handle_, val);
+}
+
+void CursesWindow::box(int x, int y)
+{
+  ::box(handle_, y, x);
+}
+
+CursesWindow CursesWindow::make_child(int x, int y, int w, int h)
+{
+  CursesWindow child(x, y, w, h);
+  child.parent_ = this;
+  return child;
+}
+
+CursesWindow CursesWindow::get_parent()
+{
+  if (parent_)
+    return *parent_;
+  return *this;
 }
 
 CursesAttrGuard::CursesAttrGuard(const CursesWindow& w, int attr) :

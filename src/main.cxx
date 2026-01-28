@@ -11,6 +11,7 @@ extern "C" {
 #include "ui.hxx"
 #include "HandleVector.hxx"
 #include "Inventory.hxx"
+#include "XorShift.hxx"
 #include <vector>
 #include <array>
 #include <thread>
@@ -21,45 +22,6 @@ using ObjectHandle = Handle;
 
 template<typename T>
 static inline constexpr T clamp(T val, T mn, T mx) { return (val < mn) ? mn : ((val > mx) ? mx : val); }
-
-class XorShift {
-public:
-  XorShift(uint64_t state) :
-    state(state)
-  {}
-
-  uint32_t next()
-  {
-    state ^= state << 13;
-    state ^= state >> 17;
-    state ^= state << 5;
-    return state;
-  }
-  uint32_t prev()
-  {
-    state = Ilshift(state, 5);
-    state = Irshift(state, 17);
-    state = Ilshift(state, 13);
-    return state;
-  }
-
-private:
-  uint32_t Ilshift(uint32_t x, uint32_t shift)
-  {
-    uint32_t res = x;
-    for (int i=0; i<32/shift; i++)
-      res = x ^ (res << shift);
-    return res;
-  }
-  uint32_t Irshift(uint32_t x, uint32_t shift)
-  {
-    uint32_t res = x;
-    for (int i=0; i<32/shift; i++)
-      res = x ^ (res >> shift);
-    return res;
-  }
-  uint64_t state;
-};
 
 class Game {
 public:
@@ -137,7 +99,7 @@ public:
   {
     auto now = std::chrono::system_clock::now();
     auto now_ns = std::chrono::time_point_cast<std::chrono::nanoseconds>(now);
-    rng = XorShift{ static_cast<uint64_t>(now_ns.time_since_epoch().count()) };
+    rng = XorShift{ static_cast<uint32_t>(now_ns.time_since_epoch().count()) };
     tiles = {
       { '@', A_BOLD, 1, COLOR_WHITE, COLOR_BLACK },
       { 't', 0, 2, COLOR_GREEN, COLOR_BLACK },
@@ -174,8 +136,8 @@ public:
         attr |= A_REVERSE;
     }
     CursesAttrGuard guard(w, attr);
-    w.move(v.x*2, v.y);
-    w.addch(t.glyph);
+    w.move_cursor(v.x*2, v.y);
+    w.putch(t.glyph);
   }
 
   void drawEmpty(CursesWindow& w) {
@@ -194,8 +156,8 @@ public:
           attr |= A_REVERSE;
 
         CursesAttrGuard guard(w, attr);
-        w.move(x*2, y);
-        w.addch('.');
+        w.move_cursor(x*2, y);
+        w.putch('.');
       }
     }
   }
@@ -205,20 +167,20 @@ public:
     if (!objects.has(h)) return;
     auto& v = objects.get(h);
 
-    w.clear();
-    w.move(1, 1);
-    w.put("H = %d W = %d", v.health, v.wood);
-    w.refresh();
+    w.reset();
+    w.move_cursor(1, 1);
+    w.putstr("H = %d W = %d", v.health, v.wood);
+    w.flush();
   }
 
   void drawAll(CursesWindow& w)
   {
-    w.clear();
+    w.reset();
     drawEmpty(w);
     for (const auto& obj : objects)
       if (objects.has(obj.handle) && obj.visible)
         drawObj(w, obj.handle);
-    w.refresh();
+    w.flush();
   }
 
   ObjectHandle addPlayer(int x, int y)
@@ -329,7 +291,7 @@ int main()
   constexpr int play_width = 30;
   constexpr int play_height = 30;
   CursesWindow play_area(0, stat_height, play_width*2, play_height);
-  nodelay(play_area.handle_ptr(), true);
+  play_area.set_nodelay(true);
 
   Game game;
   int input;
@@ -337,9 +299,9 @@ int main()
   game.populateTrees(play_width, play_height);
   game.drawStats(stat_area, player);
   game.drawAll(play_area);
-  root.refresh();
+  root.flush();
 
-  while ((input = play_area.getch()) != 'q') {
+  while ((input = play_area.readch()) != 'q') {
     game.drawStats(stat_area, player);
     Point dir{0, 0};
     switch (input) {
@@ -385,7 +347,7 @@ int main()
     }
 
     game.drawAll(play_area);
-    root.refresh();
+    root.flush();
     std::this_thread::sleep_for(15ms);
   }
 }

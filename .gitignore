@@ -21,3 +21,13 @@ build/
 
 # Ignore Gradle build output directory
 build
+
+*.o
+*.so
+*.dll
+*.a
+*.lib
+*.dynlib
+*.swp
+\~*
+\#*\#

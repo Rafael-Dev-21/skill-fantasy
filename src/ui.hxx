@@ -6,17 +6,23 @@ public:
   CursesWindow();
   CursesWindow(int x, int y, int w, int h);
   ~CursesWindow();
-  void move(int x, int y);
-  void addch(int ch);
-  int getch();
-  void refresh();
-  void clear();
-  void put(const char *fmt...);
+  void move_cursor(int x, int y);
+  void putch(int ch);
+  int readch();
+  void flush();
+  void reset();
+  void putstr(const char *fmt...);
+  void set_nodelay(bool val);
+  void box(int x, int y);
 
   inline winptr handle_ptr() const { return handle_; }
 
+  CursesWindow make_child(int x, int y, int w, int h);
+  CursesWindow get_parent();
+
 private:
   winptr handle_;
+  CursesWindow *parent_ = nullptr;
   bool sub=false;
 };
 
