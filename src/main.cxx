@@ -278,10 +278,6 @@ public:
   }
 };
 
-struct Point {
-  int x, y;
-};
-
 int main()
 {
   using namespace std::chrono_literals;
@@ -304,7 +300,7 @@ int main()
 
   while ((input = play_area.readch()) != 'q') {
     game.drawStats(stat_area, player);
-    Point dir{0, 0};
+    Pt dir{0, 0};
     switch (input) {
     case 'h':
       dir.x = -1;
