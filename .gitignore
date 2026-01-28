@@ -31,3 +31,4 @@ build
 *.swp
 \~*
 \#*\#
+subprojects/pdcurses/

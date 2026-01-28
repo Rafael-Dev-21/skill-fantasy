@@ -10,61 +10,32 @@
 
 using ObjectHandle = Handle;
 
+class Game;
+struct Object {
+  enum {
+    Player,
+    Tree,
+    Cursor,
+    Mark,
+    Wood
+  } kind;
+  int x;
+  int y;
+  int tile_id;
+  bool solid;
+  bool visible;
+  int health{-1}, attack, wood;
+  ObjectHandle handle{};
+
+  void move(Game& g, int dx, int dy, int w, int h);
+  void kill(Game& g, const ObjectHandle& h);
+
+  bool operator==(const Object& o) const { return handle == o.handle; }
+  bool operator!=(const Object& o) const { return handle != o.handle; }
+};
+
 class Game {
 public:
-  struct Object {
-    ObjectHandle handle;
-    enum class Kind {
-      Player,
-      Tree,
-      Cursor,
-      Mark,
-      Wood
-    } kind;
-    int x;
-    int y;
-    int tile_id;
-    bool solid;
-    bool visible;
-    int health, attack, wood;
-
-    void move(Game& g, int dx, int dy, int w, int h)
-    {
-      int nx = std::clamp(x+dx, 0, w-1);
-      int ny = std::clamp(y+dy, 0, h-1);
-      Object& o = g.objAt(nx, ny);
-      if (g.objects.has(o.handle) && o != *this && o.solid) {
-        if (o.health != -1) {
-          o.health = std::clamp(o.health-attack, 0, 127);
-        }
-        if (o.health == 0) {
-          kill(g, o.handle);
-        }
-        return;
-      }
-      g.map.get(x, y) = {};
-      g.map.get(nx, ny) = handle;
-      //g.map[y][x] = {};
-      //g.map[ny][nx] = handle;
-      x = nx;
-      y = ny;
-    }
-    void kill(Game& g, const ObjectHandle& h)
-    {
-      if (!g.objects.has(h) || h == handle) return;
-      Object& o = g.objects.get(h);
-      int coin2 = g.rng.next() % 4 + 2;
-      int coin1 = g.rng.next() % 2 + 1;
-      int amt = coin2 + (o.wood >> coin1);
-      wood = std::clamp(wood + amt, 0, 107);
-      g.map.get(o.x, o.y) = {};
-      //g.map[o.y][o.x] = {};
-      g.objects.remove(h);
-    }
-
-    inline bool operator==(const Object& o) const { return handle == o.handle; }
-    inline bool operator!=(const Object& o) const { return handle != o.handle; }
-  };
 
   struct Tile {
     int glyph;
@@ -175,7 +146,7 @@ public:
 
   ObjectHandle addPlayer(int x, int y)
   {
-    Object player{{}, Object::Kind::Player, x, y, 0, true, true, 31, 2, 0};
+    Object player{Object::Player, x, y, 0, true, true, 31, 2, 0};
     auto h = objects.add(player);
     map[y][x] = h;
     return h;
@@ -188,7 +159,7 @@ public:
       x = rng.next() % w;
       y = rng.next() % h;
     } while(occupied(x, y));
-    Object tree{{}, Object::Kind::Tree, x, y, 1, true, true, 5, 0, 13};
+    Object tree{Object::Tree, x, y, 1, true, true, 5, 0, 5};
     map[y][x] = objects.add(tree);
   }
 
@@ -213,7 +184,7 @@ public:
   {
     if (objects.has(cursor))
       objects.remove(cursor);
-    Object cs{{}, Object::Kind::Cursor, x, y, 0, false, false, -1, 0, 0};
+    Object cs{Object::Cursor, x, y, 0, false, false, -1, 0, 0};
     cursor = objects.add(cs);
   }
 
@@ -221,7 +192,7 @@ public:
   {
     if (objects.has(mark))
       objects.remove(mark);
-    Object mk{{}, Object::Kind::Mark, x, y, 0, false, false, -1, 0, 0};
+    Object mk{Object::Mark, x, y, 0, false, false, -1, 0, 0};
     mark = objects.add(mk);
   }
 
@@ -261,7 +232,7 @@ public:
   bool placeWall(int x, int y)
   {
     if (occupied(x, y)) return false;
-    Object wall{{}, Object::Kind::Wood, x, y, 2, true, true, 5, 0, 5};
+    Object wall{Object::Wood, x, y, 2, true, true, 9, 0, 1};
     map.get(x, y) = objects.add(wall);
     return true;
   }

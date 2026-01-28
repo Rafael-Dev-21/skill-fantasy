@@ -61,9 +61,9 @@ int main()
       else if (input == 'b' || input == 'p') {
         game.mapFnOverArea([&game, &player, input](ObjectHandle handle, int x, int y) {
           game.get(player).kill(game, handle);
-          if (input == 'p' && game.get(player).wood > 5) {
+          if (input == 'p' && game.get(player).wood > 1) {
             if (game.placeWall(x, y))
-              game.get(player).wood -= 5;
+              game.get(player).wood -= 1;
           }
         });
       }
