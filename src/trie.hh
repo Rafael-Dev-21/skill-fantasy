@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <array>
+#include <string>
 
 class TrieNode {
 public:

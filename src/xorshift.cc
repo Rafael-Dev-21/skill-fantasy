@@ -1,4 +1,4 @@
-#include "XorShift.hxx"
+#include "xorshift.hh"
 
 XorShift::XorShift(uint32_t state) :
   state(state)

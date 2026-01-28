@@ -1,6 +1,6 @@
 #pragma once
 
-#include "geom.hxx"
+#include "geom.hh"
 
 class CursesWindow {
   typedef WINDOW *winptr;

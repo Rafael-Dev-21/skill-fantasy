@@ -5,7 +5,7 @@ extern "C" {
 #include <curses.h>
 #endif
 }
-#include "ui.hxx"
+#include "ui.hh"
 #include <cstdarg>
 
 CursesWindow::CursesWindow() :

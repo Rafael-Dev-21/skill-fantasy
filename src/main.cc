@@ -8,12 +8,12 @@ extern "C" {
 #undef addch
 #undef getch
 #undef clear
-#include "ui.hxx"
-#include "HandleVector.hxx"
-#include "Inventory.hxx"
-#include "XorShift.hxx"
-#include "geom.hxx"
-#include "math.hxx"
+#include "ui.hh"
+#include "handlevector.hh"
+#include "inventory.hh"
+#include "xorshift.hh"
+#include "geom.hh"
+#include "math.hh"
 #include <vector>
 #include <array>
 #include <thread>
@@ -21,7 +21,6 @@ extern "C" {
 #include <functional>
 
 using ObjectHandle = Handle;
-
 
 class Game {
 public:

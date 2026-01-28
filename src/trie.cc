@@ -1,4 +1,4 @@
-#include "Trie.hxx"
+#include "trie.hh"
 
 Trie::Trie() { root = std::make_unique<TrieNode>(); }
 
@@ -31,7 +31,7 @@ bool Trie::search(const std::string& word)
 bool Trie::startsWith(const std::string& prefix)
 {
   TrieNode *node = root.get();
-  for (const auto& c : word) {
+  for (const auto& c : prefix) {
     int index = c - 'a';
     if (!node->children[index]) {
       return false;
@@ -51,6 +51,6 @@ void Trie::deleteWord(const std::string& word)
     }
     node = node->children[index].get();
   }
-  if (nodr->endOfWord)
+  if (node->endOfWord)
     node->endOfWord = false;
 }
