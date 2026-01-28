@@ -1,5 +1,13 @@
 #pragma once
 
+extern "C" {
+#ifndef _WIN32
+#include <ncurses.h>
+#else
+#include <curses.h>
+#endif
+}
+
 #include "geom.hh"
 
 class CursesWindow {

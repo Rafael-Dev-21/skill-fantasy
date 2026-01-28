@@ -1,9 +1,6 @@
 #pragma once
 
 template<typename T>
-static inline constexpr T clamp(T val, T mn, T mx) { return (val < mn) ? mn : ((val > mx) ? mx : val); }
-
-template<typename T>
 static inline constexpr T lerp(T a, T b, double t)
 {
   if (t < 0.)
