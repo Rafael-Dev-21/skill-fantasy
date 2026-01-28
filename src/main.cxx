@@ -13,6 +13,7 @@ extern "C" {
 #include "Inventory.hxx"
 #include "XorShift.hxx"
 #include "geom.hxx"
+#include "math.hxx"
 #include <vector>
 #include <array>
 #include <thread>
@@ -21,8 +22,6 @@ extern "C" {
 
 using ObjectHandle = Handle;
 
-template<typename T>
-static inline constexpr T clamp(T val, T mn, T mx) { return (val < mn) ? mn : ((val > mx) ? mx : val); }
 
 class Game {
 public:
