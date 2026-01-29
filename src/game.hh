@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <chrono>
 
 using ObjectHandle = Handle;
 
