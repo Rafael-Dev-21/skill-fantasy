@@ -1,0 +1,8 @@
+[wrap-git]
+url = https://github.com/Bill-Gray/PDCursesMod.git
+revision = master
+depth = 1
+patch_directory = pdcurses
+
+[provide]
+dependency_names = "pdcurses"

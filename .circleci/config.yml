@@ -1,0 +1,53 @@
+version: 2.1
+
+jobs:
+  build-linux:
+    docker:
+      - image: cimg/python:3.12.3
+    steps:
+      - checkout
+      - run:
+          name: Install Meson and Ninja
+          command: |
+            python -m pip install --user meson ninja
+      - run:
+          name: Configure Project
+          command: |
+            meson setup builddir
+      - run:
+          name: Compile Project
+          command: |
+            meson compile -C builddir
+      - run:
+          name: Run Tests
+          command: |
+            meson test -C builddir
+
+  build-macos:
+    macos:
+      xcode: 15.3.0
+    steps:
+      - checkout
+      - run:
+          name: Install Meson and Ninja
+          command: |
+            python -m pip install meson ninja
+      - run:
+          name: Configure Project
+          command: |
+            meson setup builddir
+      - run:
+          name: Compile Project
+          command: |
+            meson compile -C builddir
+      - run:
+          name: Run Tests
+          command: |
+            meson test -C builddir
+
+workflows:
+  version: 2.1
+  build:
+    jobs:
+      - build-linux
+      - build-macos
