@@ -8,12 +8,10 @@ else
   add_packages("ncurses")
 end
 
-add_requires("flecs")
-add_packages("flecs")
-
 target("skfantasy")
   set_kind("binary")
   add_files("src/**.c")
+  add_includedirs("include")
   set_languages("c99")
   if is_plat("mingw") then
     add_ldflags("-static-libgcc", "-static-libc++")
