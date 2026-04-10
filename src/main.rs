@@ -1,37 +1,78 @@
-struct Player {
-    x: i32,
-    y: i32,
+use crossterm::{
+    cursor::{Hide, MoveTo, Show},
+    event::{self, Event, KeyCode, KeyEventKind, KeyModifiers},
+    execute,
+    style::{Color, Print, SetForegroundColor},
+    terminal::{disable_raw_mode, enable_raw_mode, Clear, ClearType},
+    ExecutableCommand, QueueableCommand,
+};
+use std::io::{stdout, Write};
+
+enum Action {
+    Quit,
+    Move(i16, i16),
 }
 
-fn main() {
-    let width = 40;
-    let height = 25;
+fn handle_ev(ev: Event) -> Option<Action> {
+    if let Event::Key(key) = ev {
+        if key.kind == KeyEventKind::Press {
+            if key.code == KeyCode::Char('q') && key.modifiers.contains(KeyModifiers::CONTROL) {
+                Some(Action::Quit)
+            } else {
+                match key.code {
+                    KeyCode::Char('k') => Some(Action::Move(0, -1)),
+                    KeyCode::Char('j') => Some(Action::Move(0, 1)),
+                    KeyCode::Char('h') => Some(Action::Move(-1, 0)),
+                    KeyCode::Char('l') => Some(Action::Move(1, 0)),
+                    _ => None
+                }
+            }
+        } else {
+            None
+        }
+    } else {
+        None
+    }
+}
 
-    let p = Player {
-        x: width / 2,
-        y: height / 2,
+struct Player {
+    x: u16,
+    y: u16,
+}
+
+fn main() -> std::io::Result<()> {
+    let mut stdout = stdout();
+    enable_raw_mode()?;
+    stdout.execute(Hide)?;
+    stdout.execute(Clear(ClearType::All))?;
+
+    let mut p = Player {
+        x: 10,
+        y: 5,
     };
 
-    for y in -1..=height {
-        for x in -1..=width {
-            if x == -1 && y == -1 {
-                print!("+");
-            } else if x == width && y == -1 {
-                print!("+");
-            } else if x == -1 && y == height {
-                print!("+");
-            } else if x == width && y == height {
-                print!("+");
-            } else if x == -1 || x == width {
-                print!("|");
-            } else if y == -1 || y == height {
-                print!("—");
-            } else if x == p.x && y == p.y {
-                print!("@");
-            } else {
-                print!(".");
+    'game: loop {
+        stdout.queue(MoveTo(0, 0))?;
+        stdout.queue(Clear(ClearType::All))?;
+        stdout.queue(MoveTo(p.x, p.y))?;
+        stdout.queue(SetForegroundColor(Color::Red))?;
+        stdout.queue(Print('@'))?;
+        stdout.flush()?;
+
+        if let Some(act) = handle_ev(event::read()?) {
+            match act {
+                Action::Quit => break 'game,
+                Action::Move(dx, dy) => {
+                    p.x = (p.x as i16 + dx) as u16;
+                    p.y = (p.y as i16 + dy) as u16;
+                },
             }
         }
-        print!("\n");
     }
+
+    disable_raw_mode()?;
+    stdout.execute(Show)?;
+    stdout.execute(MoveTo(0,0))?;
+    stdout.execute(Clear(ClearType::All))?;
+    Ok(())
 }
