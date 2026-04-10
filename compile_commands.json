@@ -1,56 +1,91 @@
 [
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/move.c.o", "src/move.c"],
-  "file": "src/move.c"
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/skfantasy/linux/arm64/release/src/main.c.o", "src/main.c"],
+  "file": "src/main.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/map.c.o", "src/map.c"],
-  "file": "src/map.c"
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/oldard1/linux/arm64/release/oldard1/colors.c.o", "oldard1/colors.c"],
+  "file": "oldard1/colors.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/noise.c.o", "src/noise.c"],
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/oldard1/linux/arm64/release/oldard1/draw.c.o", "oldard1/draw.c"],
+  "file": "oldard1/draw.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/oldard1/linux/arm64/release/oldard1/main.c.o", "oldard1/main.c"],
+  "file": "oldard1/main.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/oldard1/linux/arm64/release/oldard1/entity.c.o", "oldard1/entity.c"],
+  "file": "oldard1/entity.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/oldard1/linux/arm64/release/oldard1/game.c.o", "oldard1/game.c"],
+  "file": "oldard1/game.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/oldard1/linux/arm64/release/oldard1/map.c.o", "oldard1/map.c"],
+  "file": "oldard1/map.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/oldard1/linux/arm64/release/oldard1/noise.c.o", "oldard1/noise.c"],
+  "file": "oldard1/noise.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/oldard3/linux/arm64/release/oldard3/engine.c.o", "oldard3/engine.c"],
+  "file": "oldard3/engine.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/oldard3/linux/arm64/release/oldard3/level.c.o", "oldard3/level.c"],
+  "file": "oldard3/level.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/oldard3/linux/arm64/release/oldard3/main.c.o", "oldard3/main.c"],
+  "file": "oldard3/main.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/core/linux/arm64/release/src/noise.c.o", "src/noise.c"],
   "file": "src/noise.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/draw.c.o", "src/draw.c"],
-  "file": "src/draw.c"
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/core/linux/arm64/release/src/util.c.o", "src/util.c"],
+  "file": "src/util.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/creature.c.o", "src/creature.c"],
-  "file": "src/creature.c"
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/oldard2/linux/arm64/release/oldard2/colors.c.o", "oldard2/colors.c"],
+  "file": "oldard2/colors.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/engine.c.o", "src/engine.c"],
-  "file": "src/engine.c"
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/oldard2/linux/arm64/release/oldard2/main.c.o", "oldard2/main.c"],
+  "file": "oldard2/main.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/math.c.o", "src/math.c"],
-  "file": "src/math.c"
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/oldard2/linux/arm64/release/oldard2/entity.c.o", "oldard2/entity.c"],
+  "file": "oldard2/entity.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/modes/generate.c.o", "src/modes/generate.c"],
-  "file": "src/modes/generate.c"
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/oldard2/linux/arm64/release/oldard2/game.c.o", "oldard2/game.c"],
+  "file": "oldard2/game.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/modes/start.c.o", "src/modes/start.c"],
-  "file": "src/modes/start.c"
-},
-{
-  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/modes/play.c.o", "src/modes/play.c"],
-  "file": "src/modes/play.c"
-},
-{
-  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-O0", "-std=c11", "-Iinclude", "-o", "build/.objs/skfantasy/linux/armv7a/debug/src/main.c.o", "src/main.c"],
-  "file": "src/main.c"
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include", "-DNDEBUG", "-o", "build/.objs/oldard2/linux/arm64/release/oldard2/level.c.o", "oldard2/level.c"],
+  "file": "oldard2/level.c"
 }]
