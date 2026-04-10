@@ -8,8 +8,12 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, Clear, ClearType},
     ExecutableCommand, QueueableCommand,
 };
+use noise::{
+    Noise::{Fbm, Simplex, Value, Perlin},
+    DEFAULT_FBM_PARAMS,
+};
 use rayon::prelude::*;
-use std::io::{stdout, Write};
+use std::io::{stdout, Stdout, Write};
 
 enum Action {
     Quit,
@@ -51,6 +55,7 @@ enum Tile {
     Mountain,
 }
 
+#[derive(Clone)]
 struct World {
     width: usize,
     height: usize,
@@ -59,16 +64,20 @@ struct World {
 
 impl World {
     fn generate(width: usize, height: usize) -> Self {
-        let ns = noise::Noise::Fbm(&noise::Noise::Simplex, noise::DEFAULT_FBM_PARAMS);
+        let mut ps = DEFAULT_FBM_PARAMS;
+        ps.octaves = 10;
+        ps.amplitude = 64.0;
+        let ns = Fbm(&Simplex, ps);
         let tiles: Vec<Tile> =
             (0..(width*height))
             .into_par_iter()
             .map(|idx| {
                 let x = idx % width;
                 let y = idx / width;
-                let nx = x as f32 / 32.0 - 0.5;
+                let nx = x as f32 / 64.0 - 0.5;
                 let ny = y as f32 / 32.0 - 0.5;
-                let e = ns.get2d(nx, ny) * 0.5 + 0.5;
+                let e = (ns.get2d(nx, ny) + 1.0) * 0.5;
+                let e = (e * 1.5).powf(1.3);
                 if e < 0.45 {
                     Tile::Water
                 } else if e < 0.5 {
@@ -81,6 +90,25 @@ impl World {
             })
             .collect();
         Self { width, height, tiles }
+    }
+
+    fn render(self, stdout: &mut Stdout) -> std::io::Result<()> {
+        for (idx, &e) in self.tiles.iter().enumerate() {
+            let x = idx % self.width;
+            let y = idx / self.width;
+            let x = x as u16;
+            let y = y as u16;
+            stdout.queue(MoveTo(x, y))?;
+            let (color, ch) = match e {
+                Tile::Water => (Color::Blue, '7'),
+                Tile::Sand => (Color::Yellow, '~'),
+                Tile::Grass => (Color::Green, ','),
+                Tile::Mountain => (Color::White, '^'),
+            };
+            stdout.queue(SetForegroundColor(color))?;
+            stdout.queue(Print(ch))?;
+        }
+        Ok(())
     }
 }
 
@@ -100,21 +128,7 @@ fn main() -> std::io::Result<()> {
     'game: loop {
         stdout.queue(MoveTo(0, 0))?;
         stdout.queue(Clear(ClearType::All))?;
-        for (idx, &e) in w.tiles.iter().enumerate() {
-            let x = idx % w.width;
-            let y = idx / w.width;
-            let x = x as u16;
-            let y = y as u16;
-            stdout.queue(MoveTo(x, y))?;
-            let (color, ch) = match e {
-                Tile::Water => (Color::Blue, '7'),
-                Tile::Sand => (Color::Yellow, '~'),
-                Tile::Grass => (Color::Green, ','),
-                Tile::Mountain => (Color::White, '^'),
-            };
-            stdout.queue(SetForegroundColor(color))?;
-            stdout.queue(Print(ch))?;
-        }
+        w.clone().render(&mut stdout)?;
         stdout.queue(MoveTo(p.x, p.y))?;
         stdout.queue(SetForegroundColor(Color::Red))?;
         stdout.queue(Print('@'))?;

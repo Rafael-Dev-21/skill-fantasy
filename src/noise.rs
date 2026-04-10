@@ -59,7 +59,7 @@ impl Noise<'_> {
     }
 
     pub fn smoother(t: f32) -> f32 {
-        (t * (t * 6.0 - 15.0) + 1.0) * t * t * t
+        (t * (t * 6.0 - 15.0) + 10.0) * t * t * t
     }
 
     pub fn norm(v: f32, mn: f32, mx: f32) -> f32 {
@@ -158,18 +158,9 @@ impl Noise<'_> {
         let x2 = x0 - 1.0 + 2.0 * G2;
         let y2 = y0 - 1.0 + 2.0 * G2;
 
-        let gi0 = Vec2 {
-            x: i as f32,
-            y: j as f32,
-        };
-        let gi1 = Vec2 {
-            x: (i+i1) as f32,
-            y: (j+j1) as f32,
-        };
-        let gi2 = Vec2 {
-            x: (i+1) as f32,
-            y: (j+1) as f32,
-        };
+        let gi0 = Self::grad2d(i, j);
+        let gi1 = Self::grad2d(i+i1, j+j1);
+        let gi2 = Self::grad2d(i+1, j+1);
 
         let t0 = 0.5 - x0 * x0 - y0 * y0;
         let n0 = if t0 < 0.0 {
