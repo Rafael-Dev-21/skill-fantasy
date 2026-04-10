@@ -6,3 +6,4 @@ edition = "2024"
 [dependencies]
 crossterm = "0.29.0"
 rand = "0.10.0"
+rayon = "1.11.0"
