@@ -13,7 +13,10 @@ use noise::{
     DEFAULT_FBM_PARAMS,
 };
 use rayon::prelude::*;
-use std::io::{stdout, Stdout, Write};
+use std::{
+    io::{stdout, Stdout, Write},
+    thread, time,
+};
 
 enum Action {
     Quit,
@@ -92,21 +95,28 @@ impl World {
         Self { width, height, tiles }
     }
 
-    fn render(self, stdout: &mut Stdout) -> std::io::Result<()> {
-        for (idx, &e) in self.tiles.iter().enumerate() {
-            let x = idx % self.width;
-            let y = idx / self.width;
-            let x = x as u16;
-            let y = y as u16;
-            stdout.queue(MoveTo(x, y))?;
-            let (color, ch) = match e {
-                Tile::Water => (Color::Blue, '7'),
-                Tile::Sand => (Color::Yellow, '~'),
-                Tile::Grass => (Color::Green, ','),
-                Tile::Mountain => (Color::White, '^'),
-            };
-            stdout.queue(SetForegroundColor(color))?;
-            stdout.queue(Print(ch))?;
+    fn render(self, stdout: &mut Stdout, cam_x: u16, cam_y: u16) -> std::io::Result<()> {
+        let commands: Vec<(u16, u16, Color, char)> = (0..(45*20))
+            .into_par_iter()
+            .map(|idx| {
+                let x = idx % 45;
+                let y = idx / 45;
+                let x = x as u16;
+                let y = y as u16;
+                let idx =  (cam_x + x) as usize + (cam_y + y) as usize * self.width;
+                let (color, ch) = match self.tiles[idx] {
+                    Tile::Water => (Color::Blue, '7'),
+                    Tile::Sand => (Color::Yellow, '~'),
+                    Tile::Grass => (Color::Green, ','),
+                    Tile::Mountain => (Color::White, '^'),
+                };
+                (x, y, color, ch)
+            })
+            .collect();
+        for (x, y, color, ch) in commands.iter() {
+            stdout.queue(MoveTo(*x, *y))?;
+            stdout.queue(SetForegroundColor(*color))?;
+            stdout.queue(Print(*ch))?;
         }
         Ok(())
     }
@@ -119,17 +129,17 @@ fn main() -> std::io::Result<()> {
     stdout.execute(Clear(ClearType::All))?;
 
     let mut p = Player {
-        x: 10,
-        y: 5,
+        x: 512,
+        y: 512,
     };
 
-    let mut w = World::generate(80, 15);
+    let mut w = World::generate(1024, 1024);
 
     'game: loop {
         stdout.queue(MoveTo(0, 0))?;
         stdout.queue(Clear(ClearType::All))?;
-        w.clone().render(&mut stdout)?;
-        stdout.queue(MoveTo(p.x, p.y))?;
+        w.clone().render(&mut stdout, p.x - 22, p.y - 10)?;
+        stdout.queue(MoveTo(22, 10))?;
         stdout.queue(SetForegroundColor(Color::Red))?;
         stdout.queue(Print('@'))?;
         stdout.flush()?;
@@ -143,6 +153,8 @@ fn main() -> std::io::Result<()> {
                 },
             }
         }
+
+        thread::sleep(time::Duration::from_millis(15));
     }
 
     disable_raw_mode()?;
