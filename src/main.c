@@ -194,6 +194,28 @@ void DrawMap(void)
   }
 }
 
+void Load(char file)
+{
+  char fn[32] = {0};
+  snprintf(fn, 31, "%c.sav", file);
+  FILE *pF = fopen(fn, "rb");
+  if (pF == NULL)
+    return;
+  fread(&S, sizeof(S), 1, pF);
+  fclose(pF);
+}
+
+void Save(char file)
+{
+  char fn[32] = {0};
+  snprintf(fn, 31, "%c.sav", file);
+  FILE *pF = fopen(fn, "wb");
+  if (pF == NULL)
+    return;
+  fwrite(&S, sizeof(S), 1, pF);
+  fclose(pF);
+}
+
 void ProcessNormalInput(int input)
 {
   switch (input) {
@@ -202,6 +224,17 @@ void ProcessNormalInput(int input)
   case 'k':
   case 'l':
     MovePlayer(input);
+    break;
+  case 'w':
+  case 'r': {
+      timeout(-1);
+      char file = getch();
+      timeout(0);
+      if (input == 'w')
+        Save(file);
+      else
+        Load(file);
+    }
     break;
   case 'b':
     S.pmode = 1;
@@ -308,7 +341,7 @@ void GenMap(void)
   float scale = 1/2.0;
   for (int i = 0; i < MAPHEIGHT; i++) {
     for (int j = 0; j < MAPWIDTH; j++) {
-      float hash = Hashf(i*scale, j*scale);
+      float hash = Hashf(Hash(Hash(i*scale, j*scale), 0), 0xF9B31A00);
       if (Diff(hash, 0.9)<0.01) {
         S.map[i][j] = TREE;
       } else if (Diff(hash, 0.8)<0.01) {
