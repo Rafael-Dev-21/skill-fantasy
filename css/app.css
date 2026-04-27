@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap");
+@import url("https://normalize-css.googlecode.com/svn/trunk/normalize.css");
 
 :root {
   --primary-lightest: rgb(110, 121, 119);

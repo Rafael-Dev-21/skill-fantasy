@@ -32,8 +32,8 @@ const states = {
     // do nothing and mop here
   },
   spread({m, w, p}) {
-    let rnx = rng32()&15 - 7 + m.x;
-    let rny = rng32()&15 - 7 + m.y;
+    let rnx = (rng32()&15) - 7 + m.x;
+    let rny = (rng32()&15) - 7 + m.y;
     let r = Point(rnx, rny);
     if (Point.eq(r, p)) return;
     if (w.mobAt(rnx, rny)) return;

@@ -6,10 +6,11 @@ class WORLD {
   constructor() {
     this.tiles = new Array(WORLD_WIDTH * WORLD_HEIGHT).fill(TILE_GRASS);
     this.objs = [];
-    this.player = Player(32, 32, 31);
+    this.player = new Player(32, 32, 31);
+    // Array<{x:int, y:int, state:enum, chooser:enum, health:Health, tasks:Array<Task>, planner:Planner, goals:Array<Goal>, ops:Array<Op>, memory:Map<tick:int, Event}>
     this.mobs = [...new Array(rng32()&15)].map(_ => ({
-        x: rng32()&WORLD_WIDTH-1,
-        y: rng32()&WORLD_HEIGHT-1,
+        x: rng32()&(WORLD_WIDTH-1),
+        y: rng32()&(WORLD_HEIGHT-1),
         state: 'wander',
         chooser: (rng32()%3==0? 'fng' : (rng32()%2==0 ? 'zmb' : 'pig')),
         health: Health(11),
