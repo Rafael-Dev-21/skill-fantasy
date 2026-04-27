@@ -51,6 +51,18 @@ function $click(a, b) {
   });
 }
 
+function $change(a, b) {
+  $(a).addEventListener('change', event => {
+    event.preventDefault();
+    b(event.target.value); 
+  });
+}
+
+/*
+TODO: maybe consider an off() method for security
+TODO: maybe globals aren't a goody idea
+*/
+
 const eventBus = (()=>{
   let events = {};
 

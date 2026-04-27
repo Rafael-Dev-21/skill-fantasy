@@ -1,3 +1,7 @@
+/*
+TODO: the architecture of this game is very confuse and interwined, consider cutting the knot some time in the future.
+*/
+
 const world = new WORLD();
 
 const view = TableView({w: 25, h: 25, world});
@@ -79,6 +83,10 @@ $click('respawn', () => {
   Game.world.player.x = 32;
   Game.world.player.y = 32;
   Game.step();
+});
+
+$change('change-theme', value => {
+  $("world").className = value;
 });
 
 const Saver = (game, bus, localStorage) => {

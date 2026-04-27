@@ -12,13 +12,13 @@ const defineCellLook = (c, w) => {
     c.innerText = "##";
   } else if (w.tiles[c.y * WORLD_WIDTH + c.x] == TILE_GRASS) {
     c.className = "grass";
-    c.innerText = ",,";
+    c.innerText = ",,";/*
     const nx = c.x / 8.0 - 0.5;
     const ny = c.y / 8.0 - 0.5;
     const sampler = val8o(nx, ny)/8.0 - 0.5;
     const sample = (val3d8o(nx, ny, sampler)&127)+128;
     const i = sample;
-    c.style.backgroundColor = `rgb(${i*0.5}, ${i*0.9}, ${i*0.6})`;
+    c.style.backgroundColor = `rgb(${i*0.5}, ${i*0.9}, ${i*0.6})`;*/
   }
 };
 

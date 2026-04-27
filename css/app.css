@@ -1,7 +1,120 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap");
+
+:root {
+  --primary-lightest: rgb(110, 121, 119);
+  --primary-lighter: rgb(88, 100, 98);
+  --primary: rgb(68, 82, 79);
+  --primary-darker: rgb(48, 61, 59);
+  --primary-darkest: rgb(29, 45, 42);
+
+  --secondary-lightest: rgb(116, 120, 126);
+  --secondary-lighter: rgb(93, 97, 105);
+  --secondary: rgb(72, 77, 85);
+  --secondary-darker: rgb(51, 56, 64);
+  --secondary-darkest: rgb(31, 38, 47);
+
+  --alternate-lightest: rgb(190, 184, 174);
+  --alternate-lighter: rgb(158, 151, 138);
+  --alternate: rgb(129, 121, 107);
+  --alternate-darker: rgb(97, 89, 75);
+  --alternate-darkest: rgb(71, 62, 45);
+
+  --compliment-lightest: rgb(190, 180, 174);
+  --compliment-lighter: rgb(158, 147, 138);
+  --compliment: rgb(129, 116, 107);
+  --compliment-darker: rgb(97, 84, 75);
+  --compliment-darkest: rgb(71, 56, 45);
+
+  /* https://pixeljoint.com/forum/forum_posts.asp?TID=12795 */
+  --db-dark: rgb(20, 12, 28);
+  --db-old-blood: rgb(68, 36, 52);
+  --db-deep-water: rgb(48, 52, 109);
+  --db-old-stone: rgb(78, 74, 78);
+  --db-wood: rgb(133, 76, 48);
+  --db-vegetation: rgb(52, 101, 36);
+  --db-blood: rgb(209, 70, 72);
+  --db-stone: rgb(117, 113, 97);
+  --db-water: rgb(89, 125, 206);
+  --db-bright-wood: rgb(210, 125, 44);
+  --db-metal: rgb(133, 149, 161);
+  --db-grass: rgb(109, 170, 44);
+  --db-skin: rgb(210, 170, 153);
+  --db-sky: rgb(109, 194, 202);
+  --db-sun: rgb(218, 212, 94);
+  --db-light: rgb(222, 238, 214);
+}
+
 *, *::before, *::after {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+
+#world {
+  --pig-bg: var(--db-skin);
+  --pig-fg: var(--db-light);
+  --player-bg: var(--db-blood);
+  --player-fg: var(--db-light);
+  --zmb-bg: var(--db-vegetation);
+  --zmb-fg: var(--db-light);
+  --grass-bg: var(--db-grass);
+  --grass-fg: var(--db-light);
+  --wall-bg: var(--db-old-stone);
+  --wall-fg: var(--db-light);
+  --ruler-bg: var(--db-skin);
+  --ruler-fg: var(--db-light);
+  font-family: "press start 2p", "fira code", "Courier New", Courier, monospace;
+}
+
+#world.theme-winter {
+  --pig-bg: var(--db-skin);
+  --pig-fg: var(--db-light);
+  --player-bg: var(--db-blood);
+  --player-fg: var(--db-light);
+  --zmb-bg: var(--db-vegetation);
+  --zmb-fg: var(--db-light);
+  --grass-bg: var(--db-sky);
+  --grass-fg: var(--db-light);
+  --wall-bg: var(--db-old-stone);
+  --wall-fg: var(--db-light);
+  --ruler-bg: var(--db-skin);
+  --ruler-fg: var(--db-light);
+}
+
+#world.theme-hell {
+  --pig-bg: var(--db-skin);
+  --pig-fg: var(--db-light);
+  --player-bg: var(--db-blood);
+  --player-fg: var(--db-light);
+  --zmb-bg: var(--db-vegetation);
+  --zmb-fg: var(--db-light);
+  --grass-bg: var(--db-old-stone);
+  --grass-fg: var(--db-light);
+  --wall-bg: var(--db-old-stone);
+  --wall-fg: var(--db-light);
+  --ruler-bg: var(--db-skin);
+  --ruler-fg: var(--db-light);
+}
+
+#world.theme-swamp {
+  --pig-bg: var(--db-skin);
+  --pig-fg: var(--db-light);
+  --player-bg: var(--db-blood);
+  --player-fg: var(--db-light);
+  --zmb-bg: var(--db-vegetation);
+  --zmb-fg: var(--db-light);
+  --grass-bg: var(--db-deep-water);
+  --grass-fg: var(--db-light);
+  --wall-bg: var(--db-old-stone);
+  --wall-fg: var(--db-light);
+  --ruler-bg: var(--db-skin);
+  --ruler-fg: var(--db-light);
+}
+
+#controls {
+  font-family: "fira code", "Courier New", Courier, monospace;
+  width: 10rem;
 }
 
 table, .mono {
@@ -16,28 +129,29 @@ td, th {
   vertical-align: middle;
 }
 .player {
-  background-color: red;
-  color: yellow;
+  background-color: var(--player-bg);
+  color: var(--player-fg);
 }
 .grass {
-  background-color: green;
-  color: yellow;
+  background-color: var(--grass-bg);
+  color: var(--grass-fg);
 }
 .wall {
-  background-color: darkgray;
-  color: gray;
+  background-color: var(--wall-bg);
+  color: var(--wall-fg);
 }
 .ruler {
-  background-color: lightgray;
+  background-color: var(--ruler-bg);
+  color: var(--ruler-fg);
 }
 
 .zmb {
-  background-color: lime;
-  color: cyan;
+  background-color: var(--zmb-bg);
+  color: var(--zmb-fg);
 }
 .pig {
-  background-color: pink;
-  color: white;
+  background-color: var(--pig-bg);
+  color: var(--pig-fg);
 }
 
 #world {
