@@ -8,7 +8,7 @@ else
   add_packages("ncurses")
 end
 
-set_languages("c99")
+set_languages("gnu99")
 
 target("core")
   set_kind("static")

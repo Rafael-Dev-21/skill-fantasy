@@ -33,7 +33,10 @@ struct state {
   int pmode;
   struct resources pres;
   int map[MAPHEIGHT][MAPWIDTH];
+  int vis[MAPHEIGHT][MAPWIDTH];
 };
+
+void UpdVis(void);
 
 struct state S;
 
@@ -81,6 +84,7 @@ void MovePlayer(int input)
     S.py--;
   if (input == 'l' && S.px < MAPWIDTH-1)
     S.px++;
+	UpdVis();
 }
 
 void BreakTile(int py, int px)
@@ -96,6 +100,7 @@ void BreakTile(int py, int px)
       S.pres.food += Hash(py, px)%3+1;
       S.pres.wood += Hash(py, px)%3+1;
     }
+		UpdVis();
   }
 }
 
@@ -105,6 +110,7 @@ void PlaceWall(int py, int px)
   if (tile == 0 && S.pres.wood >= 2) {
     S.map[py][px] = 2;
     S.pres.wood -= 2;
+		UpdVis();
   }
 }
 
@@ -118,9 +124,11 @@ void CollectTile(int py, int px)
     } else {
       S.pres.stone++;
     }
+		UpdVis();
   } else if (tile == BUSH) {
     S.pres.food += Hash(py, px)%2;
     S.pres.wood += Hash(py, px)%3==0;
+		UpdVis();
   }
 }
 
@@ -162,15 +170,6 @@ void DrawTile(int tile, int y, int x)
 {
   static const char tile_chars[] = ".T#o/O*";
   static const int tclen = (sizeof(tile_chars)-1)/sizeof(char);
-  /*
-  int c = ' ';
-  if (tile == GRASS) c = '.';
-  if (tile == TREE) c = 'T';
-  if (tile == WALL) c = '#';
-  if (tile == PEBBLE) c = 'o';
-  if (tile == STICK) c = '/';
-  if (tile == ROCK) c = 'O';
-  if (tile == BUSH) c = '*';*/
   int c = (tile < 0 || tile >= tclen) ? ' ' : tile_chars[tile];
   mvaddch(y, x, c);
 }
@@ -185,7 +184,7 @@ void DrawMap(void)
     for (int j = 0; j < COLS/2; j++) {
       int mapx = j + S.px - rx;
       int mapy = i + S.py - ry;
-      if (mapx<0||mapy<0||mapx>=MAPWIDTH||mapy>=MAPHEIGHT) {
+      if (mapx<0||mapy<0||mapx>=MAPWIDTH||mapy>=MAPHEIGHT || !S.vis[mapy][mapx]) {
         mvaddch(i, j*2, ' ');
         continue;
       }
@@ -357,13 +356,84 @@ void GenMap(void)
   }
 }
 
+void CastLight(struct state *s, int angle, int radius) {
+  static const char tile_trprn[] = { 1, 0, 0, 1, 1, 0, 0};
+  static const int ttlen = sizeof(tile_trprn)/sizeof(char);
+  int dx = angle;
+	int dy = angle + 256;
+	if (dy > 512) {
+		dy = -512 + (dy - 512);
+	}
+
+	if (dx > 256) {
+		dx = 512 - dx;
+	}
+	if (dx < -256) {
+		dx = -512 - dx;
+	}
+	if (dy > 256) {
+		dy = 512 - dy;
+	}
+	if (dy < -256) {
+		dy = -512 - dy;
+	}
+
+	int mx = s->px;
+	int my = s->py;
+
+	int mr = radius * radius;
+
+	long long int sdx, sdy;
+
+	int ddx = !dx ? 0xFFFF : MAX(0xFFFF/dx, 0xFFFF/-dx);
+	int ddy = !dy ? 0xFFFF : MAX(0xFFFF/dy, 0xFFFF/-dy);
+	int pwd = 0;
+
+	int sx, sy;
+	sdx = 0; sdy = 0;
+	sx = dx == 0 ? 0 : (dx < 0 ? -1 : 1);
+	sy = dy == 0 ? 0 : (dy < 0 ? -1 : 1);
+
+	while (pwd < mr) {
+		{
+			int mdx = mx - s->px;
+			int mdy = my - s->py;
+			pwd = mdx * mdx + mdy * mdy;
+		}
+		if (sdx < sdy) {
+			sdx += ddx;
+			mx += sx;
+		} else {
+			sdy += ddy;
+			my += sy;
+		}
+		if (mx < 0 || my < 0 || MAPWIDTH < mx || MAPHEIGHT < my)
+			break;
+		s->vis[my][mx] = 1;
+		int t = s->map[my][mx];
+		if (t < 0 || t >= ttlen || !tile_trprn[t])
+			break;
+	}
+}
+ 
+void UpdVis(void) {
+	memset(S.vis, 0, sizeof(S.vis));
+	S.vis[S.py][S.px] = 1;
+	for (int i = 0; i < MAPWIDTH; i++) {
+		int angle = 1024 * i / MAPWIDTH - 512;
+		CastLight(&S, angle, 8);
+	}
+}
+
 void InitState(void)
 {
   S.px = 32;
   S.py = 32;
   S.pmode = 0;
   memset(S.map, 0, sizeof(S.map));
+  memset(S.vis, 0, sizeof(S.vis));
   GenMap();
+  UpdVis();
 }
 
 int main(void)
