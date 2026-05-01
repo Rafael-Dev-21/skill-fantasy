@@ -1,7 +1,7 @@
 #include <math.h>
 
 #include "noise.h"
-#include "mymath.h"
+#include "util.h"
 
 #ifndef M_PI
 #define M_PI 3.1415926535897
@@ -16,11 +16,11 @@ FBMParams default_fbm = {
 	perlin2d
 };
 
-static Vec2 grad(int ix, int iy)
+static v2 grad(int ix, int iy)
 {
 	float angle = hash_posf(ix, iy) * (M_PI * 2.0);
 
-	Vec2 ret;
+	v2 ret;
 
 	ret.x = cos(angle);
 	ret.y = sin(angle);
@@ -54,22 +54,22 @@ float perlin2d(float x, float y)
 	float u = smoother(fx);
 	float v = smoother(fy);
 
-	Vec2 g1 = grad(ix, iy);
-	Vec2 g2 = grad(ix + 1, iy);
-	Vec2 g3 = grad(ix, iy + 1);
-	Vec2 g4 = grad(ix + 1, iy + 1);
+	v2 g1 = grad(ix, iy);
+	v2 g2 = grad(ix + 1, iy);
+	v2 g3 = grad(ix, iy + 1);
+	v2 g4 = grad(ix + 1, iy + 1);
 
-	Vec2 d1 = {fx, fy};
-	Vec2 d2 = {fx - 1, fy};
-	Vec2 d3 = {fx, fy - 1};
-	Vec2 d4 = {fx - 1, fy - 1};
+	v2 d1 = {fx, fy};
+	v2 d2 = {fx - 1, fy};
+	v2 d3 = {fx, fy - 1};
+	v2 d4 = {fx - 1, fy - 1};
 
 	float n0, n1, x0, x1, value;
-	n0 = dot(g1, d1);
-	n1 = dot(g2, d2);
+	n0 = v2_dot(g1, d1);
+	n1 = v2_dot(g2, d2);
 	x0 = lerp(n0, n1, u);
-	n0 = dot(g3, d3);
-	n1 = dot(g4, d4);
+	n0 = v2_dot(g3, d3);
+	n1 = v2_dot(g4, d4);
 	x1 = lerp(n0, n1, u);
 	value = lerp(x0, x1, v);
 	return value;
@@ -104,20 +104,20 @@ float simplex2d(float x, float y)
 	float x2 = x0 - 1.0 + 2.0 * G2;
 	float y2 = y0 - 1.0 + 2.0 * G2;
 
-	Vec2 gi0 = grad(i, j);
-	Vec2 gi1 = grad(i + i1, j + j1);
-	Vec2 gi2 = grad(i + 1, j + 1);
+	v2 gi0 = grad(i, j);
+	v2 gi1 = grad(i + i1, j + j1);
+	v2 gi2 = grad(i + 1, j + 1);
 
-	Vec2 v0 = {x0, y0};
-	Vec2 v1 = {x1, y1};
-	Vec2 v2 = {x2, y2};
+	v2 v0 = {x0, y0};
+	v2 v1 = {x1, y1};
+	v2 v2 = {x2, y2};
 
 	float t0 = 0.5 - x0*x0-y0*y0;
 	if (t0<0) {
 		n0 = 0.0;
 	} else {
 		t0 *= t0;
-		n0 = t0 * t0 * dot(gi0, v0);
+		n0 = t0 * t0 * v2_dot(gi0, v0);
 	}
 
 	float t1 = 0.5 - x1*x1-y1*y1;
@@ -125,7 +125,7 @@ float simplex2d(float x, float y)
 		n1 = 0.0;
 	} else {
 		t1 *= t1;
-		n1 = t1 * t1 * dot(gi1, v1);
+		n1 = t1 * t1 * v2_dot(gi1, v1);
 	}
 
 	float t2 = 0.5 - x2*x2-y2*y2;
@@ -133,7 +133,7 @@ float simplex2d(float x, float y)
 		n2 = 0.0;
 	} else {
 		t2 *= t2;
-		n2 = t2 * t2 * dot(gi2, v2);
+		n2 = t2 * t2 * v2_dot(gi2, v2);
 	}
 
 	return 70.0 * (n0 + n1 + n2);
