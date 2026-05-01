@@ -1,13 +1,36 @@
 #pragma once
 
-#include "handlevector.hh"
-#include "xorshift.hh"
-#include "geom.hh"
-#include "ui.hh"
+#include "../core/handlevector.hh"
+#include "../core/xorshift.hh"
+#include "../core/geom.hh"
+#include "object.hh"
+#include "world.hh"
+#include "inventory.hh"
+//#include "ui.hh"
 
 #include <algorithm>
 #include <functional>
 #include <chrono>
+
+struct Game {
+  enum class Mode {
+    Normal,
+    Visual,
+    InvMenu
+  } mode = Mode::Normal;
+  World world;
+  Selection selection;
+
+  Game(const Pt& p) :
+    world(p) {}
+
+  void placeMark(int x, int y) { selection.placeMark(world, x, y); }
+  void placeCursor(int x, int y) { selection.placeCursor(world, x, y); }
+  void clearMark() { selection.clearMark(world); }
+  void clearCursorAndMark() { selection.clearCursorAndMark(world); }
+};
+
+/*
 
 using ObjectHandle = Handle;
 
@@ -238,3 +261,6 @@ public:
     return true;
   }
 };
+*/
+
+#endif
