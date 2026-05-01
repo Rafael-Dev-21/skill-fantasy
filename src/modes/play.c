@@ -1,4 +1,5 @@
 #include "skfantasy.h"
+#include "../api/guile_api.h"
 
 #define BLOCK_LENGTH 10
 
@@ -50,6 +51,8 @@ int play_mode(ModeData *data)
 	draw_world(data->world, data->player->position);
 
 	print_instructions();
+  skfantasy_api_guile_update(data->world, data->player);
+
 	print_creature_stats(data->player, COLS-BLOCK_LENGTH-1, 0);
 
 	int ch = getch();
