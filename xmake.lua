@@ -8,17 +8,19 @@ else
   add_packages("ncurses")
 end
 
-set_languages("gnu99")
-
-target("core")
-  set_kind("static")
-  add_files("src/noise.c", "src/util.c")
 
 target("skfantasy")
   set_kind("binary")
-  add_files("src/main.c")
-  add_deps("core")
+  add_files("src/**.c")
+  add_includedirs("include")
+  set_languages("c99")
   if is_plat("mingw") then
     add_ldflags("-static-libgcc", "-static-libc++")
   end
-target_end()
+  after_build(function(target)
+    os.cp("$(projectdir)/data", "$(builddir)/$(plat)/$(arch)/$(mode)")
+    os.cp("$(projectdir)/scripts", "$(builddir)/$(plat)/$(arch)/$(mode)")
+    os.cp("$(projectdir)/version.txt", "$(builddir)/$(plat)/$(arch)/$(mode)")
+  end)
+  add_syslinks("guile-3.0")
+
