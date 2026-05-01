@@ -1,0 +1,175 @@
+- Renderizar Tilemap baseado no Level
+- Level 128x128 de Tiles
+- Z-Layer
+- Movimentação por Grid
+- Movimentação Floating-Point
+- Movimentação Momentum
+- Movimentação Dot-Product
+- Movimentação Quake-like/Mario-like
+- Fov cônico
+- Progressão por eras
+    - pedra lascada
+    - pedra polida
+    - bronze
+    - ferro
+    - aço
+    - medievo
+    - moderna
+    - contemp.
+    - espaço
+- Modo Livre
+- Modo survival
+- Modo creative
+- Modo tribe
+- Modo fortress
+- Modo adventure
+- Modo spectator
+- Enciclopédia
+- Tooltips
+- Luzes
+- Fogueira
+- Metalurgia
+    - Cobre
+    - Estanho
+    - Chumbo
+    - Ouro
+    - Prata
+    - Electro
+    - Bronze
+    - Latão
+    - Zinco
+    - Ferro
+    - Aço
+    - Siderita
+    - Estrelita
+- Obsidiana
+- Giz
+- Espelhos
+    - Com vetor normal
+    - Espelho "reflete", expandindo o FOV em relação a seu tamanho e seu normal
+- Coletar pedras
+- Pegar, lançar, soltar objetos
+- Colidir pedras para lascar
+- Colidir pedras e gravetos
+- Crafting in world
+- Audio global e audio posicional
+- Seen que congela o visual fora de fov como visto da última vez
+- Grappling
+- Boxing
+- Faca
+- Lança
+- Muros
+- Porta
+- Tenda
+- Comida
+- Arbustos com frutas
+    - cranberry
+    - blueberry
+    - blackberry
+    - cherry
+    - strawberry
+    - raspberry
+    - gooseberry
+- Cogumelos que se espalham
+- Biomas
+- Fogo espalha
+- Explosivos
+- Barra de vida
+- Lebres
+- Lobos
+- Domesticar lobos com carne
+- Bandido
+- Bandido invade base do jogador enquanto ele dorme, o acordando no meio da noite
+- Usar urina para craftar explosivos e fósforo
+- Usar guano para fertilizantes e explosivos
+- Usar esterco para craftar fertilizantes, explosivos e curtir couro
+- Defumar carne
+- Assar carne
+- Desidratar carne
+- Cervo
+- Vaca
+- Porco
+- Galinha
+- Pato
+- Javali
+- Búfalo 
+- Bisão
+- Gnu
+- Trigo
+- Cevada
+- Aveia
+- Sal
+- Cana de açúcar
+- Mel
+- Abelhas
+- Cenouras
+- Batatas
+- Tomates
+- Pimentas
+- Sistema de janelas
+- Renderer OpenGL ES
+- Genética
+- Robôs com espaço de cartuchos de 40b reprogramaveis
+- Computadores
+- Transístor
+- Portões lógicos
+- Pistão
+- Quasiconectividade
+- Ejetor
+- Disparador
+- Funil
+- Baú 
+- Barril
+- Caldeirão
+- Brewing de bebidas (sucos, cerveja, ale, café, vinho)
+- Fermento
+- Pão
+- Gatos
+- Hamsters
+- Engine:
+  - Componentes (como "version2")
+  - Real time
+  - Ticking
+  - Timers
+  - Loop estável de update
+  - Talvez concorrência
+  - Serialização
+    - Save e Load
+- Mecanic:
+  - Construção
+  - Coleta de Recursos
+  - Revisar sistema de estatísticas, talvez como componentes (Health, Attack, Defense, Speed+Velocity, Special/Extra/alguma coisa para coisas especiais)
+    - Apesar de 5 stats, apenas Health é um recurso. Sem stamina, sem hunger, sem thirst, porque eu não gosto dessas mecânicas. Comida recupera vida
+  - Crafting
+  - Spread
+- Level:
+  - Chunking
+  - Biomas
+    - Mapa de umidade
+    - Mapa de temperatura
+    - Floresta
+    - Tundra
+    - Deserto
+    - Grassland
+    - Pântano
+    - Savana
+    - Taiga
+    - Shrubland
+    - Fungi camps
+  - Ciclo de dia e noite
+  - Ciclo de clima
+- Creature:
+  - Lebres
+  - Lobos
+  - Bandidos
+  - Caçador
+  - Coletor
+  - Cuidador
+  - Criança
+- QoL:
+  - Streamlined vim like controls
+  - better UI
+  - better UX
+  - better controls
+    - better building/breaking controls
+      - at least less clunky
