@@ -17,13 +17,14 @@ end
 
 target("skfantasy")
   set_kind("binary")
-  add_files("src/**.c")
+  add_files("src/*.c", "src/creatures/*.c", "src/modes/*.c")
   add_includedirs("include")
   set_languages("c99")
   if is_plat("mingw") then
     add_ldflags("-static-libgcc", "-static-libc++")
     add_packages("guile-3.0")
     add_defines("USE_GUILE")
+    add_files("src/api/guile_api.c")
   end
   after_build(function(target)
     os.cp("$(projectdir)/data", "$(builddir)/$(plat)/$(arch)/$(mode)")

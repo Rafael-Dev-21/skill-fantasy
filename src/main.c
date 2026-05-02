@@ -6,7 +6,9 @@
 #include <stdlib.h>
 
 #include "skfantasy.h"
+#ifdef USE_GUILE
 #include "api/guile_api.h"
+#endif
 
 TileType tile_types[TILE_COUNT] = {
 	{ ' ', 1 },
@@ -37,7 +39,9 @@ int main(int argc, char *argv[])
 	int mode = 0;
 
 	init_curses();
+#ifdef USE_GUILE
   skfantasy_api_guile_init();
+#endif
 	while (mode != -1) {
 		switch (mode) {
 		case 0:
