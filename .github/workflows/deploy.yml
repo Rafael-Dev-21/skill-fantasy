@@ -19,9 +19,13 @@ jobs:
       - name: Install Mingw
         run: |
           sudo apt-get install mingw-w64
+      - name: Install Guile
+        run: |
+          sudo apt-get install guile-3.0
       - name: Build Linux
         run: |
-          ./build.sh
+          xmake f -p linux -a x86_64
+          xmake build
       - name: Deploy Linux to Itch.io
         uses: manleydev/butler-publish-itchio-action@master
         env:
@@ -29,7 +33,7 @@ jobs:
           CHANNEL: linux
           ITCH_GAME: skill-fantasy
           ITCH_USER: rafael-dev-21
-          PACKAGE: linux_pkg
+          PACKAGE: build/linux/x86_64/release
           VERSION_FILE: version.txt
       - name: Build Windows
         run: |
