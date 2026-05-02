@@ -1,5 +1,7 @@
 #include "skfantasy.h"
+#ifdef USE_GUILE
 #include "../api/guile_api.h"
+#endif
 
 #define BLOCK_LENGTH 10
 
@@ -48,10 +50,27 @@ int play_mode(ModeData *data)
 		it = it->next;
 	}
 
+  it = data->world->creatures;
+	while (it != NULL) {
+	  int ohrt = get_stat_value(it, STAT_HRT);
+	  int bohrt = get_base_stat_value(it, STAT_HRT);
+    Creature *next = it->next;
+    if (ohrt < HRT_DEAD(bohrt)) {
+      if (it == data->player) {
+        return 0;
+      }
+		  world_remove(data->world, it);
+		  free_creature(it);
+	  }
+    it = next;
+  }
+
 	draw_world(data->world, data->player->position);
 
 	print_instructions();
+#ifdef USE_GUILE
   skfantasy_api_guile_update(data->world, data->player);
+#endif
 
 	print_creature_stats(data->player, COLS-BLOCK_LENGTH-1, 0);
 

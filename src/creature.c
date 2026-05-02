@@ -107,14 +107,7 @@ void creature_attack(Creature *a, Creature *b, World *world)
 	if (dmg <= 0) {
 		dmg = 1;
 	}
-	apply_modifier(b, STAT_HRT, -dmg);
-	
-	int ohrt = get_stat_value(b, STAT_HRT);
-	int bohrt = get_base_stat_value(b, STAT_HRT);
-	if (ohrt < HRT_DEAD(bohrt)) {
-		world_remove(world, b);
-		free_creature(b);
-	}
+	apply_modifier(b, STAT_HRT, -dmg);	
 }
 
 void creature_default_enter(Creature *creature, World *world, Point cell)
