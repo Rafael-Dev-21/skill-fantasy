@@ -23,12 +23,16 @@ ObjectType obj_types[OBJ_COUNT] = {
 
 int main(int argc, char *argv[])
 {
+#ifndef VERSION
 	ModeData data = {NULL, NULL, {0}};
 
 	FILE *file_version;
 	file_version = fopen("version.txt", "r");
 	fgets(data.version, 256, file_version);
 	fclose(file_version);
+#else
+  ModeData data = {NULL, NULL, VERSION};
+#endif
 
 	int mode = 0;
 
