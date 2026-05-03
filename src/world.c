@@ -159,9 +159,12 @@ void try_toil(World *world, Point cell)
 	if (cell.y < 0) return;
 	if (cell.y >= world->height) return;
 	Tile *t = tile_at(world, cell);
-  if (t->type != TILE_GRASS && t->object != OBJ_NONE)
+  if ((t->type != TILE_GRASS || t->type != TILE_MUD) && t->object != OBJ_NONE)
     return;
-  t->type = TILE_SOIL;
+  if (t->type == TILE_GRASS)
+    t->type = TILE_SOIL;
+  else
+    t->object = OBJ_WHEAT_SEED;
 }
 
 bool is_solid(Tile * tile)
@@ -228,12 +231,62 @@ int world_update(World *w, Creature *p)
     return 1;
   if (p == NULL)
     return 1;
+
+  // MOISTURE UPDATE
+  for (int y = 0; y < w->height; ++y) {
+    for (int x = 0; x < w->width; ++x) {
+      Tile *t = tile_at(w, (Point){x, y}), *t2;
+      if (t->type == TILE_WATER)
+        t->moisture = 32;
+    }
+  }
+  for (int y = 0; y < w->height; ++y) {
+    for (int x = 0; x < w->width; ++x) {
+      Tile *t = tile_at(w, (Point){x, y}), *t2;
+      if (t->type == TILE_WATER) {
+      } else {
+        int i = 0;
+        for (int dy = -1; dy < 2; ++dy)
+          for (int dx = -1; dx < 2; ++dx)
+            if ((dy || dx) && (t2 = tile_at(w, (Point){x+dx, y+dy})))
+              i += t2->moisture;
+        i /= 8;
+        t->moisture = i;
+      }
+    }
+  }
+  // GROWTH UPDATE
+  for (int y = 0; y < w->height; ++y) {
+    for (int x = 0; x < w->width; ++x) {
+      Tile *t = tile_at(w, (Point){x, y});
+      if (obj_types[t->object].grow.enabled)
+        t->growtime += rand()%3;
+      else
+        t->growtime = 0;
+    }
+  }
+  // CHANGE UPDATE
+  for (int y = 0; y < w->height; ++y) {
+    for (int x = 0; x < w->width; ++x) {
+      Tile *t = tile_at(w, (Point){x, y});
+      if (obj_types[t->object].grow.enabled && t->growtime > obj_types[t->object].grow.threshold)
+        t->object = obj_types[t->object].grow.turnto;
+      if (tile_types[t->type].highmoist.enabled && t->moisture > tile_types[t->type].highmoist.threshold)
+        t->type = tile_types[t->type].highmoist.turnto;
+
+      if (tile_types[t->type].lowmoist.enabled && t->moisture < tile_types[t->type].lowmoist.threshold)
+        t->type = tile_types[t->type].lowmoist.turnto;
+    }
+  }
+
+  // CREATURE UPDATES
 	Creature *it = w->creatures;
 	while (it != NULL) {
     creature_update(it, w);
 		it = it->next;
 	}
 
+  // CREATURE DEATHS
   it = w->creatures;
 	while (it != NULL) {
 	  int ohrt = get_stat_value(it, STAT_HRT);

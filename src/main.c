@@ -16,15 +16,16 @@ TileType tile_types[TILE_COUNT] = {
 	{ '~', 4 },
 	{ '7', 5 },
 	{ '.', 9 },
-  { '3', 4 },
-  { '3', 2 },
-  { '1', 12 },
+  { '3', 4, .highmoist = {true, 1, TILE_MUD} },
+  { '3', 2, .lowmoist = {true, 0, TILE_SOIL} },
 };
 
 ObjectType obj_types[OBJ_COUNT] = {
 	{ -1, 0, false, false },
 	{ '#', 8, true, true },
   { '*', 2, false, true },
+  { ',', 12, true, true, .grow = { true, 32, OBJ_WHEAT } },
+  { '1', 12, true, true },
 };
 
 int main(int argc, char *argv[])

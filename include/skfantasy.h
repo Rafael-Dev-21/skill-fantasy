@@ -90,7 +90,6 @@ typedef enum {
 	TILE_STONE,
   TILE_SOIL,
   TILE_MUD,
-  TILE_WHEAT,
 	TILE_COUNT
 } TileId;
 
@@ -98,27 +97,43 @@ typedef enum {
 	OBJ_NONE,
 	OBJ_WALL,
   OBJ_BUSH,
+  OBJ_WHEAT_SEED,
+  OBJ_WHEAT,
 	OBJ_COUNT
 } ObjectId;
 
 typedef struct {
+  bool enabled;
+  int threshold;
+  int turnto;
+} CondValueChange;
+
+typedef struct {
+  bool enabled;
+  TileId turnto;
+} CondChange;
+
+typedef struct {
 	int32_t glyph;
 	int32_t color;
-  bool growable;
-  int growtime;
-  TileId growto;
+  CondValueChange lowmoist;
+  CondValueChange highmoist;
 } TileType;
 
 typedef struct {
 	int32_t glyph;
 	int32_t color;
 	bool solid;
+  // TODO: flammable can be a CondChange?
   bool flammable;
+  CondValueChange grow;
 } ObjectType;
 
 typedef struct {
 	TileId type;
 	ObjectId object;
+  int moisture;
+  int growtime;
 } Tile;
 
 struct World {
