@@ -104,6 +104,9 @@ typedef enum {
 typedef struct {
 	int32_t glyph;
 	int32_t color;
+  bool growable;
+  int growtime;
+  TileId growto;
 } TileType;
 
 typedef struct {
