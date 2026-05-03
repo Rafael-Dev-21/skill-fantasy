@@ -93,6 +93,7 @@ typedef enum {
 typedef enum {
 	OBJ_NONE,
 	OBJ_WALL,
+  OBJ_BUSH,
 	OBJ_COUNT
 } ObjectId;
 
