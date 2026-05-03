@@ -1,6 +1,6 @@
 ## TODO
 
-Here's the list of things do to in the game.
+Here's the list of things to do in the game.
 
 * [ ] World generation
   * [x] Noise
@@ -9,6 +9,7 @@ Here's the list of things do to in the game.
   * [ ] Forests
   * [ ] Chunks
   * [ ] Caves
+  * [ ] Biomes
   * [x] Mob first spawn
   * [ ] Mob runtime spawn
 * [ ] Player
@@ -32,7 +33,9 @@ Here's the list of things do to in the game.
   * [ ] Bandoleers
   * [ ] Turkey
   * [ ] Gnu
-* [ ] Berries
-* [ ] Berries rot
-* [ ] Berry bushes grow
-* [ ] Fire spreads
+* [ ] Berry Bushes
+    * [x] Berry bushes spawn
+    * [ ] Berries
+    * [ ] Berries rot
+    * [ ] Berry bushes grow
+* [x] Fire spreads

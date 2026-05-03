@@ -1,7 +1,9 @@
 #include <stdlib.h>
+#include <math.h>
 
 #include "skfantasy.h"
 #include "noise.h"
+#include "util.h"
 
 World * create_world(int width, int height)
 {
@@ -53,6 +55,9 @@ void init_world(World * world)
 		return;
 	}
 
+  const float POLES   = 0.8f;
+  const float EQUATOR = 0.2f;
+
 	FBMParams params = default_fbm;
 	params.noisefn = simplex2d;
 	params.amplitude = 0.5;
@@ -64,8 +69,31 @@ void init_world(World * world)
 			if (tile == NULL) {
 				return;
 			}
-			tile->type = TILE_STONE;
-			tile->object = fbm2d(i/16.0 - 0.5, j/16.0 - 0.5, params) <= 0.5 ? OBJ_NONE : OBJ_WALL;
+      float nx = i / 64.0 - 0.5;
+      float ny = j / 64.0 - 0.5;
+      float e = fbm2d(nx, ny, params);
+      e = fbm2d(nx+e, ny+e, params);
+      float m = fbm2d(nx+1000, ny, params);
+      float t = e * e + POLES + (EQUATOR-POLES) * sinf(3.14159f * j / world->height);
+      if        (e < 0.3f)
+        tile->type = TILE_WATER;
+      else if (e < 0.4f)
+        tile->type = TILE_SAND;
+      else if (e < 0.7f)
+        tile->type = TILE_GRASS;
+      else
+		  	tile->type = TILE_STONE;
+
+      if        (tile->type == TILE_STONE && e >= 0.9) {
+			  tile->object = OBJ_WALL;
+      } else if (tile->type == TILE_GRASS) {
+        if      (((t <= 0.8 && t > 0.6 && m >= 0.33 && m < 0.66)
+                  || (t <= 0.6 && t > 0.3 && m >= 0.16 && m < 0.5))
+                 && ((hash_pos(i, j) % 100) < 35))
+          tile->object = OBJ_BUSH;
+        else
+          tile->object = OBJ_NONE;
+      }
 		}
 	}
 }
