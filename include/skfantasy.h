@@ -88,6 +88,9 @@ typedef enum {
 	TILE_SAND,
 	TILE_WATER,
 	TILE_STONE,
+  TILE_SOIL,
+  TILE_MUD,
+  TILE_WHEAT,
 	TILE_COUNT
 } TileId;
 
