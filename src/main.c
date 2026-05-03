@@ -16,6 +16,9 @@ TileType tile_types[TILE_COUNT] = {
 	{ '~', 4 },
 	{ '7', 5 },
 	{ '.', 9 },
+  { '3', 4 },
+  { '3', 2 },
+  { '1', 12 },
 };
 
 ObjectType obj_types[OBJ_COUNT] = {

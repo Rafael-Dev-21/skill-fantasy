@@ -4,6 +4,7 @@
 #endif
 
 #define BLOCK_LENGTH 10
+#define CTRL(c) ((c)&0x1f)
 
 static void print_instructions()
 {
