@@ -180,6 +180,7 @@ void creature_move_by(Creature *creature, World *world);
 void free_creature(Creature *creature);
 
 void creature_attack(Creature *a, Creature *b, World *world);
+void creature_update(Creature *a, World *world);
 
 /*********************
  * default behaviors *
@@ -204,6 +205,7 @@ bool is_solid(Tile * tile);
 bool is_flammable(Tile *tile);
 void add_creature_rand_empty(World *world, Creature *creature);
 void world_remove(World *world, Creature *creature);
+void world_update(World *world);
 
 /*************
  * factories *
