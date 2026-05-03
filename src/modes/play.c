@@ -91,6 +91,10 @@ int play_mode(ModeData *data)
 	case 'b':
 		break_wall(data->world, cell);
 		break;
+  case 'f': {
+      create_fire(data->world, cell);
+    }
+    break;
 	case 'r':
 		return 1;
 	case ESC:
