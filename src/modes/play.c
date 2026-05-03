@@ -44,26 +44,8 @@ int play_mode(ModeData *data)
 	
 	move_from(&cell, data->player->facing);
 
-	Creature *it = data->world->creatures;
-	while (it != NULL) {
-    creature_update(it, data->world);
-		it = it->next;
-	}
-
-  it = data->world->creatures;
-	while (it != NULL) {
-	  int ohrt = get_stat_value(it, STAT_HRT);
-	  int bohrt = get_base_stat_value(it, STAT_HRT);
-    Creature *next = it->next;
-    if (ohrt < HRT_DEAD(bohrt)) {
-      if (it == data->player) {
-        return 0;
-      }
-		  world_remove(data->world, it);
-		  free_creature(it);
-	  }
-    it = next;
-  }
+  if (world_update(data->world, data->player))
+    return 0;
 
 	draw_world(data->world, data->player->position);
 

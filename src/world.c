@@ -221,3 +221,32 @@ void world_remove(World *world, Creature *creature)
 		}
 	}
 }
+
+int world_update(World *w, Creature *p)
+{
+  if (w == NULL)
+    return 1;
+  if (p == NULL)
+    return 1;
+	Creature *it = w->creatures;
+	while (it != NULL) {
+    creature_update(it, w);
+		it = it->next;
+	}
+
+  it = w->creatures;
+	while (it != NULL) {
+	  int ohrt = get_stat_value(it, STAT_HRT);
+	  int bohrt = get_base_stat_value(it, STAT_HRT);
+    Creature *next = it->next;
+    if (ohrt < HRT_DEAD(bohrt)) {
+      if (it == p) {
+        return 1;
+      }
+		  world_remove(w, it);
+		  free_creature(it);
+	  }
+    it = next;
+  }
+  return 0;
+}

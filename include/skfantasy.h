@@ -205,7 +205,7 @@ bool is_solid(Tile * tile);
 bool is_flammable(Tile *tile);
 void add_creature_rand_empty(World *world, Creature *creature);
 void world_remove(World *world, Creature *creature);
-void world_update(World *world);
+int world_update(World *world, Creature *player);
 
 /*************
  * factories *
