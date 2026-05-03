@@ -55,7 +55,7 @@ typedef enum {
 	STAT_STR,
 	STAT_MBL,
 	STAT_MND,
-	STAT_FHT,
+	STAT_FTH,
 	STAT_HRT,
 	STATS_COUNT
 } StatId;

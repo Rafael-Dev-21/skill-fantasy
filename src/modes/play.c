@@ -27,7 +27,7 @@ static void print_creature_stats(Creature const * const creature, int x, int y)
 	mvprintw(y + 0, x + 1, "STR: %d", get_stat_value(creature, STAT_STR));
 	mvprintw(y + 1, x + 1, "MBL: %d", get_stat_value(creature, STAT_MBL));
 	mvprintw(y + 2, x + 1, "MND: %d", get_stat_value(creature, STAT_MND));
-	mvprintw(y + 3, x + 1, "FHT: %d", get_stat_value(creature, STAT_FHT));
+	mvprintw(y + 3, x + 1, "FTH: %d", get_stat_value(creature, STAT_FTH));
 	mvprintw(y + 4, x + 1, "HRT: %d", get_stat_value(creature, STAT_HRT));
 
 }
