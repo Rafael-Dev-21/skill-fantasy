@@ -24,6 +24,7 @@ Creature *create_player(World *world)
 	}
 	player->glyph = '@';
 	player->color = 4;
+  player->is_flammable = true;
 
 	add_creature_rand_empty(world, player);
 

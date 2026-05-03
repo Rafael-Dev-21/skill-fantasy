@@ -53,9 +53,19 @@ Creature *create_fire(World *world, Point cell)
 	fire->facing = rand()%4;
 	fire->glyph = 'f';
 	fire->color = 2;
+  fire->is_flammable = false;
 	
 	add_creature_rand_empty(world, fire);
   fire->position = cell;
+  
+	Tile *tile = tile_at(world, cell);
+  if (is_flammable(tile->object)) {
+    tile->object = OBJ_NONE;
+  }
+  Creature *c = creature_at(world, cell);
+  if (c && c->is_flammable) {
+    c->stats[STAT_HRT].modifier = 2 * HRT_DEAD(c->stats[STAT_HRT].base);
+  }
 	
 	return fire;
 }
@@ -97,13 +107,10 @@ static void fire_spread(Creature* fire, World* world)
 	
 	Tile *tile = tile_at(world, cell);
 
-	if (tile->object != OBJ_WALL || !creature_at(world, cell)) {
+	if (tile->object != OBJ_WALL && (!creature_at(world, cell) || !creature_at(world, cell)->is_flammable)) {
 		return;
 	}
 	
-  tile->object = OBJ_NONE;
-  Creature *c = creature_at(world, cell);
-  c->stats[STAT_HRT].modifier = 2 * HRT_DEAD(c->stats[STAT_HRT].base);
 	
 	Creature *child = create_fire(world, cell);
 	if (child == NULL) {

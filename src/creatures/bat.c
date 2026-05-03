@@ -38,6 +38,7 @@ Creature *create_bat(World *world)
 	bat->facing = rand()%4;
 	bat->glyph = 'b';
 	bat->color = 4;
+  bat->is_flammable = true;
 	
 	add_creature_rand_empty(world, bat);
 	

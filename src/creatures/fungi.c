@@ -49,6 +49,7 @@ Creature *create_fungi(World *world)
 	fungi->facing = rand()%4;
 	fungi->glyph = 'f';
 	fungi->color = 3;
+  fungi->is_flammable = true;
 	
 	add_creature_rand_empty(world, fungi);
 	
