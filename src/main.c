@@ -19,8 +19,8 @@ TileType tile_types[TILE_COUNT] = {
 };
 
 ObjectType obj_types[OBJ_COUNT] = {
-	{ -1, 0, false },
-	{ '#', 8, true },
+	{ -1, 0, false, false },
+	{ '#', 8, true, true },
 };
 
 int main(int argc, char *argv[])

@@ -59,7 +59,7 @@ Creature *create_fire(World *world, Point cell)
   fire->position = cell;
   
 	Tile *tile = tile_at(world, cell);
-  if (is_flammable(tile->object)) {
+  if (is_flammable(tile)) {
     tile->object = OBJ_NONE;
   }
   Creature *c = creature_at(world, cell);
@@ -107,7 +107,7 @@ static void fire_spread(Creature* fire, World* world)
 	
 	Tile *tile = tile_at(world, cell);
 
-	if (tile->object != OBJ_WALL && (!creature_at(world, cell) || !creature_at(world, cell)->is_flammable)) {
+	if (!is_flammable(tile) && (!creature_at(world, cell) || !creature_at(world, cell)->is_flammable)) {
 		return;
 	}
 	

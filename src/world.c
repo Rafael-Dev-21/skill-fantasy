@@ -132,6 +132,15 @@ bool is_solid(Tile * tile)
 	return obj_types[tile->object].solid;
 }
 
+
+bool is_flammable(Tile * tile)
+{
+	if (tile == NULL) {
+		return false;
+	}
+	return obj_types[tile->object].flammable;
+}
+
 void add_creature_rand_empty(World *world, Creature *creature)
 {
 	if (world == NULL) {
