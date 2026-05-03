@@ -149,7 +149,19 @@ void break_wall(World * world, Point cell)
 	if (cell.y < 0) return;
 	if (cell.y >= world->height) return;
 	tile_at(world, cell)->object = OBJ_NONE;
+}
 
+void try_toil(World *world, Point cell)
+{
+	if (world == NULL) return;
+	if (cell.x < 0) return;
+	if (cell.x >= world->width) return;
+	if (cell.y < 0) return;
+	if (cell.y >= world->height) return;
+	Tile *t = tile_at(world, cell);
+  if (t->type != TILE_GRASS && t->object != OBJ_NONE)
+    return;
+  t->type = TILE_SOIL;
 }
 
 bool is_solid(Tile * tile)

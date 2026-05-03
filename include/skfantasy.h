@@ -199,6 +199,7 @@ Tile *tile_at(World *world, Point cell);
 Creature *creature_at(World *world, Point cell);
 void place_wall(World *world, Point cell);
 void break_wall(World *world, Point cell);
+void try_toil(World *world, Point cell);
 bool is_solid(Tile * tile);
 bool is_flammable(Tile *tile);
 void add_creature_rand_empty(World *world, Creature *creature);
