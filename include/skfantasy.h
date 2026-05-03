@@ -79,6 +79,7 @@ struct Creature {
 	Direction facing;
 	int32_t glyph;
 	int32_t color;
+  bool is_flammable;
 };
 
 typedef enum {
