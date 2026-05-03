@@ -46,8 +46,7 @@ int play_mode(ModeData *data)
 
 	Creature *it = data->world->creatures;
 	while (it != NULL) {
-		Brain *brain = it->brain;
-		brain->update(it,data->world);
+    creature_update(it, data->world);
 		it = it->next;
 	}
 

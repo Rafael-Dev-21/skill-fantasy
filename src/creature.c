@@ -110,6 +110,21 @@ void creature_attack(Creature *a, Creature *b, World *world)
 	apply_modifier(b, STAT_HRT, -dmg);	
 }
 
+void creature_update(Creature *c, World *w)
+{
+  if (c == NULL)
+    return;
+  if (w == NULL)
+    return;
+	Brain *brain = c->brain;
+  if (brain == NULL)
+    return;
+  void (*upd)(Creature*,World*) = brain->update;
+  if (upd == NULL)
+    return;
+	upd(c, w);
+}
+
 void creature_default_enter(Creature *creature, World *world, Point cell)
 {}
 
