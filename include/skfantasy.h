@@ -202,7 +202,7 @@ void world_remove(World *world, Creature *creature);
 Creature *create_player(World *world);
 Creature *create_fungi(World *world);
 Creature *create_bat(World *world);
-Creature *create_fire(World *world);
+Creature *create_fire(World *world, Point p);
 
 /***********
  * EXTERNS *
