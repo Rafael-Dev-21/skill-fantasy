@@ -61,6 +61,7 @@ Creature *create_creature(Brain *brain)
 
 	result->brain = brain;
 	result->next = NULL;
+  result->is_alive = true;
 	return result;
 }
 

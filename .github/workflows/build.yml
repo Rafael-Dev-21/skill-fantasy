@@ -19,7 +19,8 @@ jobs:
           actions-cache-key: ubuntu-deploy
       - name: Build
         run: |
-          ./build.sh
+          cmake -B build
+          cmake --build build
       - name: Upload
         uses: actions/upload-artifact@v4
         with:

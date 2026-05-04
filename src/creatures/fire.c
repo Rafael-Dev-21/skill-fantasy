@@ -55,18 +55,20 @@ Creature *create_fire(World *world, Point cell)
 	fire->color = 2;
   fire->is_flammable = false;
 	
-	add_creature_rand_empty(world, fire);
-  fire->position = cell;
-  
+
 	Tile *tile = tile_at(world, cell);
   if (is_flammable(tile)) {
     tile->object = OBJ_NONE;
   }
   Creature *c = creature_at(world, cell);
   if (c && c->is_flammable) {
-    c->stats[STAT_HRT].modifier = 2 * HRT_DEAD(c->stats[STAT_HRT].base);
+//    c->stats[STAT_HRT].modifier = 2 * HRT_DEAD(c->stats[STAT_HRT].base);
+    c->is_alive = false;
   }
-	
+
+	add_creature_rand_empty(world, fire);
+  fire->position = cell;
+
 	return fire;
 }
 

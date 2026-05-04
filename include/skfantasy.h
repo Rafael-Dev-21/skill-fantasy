@@ -80,6 +80,7 @@ struct Creature {
 	int32_t glyph;
 	int32_t color;
   bool is_flammable;
+  bool is_alive;
 };
 
 typedef enum {

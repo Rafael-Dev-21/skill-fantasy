@@ -89,7 +89,7 @@ static void fungi_spread(Creature* fungi, World* world)
 	
 	Tile *tile = tile_at(world, (Point){x, y});
 
-	if (is_solid(tile) || creature_at(world, (Point){x, y})) {
+	if (!tile || is_solid(tile) || creature_at(world, (Point){x, y})) {
 		return;
 	}
 	
@@ -102,7 +102,6 @@ static void fungi_spread(Creature* fungi, World* world)
 	
 	Brain *brain = fungi->brain;
 	struct FungiData *data = brain->data;
-
-	data->spread_count++;
+  ((struct FungiData*)child->brain->data)->spread_count = data->spread_count++;
 }
 

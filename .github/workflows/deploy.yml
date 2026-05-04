@@ -24,7 +24,8 @@ jobs:
           sudo apt-get install guile-3.0
       - name: Build Linux
         run: |
-          ./build.sh
+          cmake -B build
+          cmake --build build
       - name: Deploy Linux to Itch.io
         uses: manleydev/butler-publish-itchio-action@master
         env:

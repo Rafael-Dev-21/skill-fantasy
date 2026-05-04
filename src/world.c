@@ -159,7 +159,7 @@ void try_toil(World *world, Point cell)
 	if (cell.y < 0) return;
 	if (cell.y >= world->height) return;
 	Tile *t = tile_at(world, cell);
-  if ((t->type != TILE_GRASS || t->type != TILE_MUD) && t->object != OBJ_NONE)
+  if ((t->type != TILE_GRASS && t->type != TILE_MUD) || t->object != OBJ_NONE)
     return;
   if (t->type == TILE_GRASS)
     t->type = TILE_SOIL;
@@ -235,26 +235,37 @@ int world_update(World *w, Creature *p)
   // MOISTURE UPDATE
   for (int y = 0; y < w->height; ++y) {
     for (int x = 0; x < w->width; ++x) {
-      Tile *t = tile_at(w, (Point){x, y}), *t2;
+      Tile *t = tile_at(w, (Point){x, y});
       if (t->type == TILE_WATER)
         t->moisture = 32;
     }
   }
-  for (int y = 0; y < w->height; ++y) {
-    for (int x = 0; x < w->width; ++x) {
-      Tile *t = tile_at(w, (Point){x, y}), *t2;
-      if (t->type == TILE_WATER) {
-      } else {
-        int i = 0;
-        for (int dy = -1; dy < 2; ++dy)
-          for (int dx = -1; dx < 2; ++dx)
-            if ((dy || dx) && (t2 = tile_at(w, (Point){x+dx, y+dy})))
-              i += t2->moisture;
-        i /= 8;
-        t->moisture = i;
+  int (*new_moist)[w->width] = calloc(w->width * w->height, sizeof(int));
+  if (new_moist) {
+    for (int y = 0; y < w->height; ++y) {
+      for (int x = 0; x < w->width; ++x) {
+        Tile *t = tile_at(w, (Point){x, y}), *t2;
+        if (t->type == TILE_WATER) {
+          new_moist[y][x] = 32;
+        } else {
+          int i = 0;
+          for (int dy = -1; dy < 2; ++dy)
+            for (int dx = -1; dx < 2; ++dx)
+              if ((dy || dx) && (t2 = tile_at(w, (Point){x+dx, y+dy})))
+                i += t2->moisture;
+          i /= 8;
+          new_moist[y][x] = i;
+        }
+      }
+    }
+    for (int y = 0; y < w->height; ++y) {
+      for (int x = 0; x < w->width; ++x) {
+        Tile *t = tile_at(w, (Point){x, y});
+        t->moisture = new_moist[y][x];
       }
     }
   }
+  free(new_moist);
   // GROWTH UPDATE
   for (int y = 0; y < w->height; ++y) {
     for (int x = 0; x < w->width; ++x) {
@@ -292,7 +303,7 @@ int world_update(World *w, Creature *p)
 	  int ohrt = get_stat_value(it, STAT_HRT);
 	  int bohrt = get_base_stat_value(it, STAT_HRT);
     Creature *next = it->next;
-    if (ohrt < HRT_DEAD(bohrt)) {
+    if (ohrt < HRT_DEAD(bohrt) || !it->is_alive) {
       if (it == p) {
         return 1;
       }
