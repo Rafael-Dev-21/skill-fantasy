@@ -35,7 +35,10 @@ int main(int argc, char *argv[])
 
 	FILE *file_version;
 	file_version = fopen("version.txt", "r");
-	fgets(data.version, 256, file_version);
+	if (file_version)
+    fgets(data.version, 256, file_version);
+  else
+    snprintf(data.version, 256, "version unknown");
 	fclose(file_version);
 #else
   ModeData data = {NULL, NULL, VERSION};
