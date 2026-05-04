@@ -26,7 +26,7 @@ jobs:
         with:
           name: linux
           path: |
-            linux_pkg
+            build/linux_pkg
   windows:
     runs-on: windows-latest
     steps:

@@ -33,7 +33,7 @@ jobs:
           CHANNEL: linux
           ITCH_GAME: skill-fantasy
           ITCH_USER: rafael-dev-21
-          PACKAGE: linux_pkg
+          PACKAGE: build/linux_pkg
           VERSION_FILE: version.txt
       - name: Build Windows
         run: |
