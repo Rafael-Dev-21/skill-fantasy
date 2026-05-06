@@ -17,7 +17,9 @@ void draw_creature(Creature const * const creature, Point player)
 
 	Point cell = { cursor.x + modified_pos.x, cursor.y + modified_pos.y };
 	mvaddch(cell.y, cell.x, 'x');
-	mvaddch(modified_pos.y, modified_pos.x, creature->glyph | COLOR_PAIR(creature->color));
+  attron(COLOR_PAIR(creature->color));
+	mvaddch(modified_pos.y, modified_pos.x, creature->glyph);
+  attroff(COLOR_PAIR(creature->color));
 }
 
 void draw_world(World const * const world, Point center)
@@ -39,17 +41,22 @@ void draw_world(World const * const world, Point center)
 				continue;
 			}
 
-			int sprite = ' ';
+			int sprite = ' ', color = 0;
 			Tile tile = world->tiles[mapy][mapx];
 			TileType tile_type = tile_types[tile.type];
 			ObjectType obj_type = obj_types[tile.object];
 
-			if (obj_type.glyph != -1)
-				sprite = obj_type.glyph | COLOR_PAIR(obj_type.color);
-			else
-				sprite = tile_type.glyph | COLOR_PAIR(tile_type.color);
+			if (obj_type.glyph != -1) {
+				sprite = obj_type.glyph;
+        color = COLOR_PAIR(obj_type.color);
+      } else {
+				sprite = tile_type.glyph;
+        color = COLOR_PAIR(tile_type.color);
+      }
 
+      attron(color);
 			mvaddch(row, col, sprite);
+      attroff(color);
 		}
 	}
 

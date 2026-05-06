@@ -19,14 +19,13 @@ jobs:
           actions-cache-key: ubuntu-deploy
       - name: Build
         run: |
-          cmake -B build
-          cmake --build build
+          bash build.sh
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: linux
           path: |
-            build/linux_pkg
+            linux_pkg
   windows:
     runs-on: windows-latest
     steps:
