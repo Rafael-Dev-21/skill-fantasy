@@ -9,7 +9,7 @@ int generate_mode(ModeData *data)
 		free_world(data->world);
 	}
 	data->world = create_world(128, 128);
-	init_world(data->world);
+	init_world(data->world, rand());
 	data->player = create_player(data->world);
 
 	for (int i = 0; i < 8; i++) {

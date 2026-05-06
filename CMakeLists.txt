@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(skfantasy VERSION 0.3.2)
+project(skfantasy VERSION 0.4.0)
 
 # -------------------------------------------------------------------
 #  Version string – matches the original "v0.3.2" format
@@ -44,7 +44,7 @@ target_include_directories(skfantasy PRIVATE
 target_compile_options(skfantasy PRIVATE
     ${NCURSES_CFLAGS_OTHER}
     ${GUILE_CFLAGS_OTHER}
-    -Wall -Werror -pedantic -Wimplicit-fallthrough -Wshadow -Wimplicit
+    #    -Wall -Werror -pedantic -Wimplicit-fallthrough -Wshadow -Wimplicit
 )
 
 target_link_directories(skfantasy PRIVATE

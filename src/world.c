@@ -49,7 +49,7 @@ void free_world(World * world)
 	world = NULL;
 }
 
-void init_world(World * world)
+void init_world(World * world, long seed)
 {
 	if (world == NULL) {
 		return;
@@ -69,7 +69,7 @@ void init_world(World * world)
 			if (tile == NULL) {
 				return;
 			}
-      float nx = i / 64.0 - 0.5;
+      float nx = (i+seed%0x7ffff) / 64.0 - 0.5;
       float ny = j / 64.0 - 0.5;
       float e = fbm2d(nx, ny, params);
       e = fbm2d(nx+e, ny+e, params);

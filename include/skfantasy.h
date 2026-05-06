@@ -211,7 +211,7 @@ void creature_default_update(Creature *creature, World *world);
 
 World *create_world(int width, int height);
 void free_world(World *world);
-void init_world(World *world);
+void init_world(World *world, long seed);
 Tile *tile_at(World *world, Point cell);
 Creature *creature_at(World *world, Point cell);
 void place_wall(World *world, Point cell);

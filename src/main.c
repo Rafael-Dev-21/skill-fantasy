@@ -45,7 +45,8 @@ int main(int argc, char *argv[])
 #endif
 
 	int mode = 0;
-
+  time_t seed = time(NULL);
+  srand(*(int*)&seed);
 	init_curses();
 #ifdef USE_GUILE
   skfantasy_api_guile_init();
