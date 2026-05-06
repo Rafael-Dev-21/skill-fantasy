@@ -108,16 +108,16 @@ float simplex2d(float x, float y)
 	v2 gi1 = grad(i + i1, j + j1);
 	v2 gi2 = grad(i + 1, j + 1);
 
-	v2 v0 = {x0, y0};
-	v2 v1 = {x1, y1};
-	v2 v2 = {x2, y2};
+	v2 vc0 = {x0, y0};
+	v2 vc1 = {x1, y1};
+	v2 vc2 = {x2, y2};
 
 	float t0 = 0.5 - x0*x0-y0*y0;
 	if (t0<0) {
 		n0 = 0.0;
 	} else {
 		t0 *= t0;
-		n0 = t0 * t0 * v2_dot(gi0, v0);
+		n0 = t0 * t0 * v2_dot(gi0, vc0);
 	}
 
 	float t1 = 0.5 - x1*x1-y1*y1;
@@ -125,7 +125,7 @@ float simplex2d(float x, float y)
 		n1 = 0.0;
 	} else {
 		t1 *= t1;
-		n1 = t1 * t1 * v2_dot(gi1, v1);
+		n1 = t1 * t1 * v2_dot(gi1, vc1);
 	}
 
 	float t2 = 0.5 - x2*x2-y2*y2;
@@ -133,7 +133,7 @@ float simplex2d(float x, float y)
 		n2 = 0.0;
 	} else {
 		t2 *= t2;
-		n2 = t2 * t2 * v2_dot(gi2, v2);
+		n2 = t2 * t2 * v2_dot(gi2, vc2);
 	}
 
 	return 70.0 * (n0 + n1 + n2);

@@ -2,6 +2,8 @@
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
+#include <assert.h>
 
 #include <libguile.h>
 
@@ -29,22 +31,33 @@ static SCM skf_player_y(void)
 
 bool skfantasy_api_guile_init(void)
 {
+  scm_t_subr q;
+  SCM (*f)() = 0;
   scm_init_guile();
   scm_c_primitive_load("./scripts/main.scm");
 
+  assert(sizeof(scm_t_subr) == sizeof(SCM (*)(SCM))); 
+  assert(sizeof(scm_t_subr) == sizeof(SCM (*)(void))); 
+
+  f = skf_log;
+  memcpy(&q, &f, sizeof(scm_t_subr));
   scm_c_define_gsubr(
       "skf-log",
       1, 0, 0,
-      skf_log);
-  
+      q);
+
+  f = skf_player_x;
+  memcpy(&q, &f, sizeof(scm_t_subr));
   scm_c_define_gsubr(
       "player-x",
       0, 0, 0,
-      skf_player_x);
+      q);
+  f = skf_player_y;
+  memcpy(&q, &f, sizeof(scm_t_subr));
   scm_c_define_gsubr(
       "player-y",
       0, 0, 0,
-      skf_player_y);
+      q);
 
   SCM init_proc =
     scm_variable_ref(

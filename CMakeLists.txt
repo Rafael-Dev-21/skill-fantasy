@@ -44,6 +44,7 @@ target_include_directories(skfantasy PRIVATE
 target_compile_options(skfantasy PRIVATE
     ${NCURSES_CFLAGS_OTHER}
     ${GUILE_CFLAGS_OTHER}
+    -Wall -Werror -pedantic -Wimplicit-fallthrough -Wshadow -Wimplicit
 )
 
 target_link_directories(skfantasy PRIVATE
