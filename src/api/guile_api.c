@@ -32,15 +32,16 @@ static SCM skf_player_y(void)
 bool skfantasy_api_guile_init(void)
 {
   scm_t_subr q;
-  SCM (*f)() = 0;
+  SCM (*f)(void) = 0;
+  SCM (*f1)(SCM) = 0;
   scm_init_guile();
   scm_c_primitive_load("./scripts/main.scm");
 
   assert(sizeof(scm_t_subr) == sizeof(SCM (*)(SCM))); 
   assert(sizeof(scm_t_subr) == sizeof(SCM (*)(void))); 
 
-  f = skf_log;
-  memcpy(&q, &f, sizeof(scm_t_subr));
+  f1 = skf_log;
+  memcpy(&q, &f1, sizeof(scm_t_subr));
   scm_c_define_gsubr(
       "skf-log",
       1, 0, 0,
