@@ -1,35 +1,12 @@
-#include <cstdlib>
+#include <stdlib.h>
 
-#include "skfantasy.hpp"
-#include "creature_copy.hpp"
+#include "skfantasy.h"
 
-#define SPREAD_MAX_COUNT 3
+#define SPREAD_MAX_COUNT 5
 #define SPREAD_DIAMETER 11
 #define SPREAD_RADIUS 5
 #define SPREAD_CHANCE 2
 
-CreatureHandle CreatureFactory::makeFungi()
-{
-  Creature f{};
-  f.color = colorpack(15, 135, 25);
-  f.facing = static_cast<Direction>(rand() % 4);
-  f.glyph = 'f';
-  f.is_alive = true;
-  f.is_flammable = true;
-  for (int i = STAT_STR; i < STAT_HRT; i++) {
-    f.stats[i].base = MIN_STAT + rand()%4;
-  }
-  f.stats[STAT_HRT].base = MIN_BASE_HRT + rand()%4;
-  auto ht = add_creature_rand_empty(world, std::move(f));
-  if (ht == HandleVector<Creature,Handle>::null_handle) {
-    return ht;
-  }
-  auto& stored = world->creatures.get(ht);
-  stored.brain = std::make_unique<FungiBrain>(world, ht);
-  return ht;
-}
-
-/*
 static void fungi_update(Creature*, World*);
 static void fungi_spread(Creature*, World*);
 
@@ -127,36 +104,4 @@ static void fungi_spread(Creature* fungi, World* world)
 	struct FungiData *data = brain->data;
   ((struct FungiData*)child->brain->data)->spread_count = data->spread_count++;
 }
-*/
 
-void FungiBrain::enter(Point) {}
-
-void FungiBrain::update()
-{
-  if (spread_count < SPREAD_MAX_COUNT && (rand()%100) < SPREAD_CHANCE) {
-    spread();
-  }
-}
-
-void FungiBrain::spread()
-{
-  auto& f = world->creatures.get(creature);
-
-	int x = f.position.x + (rand()%SPREAD_DIAMETER) - SPREAD_RADIUS;
-	int y = f.position.y + (rand()%SPREAD_DIAMETER) - SPREAD_RADIUS;
-
-  auto cell = Point{static_cast<int16_t>(x), static_cast<int16_t>(y)};
-  
-  if (cell.x < 0 || cell.y < 0 || cell.x >= world->width || cell.y >= world->height)
-    return;
-	
-	auto tile = tile_at(world, cell);
-
-	if (!tile || is_solid(tile) || creature_at(world, cell)) {
-		return;
-	}
-
-  auto child = util::copyCreature(world, f, cell);
-
-  spread_count++;
-}

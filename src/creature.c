@@ -1,6 +1,6 @@
-#include <cstdlib>
+#include <stdlib.h>
 
-#include "skfantasy.hpp"
+#include "skfantasy.h"
 
 int8_t get_base_stat_value(Creature const * const creature, StatId stat)
 {
@@ -52,16 +52,16 @@ void apply_modifier(Creature * creature, StatId stat, int8_t modifier)
 	creature->stats[stat].modifier += modifier;
 }
 
-Creature create_creature(Brain *brain)
+Creature *create_creature(Brain *brain)
 {
-	auto result = Creature(); /* = new Creature();
-
+	Creature *result = (Creature*)malloc(sizeof(Creature));
 	if (result == NULL) {
 		return NULL;
-	}*/
+	}
 
-	result.brain = std::unique_ptr<Brain>(brain);
-  result.is_alive = true;
+	result->brain = brain;
+	result->next = NULL;
+  result->is_alive = true;
 	return result;
 }
 
@@ -75,13 +75,13 @@ void creature_move_by(Creature *creature, World *world)
 	}
 	Point cell = creature->position;
 	move_from(&cell, creature->facing);
-	auto& brain = creature->brain;
+	Brain *brain = creature->brain;
 	if (brain == NULL) {
 		return;
 	}
 	Creature *other = creature_at(world, cell);
 	if (other == NULL) {
-		brain->enter(cell);
+		brain->enter(creature, world, cell);
 	} else {
 		creature_attack(creature, other, world);
 	}
@@ -93,12 +93,12 @@ void free_creature(Creature *creature)
 		return;
 	}
 	if (creature->brain != NULL) {
+		free(creature->brain->data);
 	}
-	//free(creature->brain);
-  //creature->brain = NULL;
-	//free(creature);
-	//creature = NULL;
-  delete creature;
+	free(creature->brain);
+	creature->brain = NULL;
+	free(creature);
+	creature = NULL;
 }
 
 void creature_attack(Creature *a, Creature *b, World *world)
@@ -117,14 +117,13 @@ void creature_update(Creature *c, World *w)
     return;
   if (w == NULL)
     return;
-	auto& brain = c->brain;
+	Brain *brain = c->brain;
   if (brain == NULL)
     return;
-  //void (*upd)(Creature*,World*) = brain->update;
-  //if (upd == NULL)
-  //  return;
-	//u,pd(c, w);
-  brain->update();
+  void (*upd)(Creature*,World*) = brain->update;
+  if (upd == NULL)
+    return;
+	upd(c, w);
 }
 
 void creature_default_enter(Creature *creature, World *world, Point cell)
