@@ -1,6 +1,7 @@
-#include <stdlib.h>
+#include <cstdlib>
 
-#include "skfantasy.h"
+#include "skfantasy.hpp"
+#include "creature_copy.hpp"
 
 #define SPREAD_MAX_COUNT 12
 #define SPREAD_CHANCE 62
@@ -8,6 +9,40 @@
 #define LIFE_MAX 11
 #define LIFE_MIN 10
 
+CreatureHandle CreatureFactory::makeFire(Point cell)
+{
+  if (cell.x < 0 || cell.y < 0 || cell.x >= world->width || cell.y >= world->height)
+    return Handle{};
+  Creature f{};
+  f.glyph = 'f';
+  f.color = colorpack(210, 198, 50);
+  for (int i = STAT_STR; i < STAT_HRT; i++) {
+    f.stats[i].base = 0;
+  }
+	f.stats[STAT_HRT].base = LIFE_MIN;
+	f.stats[STAT_HRT].modifier = rand()%LIFE_MAX;
+	f.facing = static_cast<Direction>(rand()%4);
+  f.is_flammable = false;
+  f.is_alive = true;
+	Tile *tile = tile_at(world, cell);
+  if (is_flammable(tile)) {
+    tile->object = OBJ_NONE;
+  }
+  Creature *c = creature_at(world, cell);
+  if (c && c->is_flammable) {
+//    c->stats[STAT_HRT].modifier = 2 * HRT_DEAD(c->stats[STAT_HRT].base);
+    c->is_alive = false;
+  }
+  f.position = cell;
+	auto ht = world->creatures.add(std::move(f));
+  auto& stored = world->creatures.get(ht);
+  stored.brain = std::make_unique<FireBrain>(world, ht);
+  world->spatial_cache[cell.x + cell.y * world->width] = ht;
+
+  return stored.handle;
+}
+
+/*
 static void fire_update(Creature*, World*);
 static void fire_spread(Creature*, World*);
 
@@ -124,4 +159,49 @@ static void fire_spread(Creature* fire, World* world)
 
 	data->spread_count++;
 }
+*/
 
+void FireBrain::enter(Point cell)
+{}
+
+void FireBrain::update()
+{
+  auto& f = world->creatures.get(creature);
+  
+  f.facing = static_cast<Direction>((f.facing + rand()%4)%4);
+
+	if (spread_count < SPREAD_MAX_COUNT && (rand()%100) < SPREAD_CHANCE) {
+		spread();
+	}
+
+  f.stats[STAT_HRT].modifier -= rand()%3;
+}
+
+void FireBrain::spread()
+{
+  auto& f = world->creatures.get(creature);
+
+  auto cell = f.position;
+  move_from(&cell, f.facing);
+  
+  if (cell.x < 0 || cell.y < 0 || cell.x >= world->width || cell.y >= world->height)
+    return;
+
+  auto tile = tile_at(world, cell);
+
+  if (!is_flammable(tile) && (!creature_at(world, cell) || !creature_at(world, cell)->is_flammable)) {
+		return;
+	}
+  
+  if (is_flammable(tile)) {
+    tile->object = OBJ_NONE;
+  }
+  Creature *c = creature_at(world, cell);
+  if (c && c->is_flammable) {
+//    c->stats[STAT_HRT].modifier = 2 * HRT_DEAD(c->stats[STAT_HRT].base);
+    c->is_alive = false;
+  }
+
+  util::copyCreature(world, f, cell);
+  spread_count++;
+}

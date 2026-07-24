@@ -19,13 +19,14 @@ jobs:
           actions-cache-key: ubuntu-deploy
       - name: Build
         run: |
-          bash build.sh
+          xmake f -m debug -p linux -a x64 -y
+          xmake
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: linux
           path: |
-            linux_pkg
+            build/linux/x64/debug
   windows:
     runs-on: windows-latest
     steps:

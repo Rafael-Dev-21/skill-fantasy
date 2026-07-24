@@ -1,0 +1,136 @@
+[
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++20", "-Iinclude", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/benchmark/linux/arm64/release/tests/benchmark.cpp.o", "tests/benchmark.cpp"],
+  "file": "tests/benchmark.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++23", "-Iinclude", "-DVERSION=\"v0.5.0\"", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/main-cpp/linux/arm64/release/src/world.cpp.o", "src/world.cpp"],
+  "file": "src/world.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++23", "-Iinclude", "-DVERSION=\"v0.5.0\"", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/main-cpp/linux/arm64/release/src/creature.cpp.o", "src/creature.cpp"],
+  "file": "src/creature.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++23", "-Iinclude", "-DVERSION=\"v0.5.0\"", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/main-cpp/linux/arm64/release/src/ModeData.cpp.o", "src/ModeData.cpp"],
+  "file": "src/ModeData.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++23", "-Iinclude", "-DVERSION=\"v0.5.0\"", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/main-cpp/linux/arm64/release/src/draw.cpp.o", "src/draw.cpp"],
+  "file": "src/draw.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++23", "-Iinclude", "-DVERSION=\"v0.5.0\"", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/main-cpp/linux/arm64/release/src/main.cpp.o", "src/main.cpp"],
+  "file": "src/main.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++23", "-Iinclude", "-DVERSION=\"v0.5.0\"", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/main-cpp/linux/arm64/release/src/data.cpp.o", "src/data.cpp"],
+  "file": "src/data.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++23", "-Iinclude", "-DVERSION=\"v0.5.0\"", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/main-cpp/linux/arm64/release/src/modes/gen.cpp.o", "src/modes/gen.cpp"],
+  "file": "src/modes/gen.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++23", "-Iinclude", "-DVERSION=\"v0.5.0\"", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/main-cpp/linux/arm64/release/src/modes/play.cpp.o", "src/modes/play.cpp"],
+  "file": "src/modes/play.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++23", "-Iinclude", "-DVERSION=\"v0.5.0\"", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/main-cpp/linux/arm64/release/src/modes/start.cpp.o", "src/modes/start.cpp"],
+  "file": "src/modes/start.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++23", "-Iinclude", "-DVERSION=\"v0.5.0\"", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/main-cpp/linux/arm64/release/src/creatures/fire.cpp.o", "src/creatures/fire.cpp"],
+  "file": "src/creatures/fire.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++23", "-Iinclude", "-DVERSION=\"v0.5.0\"", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/main-cpp/linux/arm64/release/src/creatures/fungi.cpp.o", "src/creatures/fungi.cpp"],
+  "file": "src/creatures/fungi.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++23", "-Iinclude", "-DVERSION=\"v0.5.0\"", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/main-cpp/linux/arm64/release/src/creatures/player.cpp.o", "src/creatures/player.cpp"],
+  "file": "src/creatures/player.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++23", "-Iinclude", "-DVERSION=\"v0.5.0\"", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/main-cpp/linux/arm64/release/src/creatures/bat.cpp.o", "src/creatures/bat.cpp"],
+  "file": "src/creatures/bat.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-Iinclude", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/world-fw/linux/arm64/release/src/data.cpp.o", "src/data.cpp"],
+  "file": "src/data.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-Iinclude", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/world-fw/linux/arm64/release/src/creature.cpp.o", "src/creature.cpp"],
+  "file": "src/creature.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-Iinclude", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/world-fw/linux/arm64/release/src/world.cpp.o", "src/world.cpp"],
+  "file": "src/world.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-Iinclude", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/world-fw/linux/arm64/release/src/creatures/fire.cpp.o", "src/creatures/fire.cpp"],
+  "file": "src/creatures/fire.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-Iinclude", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/world-fw/linux/arm64/release/src/creatures/fungi.cpp.o", "src/creatures/fungi.cpp"],
+  "file": "src/creatures/fungi.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-Iinclude", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/world-fw/linux/arm64/release/src/creatures/player.cpp.o", "src/creatures/player.cpp"],
+  "file": "src/creatures/player.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["g++", "-c", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-Iinclude", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/world-fw/linux/arm64/release/src/creatures/bat.cpp.o", "src/creatures/bat.cpp"],
+  "file": "src/creatures/bat.cpp"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-Iinclude", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/world-fw/linux/arm64/release/src/util.c.o", "src/util.c"],
+  "file": "src/util.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-Iinclude", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/world-fw/linux/arm64/release/src/noise.c.o", "src/noise.c"],
+  "file": "src/noise.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-Iinclude", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/world-fw/linux/arm64/release/src/move.c.o", "src/move.c"],
+  "file": "src/move.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-Iinclude", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/skfantasy/linux/arm64/release/src/move.c.o", "src/move.c"],
+  "file": "src/move.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-Iinclude", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/skfantasy/linux/arm64/release/src/noise.c.o", "src/noise.c"],
+  "file": "src/noise.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["gcc", "-c", "-fvisibility=hidden", "-O3", "-std=c99", "-Iinclude", "-I", "/data/data/com.termux/files/home/.xmake/packages/f/ftxui/v7.0.0/eb82d01428fb4b4390cf58e4baee85f7/include", "-I", "/data/data/com.termux/files/home/.xmake/packages/e/entt/v3.16.0/663fc93f72bf420f81b0d8426e37d0e4/include", "-DNDEBUG", "-o", "build/.objs/skfantasy/linux/arm64/release/src/util.c.o", "src/util.c"],
+  "file": "src/util.c"
+}]
