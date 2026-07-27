@@ -36,7 +36,7 @@ void draw_world(World const * const world, Point center)
 			int mapx = startx + col;
 			int mapy = starty + row;
 			if (mapx < 0 || mapy < 0
-				|| mapx >= world->width || mapy >= world->height) {
+				|| mapx >= WORLD_WIDTH || mapy >= WORLD_HEIGHT) {
 				mvaddch(row, col, ' ');
 				continue;
 			}
@@ -60,11 +60,8 @@ void draw_world(World const * const world, Point center)
 		}
 	}
 
-	Creature *it = world->creatures;
-
-	while (it != NULL) {
-		draw_creature(it, center);
-		it = it->next;
+	for (size_t i = 0; i < world->creature_count; ++i) {
+		draw_creature(&world->creatures[i], center);
 	}
 }
 

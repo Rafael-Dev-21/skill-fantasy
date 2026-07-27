@@ -2,31 +2,22 @@
 
 #include "skfantasy.h"
 
-static void player_enter(Creature *creature, World *world, Point cell);
-
 Creature *create_player(World *world)
 {
 	if (world == NULL) {
 		return NULL;
 	}
-	Brain *brain = malloc(sizeof(Brain));
-	if (brain == NULL) {
-		return NULL;
-	}
 
-	brain->enter = &player_enter;
-	brain->update = &creature_default_update;
-	brain->data = NULL;
-
-	Creature *player = create_creature(brain);
+  Creature *player = get_creature_rand_empty(world);
 	if (player == NULL) {
 		return NULL;
 	}
+
+  player->kind = CPLAYER;
+
 	player->glyph = '@';
 	player->color = 4;
   player->is_flammable = true;
-
-	add_creature_rand_empty(world, player);
 
 	for (int i = STAT_STR; i < STAT_HRT; i++) {
 		player->stats[i].base = ((rand() % 6) + (rand() % 6) + 2) / 2;

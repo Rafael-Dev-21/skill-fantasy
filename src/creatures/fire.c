@@ -8,39 +8,29 @@
 #define LIFE_MAX 11
 #define LIFE_MIN 10
 
-static void fire_update(Creature*, World*);
 static void fire_spread(Creature*, World*);
-
-struct FireData {
-	int8_t spread_count;
-};
 
 Creature *create_fire(World *world, Point cell)
 {
 	if (world == NULL) {
 		return NULL;
 	}
-
-	Brain *brain = malloc(sizeof(Brain));
-	if (brain == NULL) {
-		return NULL;
-	}
-	brain->enter = &creature_default_enter;
-	brain->update = &fire_update;
-	struct FireData *data = malloc(sizeof(struct FireData));
-	if (data == NULL) {
-		free(brain);
-		return NULL;
-	}
-	data->spread_count = 0;
-	brain->data = data;
 	
-	Creature *fire = create_creature(brain);
+  Tile *tile = tile_at(world, cell);
+  if (is_flammable(tile)) {
+    tile->object = OBJ_NONE;
+  }
+  Creature *c = creature_at(world, cell);
+  if (c && c->is_flammable) {
+    c->is_alive = false;
+  }
+
+	Creature *fire = create_creature(world);
 	if (fire == NULL) {
-		free(brain->data);
-		free(brain);
 		return NULL;
 	}
+
+  fire->kind = CFIRE;
 	
 	for (int i = STAT_STR; i < STAT_HRT; i++) {
 		fire->stats[i].base = 0;
@@ -54,25 +44,12 @@ Creature *create_fire(World *world, Point cell)
 	fire->glyph = 'f';
 	fire->color = 2;
   fire->is_flammable = false;
-	
-
-	Tile *tile = tile_at(world, cell);
-  if (is_flammable(tile)) {
-    tile->object = OBJ_NONE;
-  }
-  Creature *c = creature_at(world, cell);
-  if (c && c->is_flammable) {
-//    c->stats[STAT_HRT].modifier = 2 * HRT_DEAD(c->stats[STAT_HRT].base);
-    c->is_alive = false;
-  }
-
-	add_creature_rand_empty(world, fire);
   fire->position = cell;
 
 	return fire;
 }
 
-static void fire_update(Creature* fire, World* world)
+void fire_update(Creature* fire, World* world)
 {
 	if (fire == NULL)
 	{
@@ -84,10 +61,7 @@ static void fire_update(Creature* fire, World* world)
 	}
 
   fire->facing = (fire->facing + rand()%4)%4;
-
-	Brain *brain = fire->brain;
-	struct FireData *data = brain->data;
-	if (data->spread_count < SPREAD_MAX_COUNT && (rand()%100) < SPREAD_CHANCE) {
+	if (fire->spread_count < SPREAD_MAX_COUNT && (rand()%100) < SPREAD_CHANCE) {
 		fire_spread(fire, world);
 	}
 
@@ -119,9 +93,6 @@ static void fire_spread(Creature* fire, World* world)
 		return;
 	}
 	
-	Brain *brain = fire->brain;
-	struct FireData *data = brain->data;
-
-	data->spread_count++;
+	fire->spread_count++;
 }
 

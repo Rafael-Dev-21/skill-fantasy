@@ -7,7 +7,6 @@
 #define SPREAD_RADIUS 5
 #define SPREAD_CHANCE 2
 
-static void fungi_update(Creature*, World*);
 static void fungi_spread(Creature*, World*);
 
 struct FungiData {
@@ -20,26 +19,12 @@ Creature *create_fungi(World *world)
 		return NULL;
 	}
 
-	Brain *brain = malloc(sizeof(Brain));
-	if (brain == NULL) {
-		return NULL;
-	}
-	brain->enter = &creature_default_enter;
-	brain->update = &fungi_update;
-	struct FungiData *data = malloc(sizeof(struct FungiData));
-	if (data == NULL) {
-		free(brain);
-		return NULL;
-	}
-	data->spread_count = 0;
-	brain->data = data;
-	
-	Creature *fungi = create_creature(brain);
+	Creature *fungi = get_creature_rand_empty(world);
 	if (fungi == NULL) {
-		free(brain->data);
-		free(brain);
 		return NULL;
 	}
+
+  fungi->kind = CFUNGI;
 	
 	for (int i = STAT_STR; i < STAT_HRT; i++) {
 		fungi->stats[i].base = MIN_STAT + rand() % MAX_STAT;
@@ -51,12 +36,10 @@ Creature *create_fungi(World *world)
 	fungi->color = 3;
   fungi->is_flammable = true;
 	
-	add_creature_rand_empty(world, fungi);
-	
 	return fungi;
 }
 
-static void fungi_update(Creature* fungi, World* world)
+void fungi_update(Creature* fungi, World* world)
 {
 	if (fungi == NULL)
 	{
@@ -67,9 +50,7 @@ static void fungi_update(Creature* fungi, World* world)
 		return;
 	}
 
-	Brain *brain = fungi->brain;
-	struct FungiData *data = brain->data;
-	if (data->spread_count < SPREAD_MAX_COUNT && (rand()%100) < SPREAD_CHANCE) {
+	if (fungi->spread_count < SPREAD_MAX_COUNT && (rand()%100) < SPREAD_CHANCE) {
 		fungi_spread(fungi, world);
 	}
 }
@@ -99,9 +80,7 @@ static void fungi_spread(Creature* fungi, World* world)
 	}
 	child->position.x = x;
 	child->position.y = y;
-	
-	Brain *brain = fungi->brain;
-	struct FungiData *data = brain->data;
-  ((struct FungiData*)child->brain->data)->spread_count = data->spread_count++;
+
+  child->spread_count = fungi->spread_count++;
 }
 

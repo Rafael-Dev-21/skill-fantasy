@@ -16,6 +16,8 @@
 #include <ncursesw/ncurses.h>
 #endif
 
+#include "arena.h"
+
 /***********
  * DEFINES *
  ***********/
@@ -65,20 +67,19 @@ typedef struct {
 	int8_t modifier;
 } Stat;
 
-typedef struct {
-	void (*enter)(Creature*, World*, Point);
-	void (*update)(Creature*, World*);
-	void *data;
-} Brain;
+#define CPLAYER 0
+#define CFUNGI  1
+#define CFIRE   2
+#define CBAT    3
 
 struct Creature {
 	Stat stats[STATS_COUNT];
-	Brain *brain;
-	Creature *next;
+	int kind;
 	Point position;
 	Direction facing;
 	int32_t glyph;
 	int32_t color;
+  int8_t spread_count;
   bool is_flammable;
   bool is_alive;
 };
@@ -131,20 +132,25 @@ typedef struct {
 } ObjectType;
 
 typedef struct {
-	TileId type;
-	ObjectId object;
-  int moisture;
-  int growtime;
+	uint8_t type;
+	uint8_t object;
+  uint16_t growtime;
 } Tile;
 
+#define WORLD_WIDTH 512
+#define WORLD_HEIGHT 512
+#define MAX_CREATURES 256
+
 struct World {
-	int16_t width;
-	int16_t height;
-	Tile **tiles;
-	Creature *creatures;
+	Tile tiles[WORLD_HEIGHT][WORLD_WIDTH];
+  uint8_t moist_bufs[2][WORLD_HEIGHT][WORLD_WIDTH];
+	Creature creatures[MAX_CREATURES];
+  size_t creature_count;
+  size_t moist_buf;
 };
 
 typedef struct {
+  Arena *arena;
 	Creature *player;
 	World *world;
 	char version[256];
@@ -191,12 +197,19 @@ void apply_modifier(Creature * creature, StatId id, int8_t modifier);
  * creature *
  ************/
 
-Creature *create_creature(Brain *brain);
+Creature *create_creature(World *world);
 void creature_move_by(Creature *creature, World *world);
 void free_creature(Creature *creature);
 
 void creature_attack(Creature *a, Creature *b, World *world);
 void creature_update(Creature *a, World *world);
+
+void player_enter(Creature*,World*, Point);
+void bat_enter(Creature*,World*, Point);
+
+void fungi_update(Creature*,World*);
+void fire_update(Creature*,World*);
+void bat_update(Creature*,World*);
 
 /*********************
  * default behaviors *
@@ -209,8 +222,6 @@ void creature_default_update(Creature *creature, World *world);
  * world *
  *********/
 
-World *create_world(int width, int height);
-void free_world(World *world);
 void init_world(World *world, long seed);
 Tile *tile_at(World *world, Point cell);
 Creature *creature_at(World *world, Point cell);
@@ -219,7 +230,7 @@ void break_wall(World *world, Point cell);
 void try_toil(World *world, Point cell);
 bool is_solid(Tile * tile);
 bool is_flammable(Tile *tile);
-void add_creature_rand_empty(World *world, Creature *creature);
+Creature *get_creature_rand_empty(World *world);
 void world_remove(World *world, Creature *creature);
 int world_update(World *world, Creature *player);
 

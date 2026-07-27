@@ -52,17 +52,17 @@ void apply_modifier(Creature * creature, StatId stat, int8_t modifier)
 	creature->stats[stat].modifier += modifier;
 }
 
-Creature *create_creature(Brain *brain)
+Creature *create_creature(World *world)
 {
-	Creature *result = (Creature*)malloc(sizeof(Creature));
-	if (result == NULL) {
-		return NULL;
-	}
-
-	result->brain = brain;
-	result->next = NULL;
-  result->is_alive = true;
-	return result;
+  if (world == NULL)
+    return NULL;
+  if (world->creature_count >= MAX_CREATURES)
+    return NULL;
+  Creature *it = world->creatures;
+  it += world->creature_count++;
+  memset(it, 0, sizeof(*it));
+  it->is_alive = true;
+  return it;
 }
 
 void creature_move_by(Creature *creature, World *world)
@@ -75,34 +75,27 @@ void creature_move_by(Creature *creature, World *world)
 	}
 	Point cell = creature->position;
 	move_from(&cell, creature->facing);
-	Brain *brain = creature->brain;
-	if (brain == NULL) {
-		return;
-	}
 	Creature *other = creature_at(world, cell);
 	if (other == NULL) {
-		brain->enter(creature, world, cell);
+		switch (creature->kind) {
+    case CPLAYER:
+      player_enter(creature, world, cell);
+      break;
+    case CBAT:
+      bat_enter(creature, world, cell);
+      break;
+    default:
+      creature_default_enter(creature, world, cell);
+      break;
+    }
 	} else {
 		creature_attack(creature, other, world);
 	}
 }
 
-void free_creature(Creature *creature)
-{
-	if (creature == NULL) {
-		return;
-	}
-	if (creature->brain != NULL) {
-		free(creature->brain->data);
-	}
-	free(creature->brain);
-	creature->brain = NULL;
-	free(creature);
-	creature = NULL;
-}
-
 void creature_attack(Creature *a, Creature *b, World *world)
 {
+  (void)world;
 	int str = get_stat_value(a, STAT_STR);
 	int dmg = (rand()%str + rand()%str);
 	if (dmg <= 0) {
@@ -117,17 +110,35 @@ void creature_update(Creature *c, World *w)
     return;
   if (w == NULL)
     return;
-	Brain *brain = c->brain;
-  if (brain == NULL)
-    return;
-  void (*upd)(Creature*,World*) = brain->update;
-  if (upd == NULL)
-    return;
-	upd(c, w);
+	switch (c->kind) {
+  case CFUNGI:
+    fungi_update(c, w);
+    break;
+  case CFIRE:
+    fire_update(c, w);
+    break;
+  case CBAT:
+    bat_update(c, w);
+    break;
+  default:
+    creature_default_update(c, w);
+    break;
+  }
 }
 
+#define UNUSED(x) ((void)(x))
+
 void creature_default_enter(Creature *creature, World *world, Point cell)
-{}
+{
+  UNUSED(creature);
+  UNUSED(world);
+  UNUSED(cell);
+}
 
 void creature_default_update(Creature *creature, World *world)
-{}
+{
+  UNUSED(creature);
+  UNUSED(world);
+}
+
+#undef UNUSED

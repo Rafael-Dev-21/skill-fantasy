@@ -82,7 +82,7 @@ int play_mode(ModeData *data)
 	case 'r':
 		return 1;
 	case ESC:
-		free_world(data->world);
+		clearArena(data->arena);
 		data->world = NULL;
 		data->player = NULL;
 		return 0;

@@ -7,28 +7,18 @@
 #define SPREAD_RADIUS 5
 #define SPREAD_CHANCE 2
 
-static void bat_update(Creature*, World*);
-static void bat_enter(Creature*, World*, Point);
-
 Creature *create_bat(World *world)
 {
 	if (world == NULL) {
 		return NULL;
 	}
 
-	Brain *brain = malloc(sizeof(Brain));
-	if (brain == NULL) {
-		return NULL;
-	}
-	brain->enter = &bat_enter;
-	brain->update = &bat_update;
-	brain->data = NULL;
-	
-	Creature *bat = create_creature(brain);
+	Creature *bat = get_creature_rand_empty(world);
 	if (bat == NULL) {
-		free(brain);
 		return NULL;
 	}
+
+  bat->kind = CBAT;
 	
 	for (int i = STAT_STR; i < STAT_HRT; i++) {
 		bat->stats[i].base = MIN_STAT + rand() % 3;
@@ -39,13 +29,10 @@ Creature *create_bat(World *world)
 	bat->glyph = 'b';
 	bat->color = 4;
   bat->is_flammable = true;
-	
-	add_creature_rand_empty(world, bat);
-	
 	return bat;
 }
 
-static void bat_update(Creature* bat, World* world)
+void bat_update(Creature* bat, World* world)
 {
 	if (bat == NULL)
 	{
@@ -60,7 +47,7 @@ static void bat_update(Creature* bat, World* world)
   creature_move_by(bat, world);
 }
 
-static void bat_enter(Creature* bat, World* world, Point cell)
+void bat_enter(Creature* bat, World* world, Point cell)
 {
 	if (bat == NULL) {
 		return;

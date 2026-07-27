@@ -1,53 +1,10 @@
 #include <stdlib.h>
 #include <math.h>
+#include <assert.h>
 
 #include "skfantasy.h"
 #include "noise.h"
 #include "util.h"
-
-World * create_world(int width, int height)
-{
-	World * result = (World *)calloc(1, sizeof(World));
-	if (result == NULL) {
-		return NULL;
-	}
-
-	result->width = width;
-	result->height = height;
-	result->tiles = (Tile * *)calloc(result->height, sizeof(Tile *));
-	if (result->tiles == NULL) {
-		free(result);
-		return NULL;
-	}
-	for (int i = 0; i < result->height; i++) {
-		result->tiles[i] = (Tile *)calloc(result->width, sizeof(Tile));
-	}
-
-	result->creatures = NULL;
-
-	return result;
-}
-
-void free_world(World * world)
-{
-	if (world == NULL) {
-		return;
-	}
-	for (int i = 0; i < world->height; i++) {
-		free(world->tiles[i]);
-	}
-	free(world->tiles);
-
-	Creature *it = world->creatures;
-	while (it != NULL) {
-		Creature *c = it;
-		it = it->next;
-		free_creature(c);
-	}
-
-	free(world);
-	world = NULL;
-}
 
 void init_world(World * world, long seed)
 {
@@ -63,8 +20,8 @@ void init_world(World * world, long seed)
 	params.amplitude = 0.5;
 	params.octaves = 3;
 
-	for (int j = 0; j < world->height; j += 1) {
-		for (int i = 0; i < world->width; i += 1) {
+	for (int j = 0; j < WORLD_HEIGHT; j += 1) {
+		for (int i = 0; i < WORLD_WIDTH; i += 1) {
 			Tile *tile = tile_at(world, (Point){i, j});
 			if (tile == NULL) {
 				return;
@@ -74,7 +31,7 @@ void init_world(World * world, long seed)
       float e = fbm2d(nx, ny, params);
       e = fbm2d(nx+e, ny+e, params);
       float m = fbm2d(nx+1000, ny, params);
-      float t = e * e + POLES + (EQUATOR-POLES) * sinf(3.14159f * j / world->height);
+      float t = e * e + POLES + (EQUATOR-POLES) * sinf(3.14159f * j / WORLD_HEIGHT);
       if        (e < 0.3f)
         tile->type = TILE_WATER;
       else if (e < 0.4f)
@@ -94,70 +51,81 @@ void init_world(World * world, long seed)
         else
           tile->object = OBJ_NONE;
       }
+
+      if (tile->type == TILE_WATER) {
+        size_t c = world->moist_buf;
+        world->moist_bufs[c][j][i] = 32;
+      }
 		}
 	}
 }
 
 Tile *tile_at(World * world, Point cell)
 {
-	if (world == NULL) {
-		return NULL;
-	}
-	if (cell.x < 0) {
-		return NULL;
-	}
-	if (cell.y < 0) {
-		return NULL;
-	}
-	if (cell.x >= world->width) {
-		return NULL;
-	}
-	if (cell.y >= world->height) {
-		return NULL;
-	}
+  if (!world
+      || cell.x < 0 || cell.y < 0
+      || cell.x >= WORLD_WIDTH
+      || cell.y >= WORLD_HEIGHT)
+  {
+    return NULL;
+  }
 	return &world->tiles[cell.y][cell.x];
 }
 
 Creature *creature_at(World *world, Point cell)
 {
-	Creature *it = world->creatures;
-	while (it != NULL) {
-		if (it->position.x == cell.x &&
-			it->position.y == cell.y) {
-			return it;
-		}
-		it = it->next;
-	}
-	return NULL;
+  if (!world
+      || cell.x < 0 || cell.y < 0
+      || cell.x >= WORLD_WIDTH
+      || cell.y >= WORLD_HEIGHT)
+  {
+    return NULL;
+  }
+  size_t len = world->creature_count;
+  for (size_t i = 0; i < len; ++i) {
+    Creature *it = world->creatures + i;
+    if (it->position.x == cell.x
+        && it->position.y == cell.y)
+    {
+      return it;
+    }
+  }
+  return NULL;
 }
 
 void place_wall(World * world, Point cell)
 {
-	if (world == NULL) return;
-	if (cell.x < 0) return;
-	if (cell.x >= world->width) return;
-	if (cell.y < 0) return;
-	if (cell.y >= world->height) return;
+  if (!world
+      || cell.x < 0 || cell.y < 0
+      || cell.x >= WORLD_WIDTH
+      || cell.y >= WORLD_HEIGHT)
+  {
+    return;
+  }
 	tile_at(world, cell)->object = OBJ_WALL;
 }
 
 void break_wall(World * world, Point cell)
 {
-	if (world == NULL) return;
-	if (cell.x < 0) return;
-	if (cell.x >= world->width) return;
-	if (cell.y < 0) return;
-	if (cell.y >= world->height) return;
+  if (!world
+      || cell.x < 0 || cell.y < 0
+      || cell.x >= WORLD_WIDTH
+      || cell.y >= WORLD_HEIGHT)
+  {
+    return;
+  }
 	tile_at(world, cell)->object = OBJ_NONE;
 }
 
 void try_toil(World *world, Point cell)
 {
-	if (world == NULL) return;
-	if (cell.x < 0) return;
-	if (cell.x >= world->width) return;
-	if (cell.y < 0) return;
-	if (cell.y >= world->height) return;
+  if (!world
+      || cell.x < 0 || cell.y < 0
+      || cell.x >= WORLD_WIDTH
+      || cell.y >= WORLD_HEIGHT)
+  {
+    return;
+  }
 	Tile *t = tile_at(world, cell);
   if ((t->type != TILE_GRASS && t->type != TILE_MUD) || t->object != OBJ_NONE)
     return;
@@ -184,45 +152,47 @@ bool is_flammable(Tile * tile)
 	return obj_types[tile->object].flammable;
 }
 
-void add_creature_rand_empty(World *world, Creature *creature)
+Creature *get_creature_rand_empty(World *world)
 {
 	if (world == NULL) {
-		return;
+		return NULL;
 	}
+  Creature *creature = create_creature(world);
 	if (creature == NULL) {
-		return;
+		return NULL;
 	}
 
 	Point cell;
 	
 	do {
-		cell.x = rand() % world->width;
-		cell.y = rand() % world->height;
+		cell.x = rand() % WORLD_WIDTH;
+		cell.y = rand() % WORLD_HEIGHT;
 	} while (is_solid(tile_at(world, cell)) || creature_at(world, cell));
 
 	creature->position = cell;
 
-	creature->next = world->creatures;
-	world->creatures = creature;
+	return creature;
 }
 
 void world_remove(World *world, Creature *creature)
 {
-	Creature *it = world->creatures;
-	if (creature == it) {
-		world->creatures = it->next;
-	} else {
-		Creature *last = it;
-		it = it->next;
-		while (it != NULL) {
-			if (creature == it) {
-				last->next = it->next;
-				return;
-			}
-			last = it;
-			it = it->next;
-		}
-	}
+  int idx;
+  int len = world->creature_count;
+  for (idx = 0; idx < len; idx++) {
+    if (&world->creatures[idx] == creature)
+      break;
+  }
+  if (idx >= len)
+    return;
+
+  Creature *tmp = &world->creatures[len-1];
+  world->creatures[idx] = *tmp;
+  world->creature_count--;
+}
+
+static inline bool InBounds(int x, int y)
+{
+  return x >= 0 && y >= 0 && x < WORLD_WIDTH && y < WORLD_HEIGHT;
 }
 
 int world_update(World *w, Creature *p)
@@ -233,84 +203,73 @@ int world_update(World *w, Creature *p)
     return 1;
 
   // MOISTURE UPDATE
-  for (int y = 0; y < w->height; ++y) {
-    for (int x = 0; x < w->width; ++x) {
+  size_t mcur = w->moist_buf;
+  size_t mnew = 1-w->moist_buf;
+  for (int y = 0; y < WORLD_HEIGHT; ++y) {
+    for (int x = 0; x < WORLD_WIDTH; ++x) {
       Tile *t = tile_at(w, (Point){x, y});
-      if (t->type == TILE_WATER)
-        t->moisture = 32;
-    }
-  }
-  int (*new_moist)[w->width] = calloc(w->width * w->height, sizeof(int));
-  if (new_moist) {
-    for (int y = 0; y < w->height; ++y) {
-      for (int x = 0; x < w->width; ++x) {
-        Tile *t = tile_at(w, (Point){x, y}), *t2;
-        if (t->type == TILE_WATER) {
-          new_moist[y][x] = 32;
-        } else {
-          int i = 0;
-          for (int dy = -1; dy < 2; ++dy)
-            for (int dx = -1; dx < 2; ++dx)
-              if ((dy || dx) && (t2 = tile_at(w, (Point){x+dx, y+dy})))
-                i += t2->moisture;
-          i /= 8;
-          new_moist[y][x] = i;
+      if (t->type == TILE_WATER) {
+        w->moist_bufs[mnew][y][x] = 32;
+      } else {
+        int i = 0, d = 0;
+        for (int dy = -1; dy < 2; ++dy) {
+          for (int dx = -1; dx < 2; ++dx) {
+            if ((dy || dx) && InBounds(x+dx, y+dy)) {
+              i += w->moist_bufs[mcur][y+dy][x+dx];
+              d += 2;
+            }
+          }
         }
-      }
-    }
-    for (int y = 0; y < w->height; ++y) {
-      for (int x = 0; x < w->width; ++x) {
-        Tile *t = tile_at(w, (Point){x, y});
-        t->moisture = new_moist[y][x];
+        i /= d ? d : 1;
+        w->moist_bufs[mcur][y][x] = i;
       }
     }
   }
-  free(new_moist);
-  // GROWTH UPDATE
-  for (int y = 0; y < w->height; ++y) {
-    for (int x = 0; x < w->width; ++x) {
+  {
+    size_t tmp = mcur;
+    mcur = mnew;
+    mnew = tmp;
+  }
+  for (int y = 0; y < WORLD_HEIGHT; ++y) {
+    for (int x = 0; x < WORLD_WIDTH; ++x) {
+    // GROWTH UPDATE
       Tile *t = tile_at(w, (Point){x, y});
+      uint8_t moist = w->moist_bufs[mcur][y][x];
       if (obj_types[t->object].grow.enabled)
         t->growtime += rand()%3;
       else
         t->growtime = 0;
-    }
-  }
-  // CHANGE UPDATE
-  for (int y = 0; y < w->height; ++y) {
-    for (int x = 0; x < w->width; ++x) {
-      Tile *t = tile_at(w, (Point){x, y});
+    // CHANGE UPDATE
       if (obj_types[t->object].grow.enabled && t->growtime > obj_types[t->object].grow.threshold)
         t->object = obj_types[t->object].grow.turnto;
-      if (tile_types[t->type].highmoist.enabled && t->moisture > tile_types[t->type].highmoist.threshold)
+      if (tile_types[t->type].highmoist.enabled && moist > tile_types[t->type].highmoist.threshold)
         t->type = tile_types[t->type].highmoist.turnto;
 
-      if (tile_types[t->type].lowmoist.enabled && t->moisture < tile_types[t->type].lowmoist.threshold)
+      if (tile_types[t->type].lowmoist.enabled && moist < tile_types[t->type].lowmoist.threshold)
         t->type = tile_types[t->type].lowmoist.turnto;
     }
   }
 
   // CREATURE UPDATES
-	Creature *it = w->creatures;
-	while (it != NULL) {
+  size_t len = w->creature_count;
+	for (size_t i = 0; i < len; ++i) {
+    Creature *it = w->creatures+i;
     creature_update(it, w);
-		it = it->next;
 	}
 
   // CREATURE DEATHS
-  it = w->creatures;
-	while (it != NULL) {
+  len = w->creature_count;
+	for (size_t i = 0; i < len; ++i) {
+    Creature *it = w->creatures+i;
 	  int ohrt = get_stat_value(it, STAT_HRT);
 	  int bohrt = get_base_stat_value(it, STAT_HRT);
-    Creature *next = it->next;
     if (ohrt < HRT_DEAD(bohrt) || !it->is_alive) {
       if (it == p) {
         return 1;
       }
 		  world_remove(w, it);
-		  free_creature(it);
+		  --i;
 	  }
-    it = next;
   }
   return 0;
 }

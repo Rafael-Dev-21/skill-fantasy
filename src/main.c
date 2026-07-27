@@ -5,33 +5,47 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "arena.h"
 #include "skfantasy.h"
 #ifdef USE_GUILE
 #include "api/guile_api.h"
 #endif
 
 TileType tile_types[TILE_COUNT] = {
-	{ ' ', 1 },
-	{ ',', 3 },
-	{ '~', 4 },
-	{ '7', 5 },
-	{ '.', 9 },
+	{ ' ', 1, {0}, {0} },
+	{ ',', 3 , {0}, {0} },
+	{ '~', 4, {0}, {0} },
+	{ '7', 5, {0}, {0} },
+	{ '.', 9, {0}, {0} },
   { '3', 4, .highmoist = {true, 1, TILE_MUD} },
   { '3', 2, .lowmoist = {true, 0, TILE_SOIL} },
 };
 
 ObjectType obj_types[OBJ_COUNT] = {
-	{ -1, 0, false, false },
-	{ '#', 8, true, true },
-  { '*', 2, false, true },
+	{ -1, 0, false, false, {0} },
+	{ '#', 8, true, true, {0} },
+  { '*', 2, false, true, {0} },
   { ',', 12, true, true, .grow = { true, 32, OBJ_WHEAT } },
-  { '1', 12, true, true },
+  { '1', 12, true, true, {0} },
 };
+
+uint8_t abuf[MB(32)] = {0};
 
 int main(int argc, char *argv[])
 {
+  (void)argc;
+  (void)argv;
+  Arena arena;
+  int err;
+  if ((err = initArena(&arena, abuf, MB(32))) != ARENA_OK) {
+    char buf[KB(1)];
+    ArenaErrStr(buf, KB(1), err, &arena);
+    fprintf(stderr, "main():%d: initArena() error: %s\n", __LINE__, buf);
+    return 1;
+  }
+
 #ifndef VERSION
-	ModeData data = {NULL, NULL, {0}};
+	ModeData data = {&arena, NULL, NULL, {0}};
 
 	FILE *file_version;
 	file_version = fopen("version.txt", "r");
@@ -41,7 +55,7 @@ int main(int argc, char *argv[])
     snprintf(data.version, 256, "version unknown");
 	fclose(file_version);
 #else
-  ModeData data = {NULL, NULL, VERSION};
+  ModeData data = {&arena, NULL, NULL, VERSION};
 #endif
 
 	int mode = 0;

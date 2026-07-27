@@ -17,6 +17,7 @@ end
 
 target("skfantasy")
   set_kind("binary")
+  set_warnings("all", "pedantic", "allextra", "error")
   add_files("src/*.c", "src/creatures/*.c", "src/modes/*.c")
   add_includedirs("include")
   set_languages("c99")

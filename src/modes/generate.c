@@ -6,23 +6,37 @@ int generate_mode(ModeData *data)
 	mvprintw(10, 10, "Generating...");
 	refresh();
 	if (data->world != NULL) {
-		free_world(data->world);
+		clearArena(data->arena);
 	}
-	data->world = create_world(128, 128);
+  int err;
+  if ((err = ArenaNewZ(data->arena, data->world)) != ARENA_OK) {
+    endwin();
+    char buf[KB(1)];
+    ArenaErrStr(buf, KB(1), err, data->arena);
+    fprintf(stderr, "generate_mode():%d: initArena() error: %s\n", __LINE__, buf);
+    if (err == ARENA_FULL_ERROR) {
+      fprintf(stderr, "  Max %zu, asked: %zu\n", ArenaCapacity(data->arena), sizeof(World));
+    }
+    exit(1);
+    return -1;
+  }
 	init_world(data->world, rand());
 	data->player = create_player(data->world);
+  if (data->player == NULL) {
+    return -1;
+  }
 
 	for (int i = 0; i < 8; i++) {
-		create_fungi(data->world);
+		(void)create_fungi(data->world);
 	}
 
   for (int i = 0; i < 24; i++) {
-    create_bat(data->world);
+    (void)create_bat(data->world);
   }
 
 	mvprintw(11, 10, "[Press any key]");
 	refresh();
 
-	getch();
+	(void)getch();
 	return 2;
 }
