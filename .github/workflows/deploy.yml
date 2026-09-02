@@ -24,7 +24,7 @@ jobs:
           sudo apt-get install guile-3.0
       - name: Build Linux
         run: |
-          xmake f -m release -p linux -a x64 -y
+          xmake f -m release -p linux -a x86_64 -y
       - name: Deploy Linux to Itch.io
         uses: manleydev/butler-publish-itchio-action@master
         env:
@@ -32,7 +32,7 @@ jobs:
           CHANNEL: linux
           ITCH_GAME: skill-fantasy
           ITCH_USER: rafael-dev-21
-          PACKAGE: build/linux/x64/release
+          PACKAGE: build/linux/x86_64/release
           VERSION_FILE: version.txt
       - name: Build Windows
         run: |
