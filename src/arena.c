@@ -1,6 +1,7 @@
 #include "arena.h"
 #include <string.h>
 #include <assert.h>
+#include <stdint.h>
 
 ArenaStatus initArena(Arena *arena, void *ptr, size_t cap)
 {
