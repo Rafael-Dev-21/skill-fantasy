@@ -8,9 +8,10 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
+      - uses: actions/cache@v6
       - name: Setup Xmake
         uses: xmake-io/github-action-setup-xmake@v1
         with:
@@ -19,19 +20,21 @@ jobs:
           actions-cache-key: ubuntu-deploy
       - name: Build
         run: |
-          bash build.sh
+          xmake f -m debug -p linux -a x64 -y
+          xmake
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
           name: linux
           path: |
-            linux_pkg
+            build/linux/x64/debug
   windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           submodules: recursive
+      - uses: actions/cache@v6
       - name: Setup Xmake
         uses: xmake-io/github-action-setup-xmake@v1
         with:
