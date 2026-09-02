@@ -25,7 +25,7 @@ void init_world(World * world, long seed)
 			if (tile == NULL) {
 				return;
 			}
-      float nx = (i+seed&0x7ffff) / 64.0 - 0.5;
+      float nx = (i+(seed&0x7ffff)) / 64.0 - 0.5;
       float ny = j / 64.0 - 0.5;
       float e = normalize(fbm2d(nx, ny, params), -1, 1);
       e = normalize(fbm2d(nx+e, ny+e, params), -1, 1);
@@ -220,11 +220,12 @@ int world_update(World *w, Creature *p)
           }
         }
         i /= d ? d : 1;
-        w->moist_bufs[mcur][y][x] = i;
+        w->moist_bufs[mnew][y][x] = i;
       }
     }
   }
   {
+    w->moist_buf = mnew;
     size_t tmp = mcur;
     mcur = mnew;
     mnew = tmp;
