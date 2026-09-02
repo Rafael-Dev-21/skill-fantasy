@@ -1,86 +1,86 @@
 [
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c99", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/creature.c.o", "src/creature.c"],
+  "arguments": ["/data/data/com.termux/files/usr/bin/gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c23", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/creature.c.o", "src/creature.c"],
   "file": "src/creature.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c99", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/draw.c.o", "src/draw.c"],
-  "file": "src/draw.c"
-},
-{
-  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c99", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/engine.c.o", "src/engine.c"],
+  "arguments": ["/data/data/com.termux/files/usr/bin/gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c23", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/engine.c.o", "src/engine.c"],
   "file": "src/engine.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c99", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/main.c.o", "src/main.c"],
+  "arguments": ["/data/data/com.termux/files/usr/bin/gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c23", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/main.c.o", "src/main.c"],
   "file": "src/main.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c99", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/noise.c.o", "src/noise.c"],
+  "arguments": ["/data/data/com.termux/files/usr/bin/gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c23", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/noise.c.o", "src/noise.c"],
   "file": "src/noise.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c99", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/world.c.o", "src/world.c"],
+  "arguments": ["/data/data/com.termux/files/usr/bin/gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c23", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/world.c.o", "src/world.c"],
   "file": "src/world.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c99", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/arena.c.o", "src/arena.c"],
+  "arguments": ["/data/data/com.termux/files/usr/bin/gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c23", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/arena.c.o", "src/arena.c"],
   "file": "src/arena.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c99", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/util.c.o", "src/util.c"],
+  "arguments": ["/data/data/com.termux/files/usr/bin/gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c23", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/util.c.o", "src/util.c"],
   "file": "src/util.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c99", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/move.c.o", "src/move.c"],
+  "arguments": ["/data/data/com.termux/files/usr/bin/gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c23", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/move.c.o", "src/move.c"],
   "file": "src/move.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c99", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/creatures/bat.c.o", "src/creatures/bat.c"],
-  "file": "src/creatures/bat.c"
+  "arguments": ["/data/data/com.termux/files/usr/bin/gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c23", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/draw.c.o", "src/draw.c"],
+  "file": "src/draw.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c99", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/creatures/fire.c.o", "src/creatures/fire.c"],
-  "file": "src/creatures/fire.c"
-},
-{
-  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c99", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/creatures/fungi.c.o", "src/creatures/fungi.c"],
+  "arguments": ["/data/data/com.termux/files/usr/bin/gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c23", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/creatures/fungi.c.o", "src/creatures/fungi.c"],
   "file": "src/creatures/fungi.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c99", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/creatures/player.c.o", "src/creatures/player.c"],
+  "arguments": ["/data/data/com.termux/files/usr/bin/gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c23", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/creatures/player.c.o", "src/creatures/player.c"],
   "file": "src/creatures/player.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c99", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/modes/generate.c.o", "src/modes/generate.c"],
-  "file": "src/modes/generate.c"
+  "arguments": ["/data/data/com.termux/files/usr/bin/gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c23", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/creatures/bat.c.o", "src/creatures/bat.c"],
+  "file": "src/creatures/bat.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c99", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/modes/play.c.o", "src/modes/play.c"],
-  "file": "src/modes/play.c"
+  "arguments": ["/data/data/com.termux/files/usr/bin/gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c23", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/creatures/fire.c.o", "src/creatures/fire.c"],
+  "file": "src/creatures/fire.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c99", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/modes/start.c.o", "src/modes/start.c"],
+  "arguments": ["/data/data/com.termux/files/usr/bin/gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c23", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/modes/start.c.o", "src/modes/start.c"],
   "file": "src/modes/start.c"
 },
 {
   "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
-  "arguments": ["gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c99", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/api/guile_api.c.o", "src/api/guile_api.c"],
+  "arguments": ["/data/data/com.termux/files/usr/bin/gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c23", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/modes/generate.c.o", "src/modes/generate.c"],
+  "file": "src/modes/generate.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["/data/data/com.termux/files/usr/bin/gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c23", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/modes/play.c.o", "src/modes/play.c"],
+  "file": "src/modes/play.c"
+},
+{
+  "directory": "/data/data/com.termux/files/home/projetos/skill-fantasy",
+  "arguments": ["/data/data/com.termux/files/usr/bin/gcc", "-c", "-g", "-Wall", "-Wpedantic", "-Wall", "-Wextra", "-Werror", "-O0", "-std=c23", "-Iinclude", "-DUSE_GUILE", "-DNCURSES_WIDECHAR", "-I", "/data/data/com.termux/files/usr/include/guile/3.0", "-I", "/data/data/com.termux/files/usr", "-I", "/data/data/com.termux/files/usr/include", "-o", "build/.objs/skfantasy/linux/arm64/debug/src/api/guile_api.c.o", "src/api/guile_api.c"],
   "file": "src/api/guile_api.c"
 }]

@@ -12,21 +12,21 @@
 #endif
 
 TileType tile_types[TILE_COUNT] = {
-	{ ' ', 1, {0}, {0} },
-	{ ',', 3 , {0}, {0} },
-	{ '~', 4, {0}, {0} },
-	{ '7', 5, {0}, {0} },
-	{ '.', 9, {0}, {0} },
-  { '3', 4, .highmoist = {true, 1, TILE_MUD} },
-  { '3', 2, .lowmoist = {true, 0, TILE_SOIL} },
+	{ ' ', 1, {}, {} },
+	{ ',', 3 , {}, {} },
+	{ '~', 4, {}, {} },
+	{ '7', 5, {}, {} },
+	{ '.', 9, {}, {} },
+  { '3', 4, {}, {true, 1, TILE_MUD} },
+  { '3', 2, {true, 0, TILE_SOIL}, {} },
 };
 
 ObjectType obj_types[OBJ_COUNT] = {
-	{ -1, 0, false, false, {0} },
-	{ '#', 8, true, true, {0} },
-  { '*', 2, false, true, {0} },
-  { ',', 12, true, true, .grow = { true, 32, OBJ_WHEAT } },
-  { '1', 12, true, true, {0} },
+	{ -1, 0, false, false, {} },
+	{ '#', 8, true, true, {} },
+  { '*', 2, false, true, {} },
+  { ',', 12, true, true, { true, 32, OBJ_WHEAT } },
+  { '1', 12, true, true, {} },
 };
 
 uint8_t abuf[MB(32)] = {0};
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
   (void)argc;
   (void)argv;
   Arena arena;
-  int err;
+  ArenaStatus err;
   if ((err = initArena(&arena, abuf, MB(32))) != ARENA_OK) {
     char buf[KB(1)];
     ArenaErrStr(buf, KB(1), err, &arena);

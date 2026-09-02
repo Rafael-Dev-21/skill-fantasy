@@ -3,7 +3,7 @@
 
 void draw_creature(Creature const * const creature, Point player)
 {
-	Point center = { COLS / 2, LINES / 2 };
+	Point center = { (COLS / 2), (LINES / 2) };
 	Point cursor = {0,0};
 
 	if (creature == NULL) {
@@ -13,7 +13,7 @@ void draw_creature(Creature const * const creature, Point player)
 	Point pos = creature->position;
 	cursor = point_from_dir(creature->facing);
 
-	Point modified_pos = { center.x + pos.x - player.x, center.y + pos.y - player.y }; 
+	Point modified_pos = {center.x + pos.x - player.x, center.y + pos.y - player.y }; 
 
 	Point cell = { cursor.x + modified_pos.x, cursor.y + modified_pos.y };
 	mvaddch(cell.y, cell.x, 'x');

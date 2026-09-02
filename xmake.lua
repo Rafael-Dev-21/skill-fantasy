@@ -20,7 +20,7 @@ target("skfantasy")
   set_warnings("all", "pedantic", "allextra", "error")
   add_files("src/*.c", "src/creatures/*.c", "src/modes/*.c")
   add_includedirs("include")
-  set_languages("c99")
+  set_languages("c23")
   if is_plat("mingw") then
     add_ldflags("-static-libgcc", "-static-libc++")
   else

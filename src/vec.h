@@ -3,8 +3,8 @@
 
 #include <math.h>
 
-typedef struct { float x, y; } v2;
-typedef struct { float x, y, z; } v3;
+typedef struct v2 { float x, y; } v2;
+typedef struct v3 { float x, y, z; } v3;
 
 static inline v2 v2_add(v2 a, v2 b) { return (v2){a.x + b.x, a.y + b.y}; }
 static inline v2 v2_sub(v2 a, v2 b) { return (v2){a.x - b.x, a.y - b.y}; }

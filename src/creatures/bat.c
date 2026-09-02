@@ -25,7 +25,7 @@ Creature *create_bat(World *world)
 	}
 	bat->stats[STAT_HRT].base = MIN_BASE_HRT + rand()%2;
 	
-	bat->facing = rand()%4;
+	bat->facing = (rand()%4);
 	bat->glyph = 'b';
 	bat->color = 4;
   bat->is_flammable = true;
@@ -43,7 +43,7 @@ void bat_update(Creature* bat, World* world)
 		return;
 	}
 
-  bat->facing = (bat->facing + rand()%4)%4;
+  bat->facing = ((bat->facing + rand()%4)%4);
   creature_move_by(bat, world);
 }
 

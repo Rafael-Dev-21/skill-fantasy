@@ -70,7 +70,7 @@ ArenaStatus initSubArena(Arena *arena, SubArena *sub, size_t cap)
 {
   sub->mark = ArenaMark(arena);
   void *ptr;
-  int err;
+  ArenaStatus err;
   if ((err = ArenaAlloc(arena, cap, &ptr)) != ARENA_OK) {
     return err;
   }

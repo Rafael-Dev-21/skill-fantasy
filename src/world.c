@@ -17,8 +17,7 @@ void init_world(World * world, long seed)
 
 	FBMParams params = default_fbm;
 	params.noisefn = simplex2d;
-	params.amplitude = 0.5;
-	params.octaves = 3;
+	params.octaves = 5;
 
 	for (int j = 0; j < WORLD_HEIGHT; j += 1) {
 		for (int i = 0; i < WORLD_WIDTH; i += 1) {
@@ -26,11 +25,11 @@ void init_world(World * world, long seed)
 			if (tile == NULL) {
 				return;
 			}
-      float nx = (i+seed%0x7ffff) / 64.0 - 0.5;
+      float nx = (i+seed&0x7ffff) / 64.0 - 0.5;
       float ny = j / 64.0 - 0.5;
-      float e = fbm2d(nx, ny, params);
-      e = fbm2d(nx+e, ny+e, params);
-      float m = fbm2d(nx+1000, ny, params);
+      float e = normalize(fbm2d(nx, ny, params), -1, 1);
+      e = normalize(fbm2d(nx+e, ny+e, params), -1, 1);
+      float m = normalize(fbm2d(nx+1000, ny, params), -1, 1);
       float t = e * e + POLES + (EQUATOR-POLES) * sinf(3.14159f * j / WORLD_HEIGHT);
       if        (e < 0.3f)
         tile->type = TILE_WATER;

@@ -28,12 +28,12 @@ float normalize(float value, float min, float max)
 
 float hash_posf(int x, int y)
 {
-	return hash_pos(x, y) * (1.0 / ~0u);
+	return hash_pos(x, y) * (1.0 / ~((uint32_t)(~0u)>>1));
 }
 
-size_t hash_pos(int x, int y)
+uint32_t hash_pos(int x, int y)
 {
-	const size_t w = 8 * sizeof(size_t);
+	const size_t w = 8 * sizeof(uint32_t);
 	const size_t s = w / 2;
 
 	size_t a = x, b = y;

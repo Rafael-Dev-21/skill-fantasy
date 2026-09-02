@@ -37,8 +37,8 @@ bool skfantasy_api_guile_init(void)
   scm_init_guile();
   scm_c_primitive_load("./scripts/main.scm");
 
-  assert(sizeof(scm_t_subr) == sizeof(SCM (*)(SCM))); 
-  assert(sizeof(scm_t_subr) == sizeof(SCM (*)(void))); 
+  static_assert(sizeof(scm_t_subr) == sizeof(SCM (*)(SCM))); 
+  static_assert(sizeof(scm_t_subr) == sizeof(SCM (*)(void))); 
 
   f1 = skf_log;
   memcpy(&q, &f1, sizeof(scm_t_subr));

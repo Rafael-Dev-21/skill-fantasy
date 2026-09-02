@@ -8,7 +8,7 @@ int generate_mode(ModeData *data)
 	if (data->world != NULL) {
 		clearArena(data->arena);
 	}
-  int err;
+  ArenaStatus err;
   if ((err = ArenaNewZ(data->arena, data->world)) != ARENA_OK) {
     endwin();
     char buf[KB(1)];

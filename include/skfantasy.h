@@ -46,8 +46,8 @@ typedef enum {
 } Direction;
 
 typedef struct {
-	int16_t x;
-	int16_t y;
+	int x;
+	int y;
 } Point;
 
 typedef struct Creature Creature;

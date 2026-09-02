@@ -40,7 +40,7 @@ Creature *create_fire(World *world, Point cell)
 	fire->stats[STAT_HRT].modifier = rand()%LIFE_MAX;
   fire->stats[STAT_STR].base = 4;
 	
-	fire->facing = rand()%4;
+	fire->facing = (rand()%4);
 	fire->glyph = 'f';
 	fire->color = 2;
   fire->is_flammable = false;
@@ -60,7 +60,7 @@ void fire_update(Creature* fire, World* world)
 		return;
 	}
 
-  fire->facing = (fire->facing + rand()%4)%4;
+  fire->facing = ((fire->facing + rand()%4)%4);
 	if (fire->spread_count < SPREAD_MAX_COUNT && (rand()%100) < SPREAD_CHANCE) {
 		fire_spread(fire, world);
 	}

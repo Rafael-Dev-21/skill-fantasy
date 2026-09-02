@@ -31,7 +31,7 @@ Creature *create_fungi(World *world)
 	}
 	fungi->stats[STAT_HRT].base = MIN_BASE_HRT + rand()%8;
 	
-	fungi->facing = rand()%4;
+	fungi->facing = (rand()%4);
 	fungi->glyph = 'f';
 	fungi->color = 3;
   fungi->is_flammable = true;
@@ -65,8 +65,8 @@ static void fungi_spread(Creature* fungi, World* world)
 		return;
 	}
 	
-	int x = fungi->position.x + (rand()%SPREAD_DIAMETER) - SPREAD_RADIUS;
-	int y = fungi->position.y + (rand()%SPREAD_DIAMETER) - SPREAD_RADIUS;
+	int16_t x = fungi->position.x + (rand()%SPREAD_DIAMETER) - SPREAD_RADIUS;
+	int16_t y = fungi->position.y + (rand()%SPREAD_DIAMETER) - SPREAD_RADIUS;
 	
 	Tile *tile = tile_at(world, (Point){x, y});
 

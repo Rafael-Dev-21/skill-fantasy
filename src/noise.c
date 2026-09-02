@@ -141,14 +141,15 @@ float simplex2d(float x, float y)
 
 float fbm2d(float x, float y, FBMParams params)
 {
-	float result = params.amplitude;
+	float result = 0.0, divider = 0.0;
 	float amp = params.amplitude;
 	float freq = params.frequency;
 	for (int i = 0; i < params.octaves; i += 1) {
 		result += amp * params.noisefn(x * freq, y * freq);
+    divider += amp;
 		freq *= params.lacunarity;
 		amp *= params.persistence;
 	}
-	return result;
+	return result/divider;
 }
 
