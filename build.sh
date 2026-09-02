@@ -1,4 +1,4 @@
-version="v0.4.1"
+version="v0.4.2"
 gcc src/{*,*/*}.c -Iinclude -lm $(pkg-config ncurses guile-3.0 --libs --cflags) -o skfantasy -DVERSION="\"$version\"" -DUSE_GUILE -std=c23 -Wall -Wextra -pedantic
 
 rm -rf linux_pkg
