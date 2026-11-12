@@ -6,12 +6,6 @@ if is_plat ("windows") or is_plat("mingw") then
 else
   add_requires("ncurses")
   add_packages("ncurses")
-
-  package("guile-3.0")
-    add_extsources("pkgconfig::guile-3.0")
-  package_end()
-
-  add_requires("guile-3.0")
 end
 
 
@@ -23,15 +17,7 @@ target("skfantasy")
   set_languages("c23")
   if is_plat("mingw") then
     add_ldflags("-static-libgcc", "-static-libc++")
-  else
-    add_packages("guile-3.0")
-    add_defines("USE_GUILE")
-    add_files("src/api/guile_api.c")
   end
   after_build(function(target)
-    os.cp("$(projectdir)/data", "$(builddir)/$(plat)/$(arch)/$(mode)")
-    os.cp("$(projectdir)/scripts", "$(builddir)/$(plat)/$(arch)/$(mode)")
     os.cp("$(projectdir)/version.txt", "$(builddir)/$(plat)/$(arch)/$(mode)")
   end)
-  --add_syslinks("guile-3.0")
-
