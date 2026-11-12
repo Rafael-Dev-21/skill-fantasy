@@ -11,12 +11,13 @@ end
 
 target("skfantasy")
   set_kind("binary")
-  set_warnings("all", "pedantic", "allextra", "error")
+  set_warnings("all", "pedantic", "allextra")
   add_files("src/*.c", "src/creatures/*.c", "src/modes/*.c")
   add_includedirs("include")
   set_languages("c23")
   if is_plat("mingw") then
     add_ldflags("-static-libgcc", "-static-libc++")
+    add_defines("__USE_MINGW_ANSI_STDIO")
   end
   after_build(function(target)
     os.cp("$(projectdir)/version.txt", "$(builddir)/$(plat)/$(arch)/$(mode)")
