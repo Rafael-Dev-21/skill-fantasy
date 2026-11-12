@@ -50,10 +50,13 @@ int main(int argc, char *argv[])
 
 	FILE *file_version;
 	file_version = fopen("version.txt", "r");
-	if (file_version)
-    fgets(data.version, 256, file_version);
-  else
+	if (file_version) {
+    if (!fgets(data.version, 256, file_version)) {
+      snprintf(data.version, 256, "version unknown");
+    }
+  } else {
     snprintf(data.version, 256, "version unknown");
+  }
 	fclose(file_version);
 #else
   ModeData data = {&arena, NULL, NULL, VERSION};
